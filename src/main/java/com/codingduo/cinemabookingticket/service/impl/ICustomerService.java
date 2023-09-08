@@ -1,13 +1,14 @@
-package com.codingduo.cinemabookingticket.service;
+package com.codingduo.cinemabookingticket.service.impl;
 
 import com.codingduo.cinemabookingticket.dto.CustomerDTO;
 import com.codingduo.cinemabookingticket.model.Customer;
 import com.codingduo.cinemabookingticket.repository.CustomerRepository;
+import com.codingduo.cinemabookingticket.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CustomerServiceImpl implements CustomerService {
+public class ICustomerService implements CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 

@@ -2,13 +2,9 @@ package com.codingduo.cinemabookingticket.controller;
 
 import com.codingduo.cinemabookingticket.dto.CustomerDTO;
 import com.codingduo.cinemabookingticket.model.Customer;
-import com.codingduo.cinemabookingticket.service.CustomerService;
-import com.codingduo.cinemabookingticket.service.CustomerServiceImpl;
+import com.codingduo.cinemabookingticket.service.impl.ICustomerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -21,7 +17,7 @@ import org.springframework.ui.Model;
 public class AuthController {
 
     @Autowired
-    CustomerServiceImpl customerService;
+    ICustomerService customerService;
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
