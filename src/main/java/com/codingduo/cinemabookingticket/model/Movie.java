@@ -1,5 +1,7 @@
 package com.codingduo.cinemabookingticket.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,6 +40,7 @@ public class Movie {
     @Column(columnDefinition = "TINYINT")
     private boolean deleted;
 
+    @JsonProperty("isComing")
     @Column(name = "is_coming", columnDefinition = "TINYINT")
     private boolean isComing;
 
@@ -47,6 +50,7 @@ public class Movie {
     @Column(name = "trailer_path")
     private String trailerPath;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tag_id", referencedColumnName = "tag_id")
     private TagMovie tagMovie;
@@ -58,4 +62,5 @@ public class Movie {
     @JoinTable(name = "movie_genre", joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "genre_id"))
     private Collection<Genre> genres;
+
 }
