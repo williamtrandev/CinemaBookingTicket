@@ -52,7 +52,7 @@ public class IMovieService implements MovieService {
         movieDTO.setTrailerPath(movie.getTrailerPath());
         movieDTO.setTagId(movie.getTagMovie().getId());
         return movieDTO;
-
+    }
 
 
     private Movie convertToMovie(MovieDTO movieDTO) {
