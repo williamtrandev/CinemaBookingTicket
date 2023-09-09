@@ -1,5 +1,6 @@
 package com.codingduo.cinemabookingticket.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.sql.Date;
@@ -15,8 +16,10 @@ public class MovieDTO {
     private Date releaseDate;
     private int duration;
     private String description;
+    @JsonProperty("isComing")
     private boolean isComing;
     private String imgPath;
     private String trailerPath;
     private Long tagId;
+    private boolean deleted;
 }
