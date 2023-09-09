@@ -10,9 +10,11 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomerDTO {
+    private Long id;
     private String name;
     private String email;
     private String password;
     private String repeatPassword;
+    private String avatarPath;
     private int point;
 }

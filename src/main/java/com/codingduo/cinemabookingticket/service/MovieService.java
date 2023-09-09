@@ -6,6 +6,6 @@ import com.codingduo.cinemabookingticket.model.Movie;
 import java.util.List;
 
 public interface MovieService {
-    List<Movie> getAll();
-    Movie getOne(Long id);
+    List<MovieDTO> getAll();
+    MovieDTO getOne(Long id);
 }

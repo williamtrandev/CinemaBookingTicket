@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -31,7 +32,11 @@ public class Movie {
 
     private int duration;
 
+    @Column(length = 2000)
     private String description;
+
+    @Column(columnDefinition = "TINYINT")
+    private boolean deleted;
 
     @Column(name = "is_coming", columnDefinition = "TINYINT")
     private boolean isComing;
@@ -48,4 +53,9 @@ public class Movie {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "movie")
     private List<ShowTime> showTimeList;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "movie_genre", joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "genre_id"))
+    private Collection<Genre> genres;
 }

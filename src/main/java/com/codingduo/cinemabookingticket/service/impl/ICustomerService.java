@@ -26,4 +26,27 @@ public class ICustomerService implements CustomerService {
         cs.setPoint(0);
         return customerRepository.save(cs);
     }
+
+    @Override
+    public CustomerDTO getInfo(Long id) {
+        return convertToCustomerDTO(customerRepository.getReferenceById(id));
+    }
+
+    @Override
+    public Customer update(CustomerDTO customerDTO) {
+        Customer customerToUpdate = customerRepository.getReferenceById(customerDTO.getId());
+        customerToUpdate.setName(customerDTO.getName());
+        customerToUpdate.setAvatarPath(customerDTO.getAvatarPath());
+        return customerRepository.save(customerToUpdate);
+    }
+
+    private CustomerDTO convertToCustomerDTO(Customer customer) {
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setId(customer.getId());
+        customerDTO.setName(customer.getName());
+        customerDTO.setEmail(customer.getEmail());
+        customerDTO.setAvatarPath(customer.getAvatarPath());
+        customerDTO.setPoint(customer.getPoint());
+        return customerDTO;
+    }
 }

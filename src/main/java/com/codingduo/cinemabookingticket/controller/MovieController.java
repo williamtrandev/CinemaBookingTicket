@@ -4,50 +4,67 @@ import com.codingduo.cinemabookingticket.dto.MovieDTO;
 import com.codingduo.cinemabookingticket.model.Movie;
 import com.codingduo.cinemabookingticket.service.impl.IMovieService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/v1/movie")
+@Controller
+@RequestMapping("/movie")
 public class MovieController {
     @Autowired
     private IMovieService movieService;
 
 
-    private MovieDTO convertToMovieDTO(Movie movie) {
-        MovieDTO movieDTO = new MovieDTO();
-        movieDTO.setId(movie.getId());
-        movieDTO.setName(movie.getName());
-        movieDTO.setDirector(movie.getDirector());
-        movieDTO.setActors(movie.getActors());
-        movieDTO.setReleaseDate(movie.getReleaseDate());
-        movieDTO.setDuration(movie.getDuration());
-        movieDTO.setDescription(movie.getDescription());
-        movieDTO.setComing(movie.isComing());
-        movieDTO.setImgPath(movie.getImagePath());
-        movieDTO.setTrailerPath(movie.getTrailerPath());
-        movieDTO.setTagId(movie.getTagMovie().getId());
-        return movieDTO;
+    @GetMapping("/showing")
+    public String showingMoviePage(Model model) {
+        List<MovieDTO> movieList = movieService.getAll();
+        List<MovieDTO> showingList = new ArrayList<>();
+        for(MovieDTO movie : movieList) {
+            if(!movie.isComing()) {
+                showingList.add(movie);
+            }
+        }
+        model.addAttribute("title", "Phim đang chiếu");
+        model.addAttribute("showingList", showingList);
+        return "showing_movie";
+    }
+
+    @GetMapping("/coming")
+    public String comingMoviePage(Model model) {
+        List<MovieDTO> movieList = movieService.getAll();
+        List<MovieDTO> comingList = new ArrayList<>();
+        for(MovieDTO movie : movieList) {
+            if(movie.isComing()) {
+                comingList.add(movie);
+            }
+        }
+        model.addAttribute("title", "Phim sắp chiếu");
+        model.addAttribute("comingList", comingList);
+        return "coming_movie";
     }
 
     @GetMapping("/getAll")
-    public List<MovieDTO> getAllMovie() {
-        List<Movie> movieList = movieService.getAll();
+    @ResponseBody
+    public List<MovieDTO> getAllMovie(Model model) {
+        List<MovieDTO> movieList = movieService.getAll();
         List<MovieDTO> movieDTOList = new ArrayList<>();
-        for(Movie movie : movieList ) {
-            movieDTOList.add(convertToMovieDTO(movie));
+        for(MovieDTO movie : movieList ) {
+            movieDTOList.add(movie);
         }
         return movieDTOList;
     }
 
-    @GetMapping("/getOne/{id}")
-    public MovieDTO getMovie(@PathVariable("id") Long id) {
-        return convertToMovieDTO(movieService.getOne(id));
+    @GetMapping("/{id}")
+    public String getMovie(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("movie", movieService.getOne(id));
+        model.addAttribute("title", "Chi tiết phim");
+        model.addAttribute("links", new String[]{"infofilm.css"});
+        return "detail_movie";
     }
+
 
 }

@@ -1,8 +1,11 @@
 package com.codingduo.cinemabookingticket.controller;
 
 import com.codingduo.cinemabookingticket.dto.CustomerDTO;
+import com.codingduo.cinemabookingticket.dto.MovieDTO;
 import com.codingduo.cinemabookingticket.model.Customer;
+import com.codingduo.cinemabookingticket.model.Movie;
 import com.codingduo.cinemabookingticket.service.impl.ICustomerService;
+import com.codingduo.cinemabookingticket.service.impl.IMovieService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,11 +16,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 public class AuthController {
 
     @Autowired
     ICustomerService customerService;
+
+    @Autowired
+    IMovieService movieService;
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -32,12 +41,26 @@ public class AuthController {
         return "customer_login";
     }
 
-    @GetMapping("/home")
-    public String home() {
+    @GetMapping("/")
+    public String home(Model model) {
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //        if(authentication == null || authentication instanceof AnonymousAuthenticationToken){
 //            return "redirect:/login";
 //        }
+        List<MovieDTO> movieList = movieService.getAll();
+        List<MovieDTO> showingList = new ArrayList<>();
+        List<MovieDTO> comingList = new ArrayList<>();
+        for(MovieDTO movie : movieList) {
+            if(movie.isComing()) {
+                comingList.add(movie);
+            } else {
+                showingList.add(movie);
+            }
+        }
+        System.out.println(showingList.toString());
+        model.addAttribute("showingList", showingList);
+        model.addAttribute("comingList", comingList);
+        model.addAttribute("title", "Trang chủ");
         return "home";
     }
 

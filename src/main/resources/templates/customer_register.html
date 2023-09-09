@@ -117,9 +117,11 @@
         <p>
           Đăng nhập vào để mua vé nhé.
         </p>
-        <button class="btn transparent" id="sign-in-btn">
-          <a th:href="@{/login}" style="text-decoration: none">Đăng nhập</a>
-        </button>
+
+        <a th:href="@{/login}" style="text-decoration: none">
+          <button class="btn transparent" id="sign-in-btn">Đăng nhập</button>
+        </a>
+      
 
       </div>
       <img th:src="@{/img/img_register.png}" class="image" alt="" />
