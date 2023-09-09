@@ -3,14 +3,12 @@ package com.codingduo.cinemabookingticket.api;
 import com.codingduo.cinemabookingticket.dto.MovieDTO;
 import com.codingduo.cinemabookingticket.model.Movie;
 import com.codingduo.cinemabookingticket.service.impl.IMovieService;
-import com.codingduo.cinemabookingticket.service.impl.ITagMovieService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
