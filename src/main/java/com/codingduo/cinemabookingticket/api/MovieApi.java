@@ -2,7 +2,8 @@ package com.codingduo.cinemabookingticket.api;
 
 import com.codingduo.cinemabookingticket.dto.MovieDTO;
 import com.codingduo.cinemabookingticket.model.Movie;
-import com.codingduo.cinemabookingticket.service.impl.IMovieService;
+import com.codingduo.cinemabookingticket.service.IMovieService;
+import com.codingduo.cinemabookingticket.service.impl.MovieService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -2,10 +2,9 @@ package com.codingduo.cinemabookingticket.controller;
 
 import com.codingduo.cinemabookingticket.dto.CustomerDTO;
 import com.codingduo.cinemabookingticket.model.Customer;
-import com.codingduo.cinemabookingticket.service.impl.ICustomerService;
+import com.codingduo.cinemabookingticket.service.ICustomerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

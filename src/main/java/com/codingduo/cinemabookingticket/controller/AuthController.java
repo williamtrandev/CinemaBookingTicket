@@ -3,9 +3,8 @@ package com.codingduo.cinemabookingticket.controller;
 import com.codingduo.cinemabookingticket.dto.CustomerDTO;
 import com.codingduo.cinemabookingticket.dto.MovieDTO;
 import com.codingduo.cinemabookingticket.model.Customer;
-import com.codingduo.cinemabookingticket.model.Movie;
-import com.codingduo.cinemabookingticket.service.impl.ICustomerService;
-import com.codingduo.cinemabookingticket.service.impl.IMovieService;
+import com.codingduo.cinemabookingticket.service.ICustomerService;
+import com.codingduo.cinemabookingticket.service.IMovieService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -57,7 +56,7 @@ public class AuthController {
                 showingList.add(movie);
             }
         }
-        System.out.println(showingList.toString());
+//        System.out.println(showingList.toString());
         model.addAttribute("showingList", showingList);
         model.addAttribute("comingList", comingList);
         model.addAttribute("title", "Trang chủ");

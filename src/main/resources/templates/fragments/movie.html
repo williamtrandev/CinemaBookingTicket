@@ -73,69 +73,45 @@
   </div>
 </div>
 
+<div th:fragment = "detail" class="d-flex justify-content-md-between flex-column flex-md-row align-items-center">
+  <div id="videoModal" class="modal-detail">
+    <div class="modal-detail-content">
+      <iframe id="videoPlayer" width="100%" height="600px" src="" frameborder="0" allowfullscreen="true"></iframe>
+    </div>
+  </div>
+  <div class="card-movie overflow-hidden me-5" >
+    <img th:src="@{'/img/movie/' + ${movie.imgPath}}" alt="" class="w-100 h-100">
+    <div class="play-button" th:attr="onclick='showTrailer(\'' + ${movie.trailerPath} + '\')'"><i class="fa-solid fa-play"></i></div>
+  </div>
+  <div class="card-detail-movie">
+    <h3 th:text = "${movie.name}"></h3>
+    <p>Khởi chiếu: <span th:text="${movie.releaseDate}"></span></p>
+    <p>Thể loại: <span th:text="${genre}"></span></p>
+    <p>Diễn viên: <span th:text="${movie.actors}"></span></p>
+    <p>Đạo diễn: <span th:text="${movie.director}"></span></p>
+    <p>Mô tả phim: <span th:text="${movie.description}"></span></p>
 
-<div class="poster" th:fragment="detail">
-  <img class="poster-img" th:src="@{'/img/movie/' + ${movie.imgPath}}" alt="">
-  <div class="poster-footer">
-    <b class="name-film" th:text="${movie.name}"></b>
   </div>
+  </div>
+  <!-- Suất chiếu  -->
+  <div></div>
 </div>
-<div class="content">
-  <img class="film-img" alt="" th:src="@{'/img/movie/' + ${movie.imgPath}}" />
 
-  <div class="thongtin-film">
-    <div class="mt-5 title text">
-      <h2 class="mb-0">THÔNG TIN PHIM</h2>
-    </div>
-    <div class="info m-3">
-      <div class="info-daodien">
-        <b>Đạo diễn:</b>
-        <div class="daodien-detail" th:text="${movie.director}"></div>
-      </div>
-      <div class="info-dienvien">
-        <b>Diễn viên:</b>
-        <div class="dienvien-detail" th:text="${movie.actors}">
-        </div>
-      </div>
-      <div class="info-khoichieu">
-        <b>Khởi chiếu:</b>
-        <div class="khoichieu-detail" th:text="${movie.releaseDate}">
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="trailer-film">
-    <div class="mt-5 title text">
-      <h2 class="mb-0">TRAILER</h2>
-    </div>
-    <div class="video-trailer">
-      <embed style="width:100%; height:300px;" th:src="${movie.trailerPath}">
-    </div>
-  </div>
-  <div class="mota-film">
-    <div class="mt-5 title text">
-      <h2 class="mb-0">MÔ TẢ</h2>
-    </div>
-    <div class="mota-detail" th:text = "${movie.description}">
-    </div>
-  </div>
-</div>
-<div class="mb-5">
-  <div class="mt-5 title text">
-    <h2 class="mb-0">LỊCH CHIẾU</h2>
-  </div>
-  <div class="container mt-5">
+
+
+
+
     <script>
-			function handleBooking(elem) {
-				// let name = $($(elem).closest(".wrapper-suatchieu").find(".title-theater")).text();
-				let time = $(elem).text();
-				let type = $($(elem).parent().parent().find(".film")).text();
-				let date = $($(elem).closest(".cls").find("h3")).text();
-				let room = $(elem).data("room");
-				let id_showtime = $(elem).data("showtime");
-				window.location.href = `<?php echo _WEB_ROOT ?>/booking/index/${time}/${type}/${date}/${id_showtime}/${room}`;
-			}
-		</script>
+      function handleBooking(elem) {
+          // let name = $($(elem).closest(".wrapper-suatchieu").find(".title-theater")).text();
+          let time = $(elem).text();
+          let type = $($(elem).parent().parent().find(".film")).text();
+          let date = $($(elem).closest(".cls").find("h3")).text();
+          let room = $(elem).data("room");
+          let id_showtime = $(elem).data("showtime");
+          window.location.href = `<?php echo _WEB_ROOT ?>/booking/index/${time}/${type}/${date}/${id_showtime}/${room}`;
+      }
+	</script>
 <!--    -->
 <!--		if (!empty($suatchieu))-->
 <!--			foreach ($suatchieu as $rap => $dates) {-->

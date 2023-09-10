@@ -3,7 +3,7 @@ package com.codingduo.cinemabookingticket.service.impl;
 import com.codingduo.cinemabookingticket.dto.TagMovieDTO;
 import com.codingduo.cinemabookingticket.model.TagMovie;
 import com.codingduo.cinemabookingticket.repository.TagMovieRepository;
-import com.codingduo.cinemabookingticket.service.TagMovieService;
+import com.codingduo.cinemabookingticket.service.ITagMovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ITagMovieService implements TagMovieService {
+public class TagMovieService implements ITagMovieService {
 
     @Autowired
     TagMovieRepository tagMovieRepository;

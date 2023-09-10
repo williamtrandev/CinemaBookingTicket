@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.sql.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -22,4 +23,5 @@ public class MovieDTO {
     private String trailerPath;
     private Long tagId;
     private boolean deleted;
+    private List<String> genres;
 }

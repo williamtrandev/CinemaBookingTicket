@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="layout/customer_layout :: page(title=${title}, links=${links}, scripts=${scripts})">
+      th:replace="~{layout/customer_layout :: page(title=${title}, links=${links}, scripts=${scripts})}">
 <head>
 
 </head>
 <body>
 
 <div th:fragment="content">
-    <div th:replace = "fragments/movie :: coming"></div>
+    <div th:replace = "~{fragments/movie :: coming}"></div>
 </div>
 
 </body>

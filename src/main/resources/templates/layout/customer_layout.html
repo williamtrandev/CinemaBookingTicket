@@ -153,7 +153,20 @@
                     $(".msg-error-info").text("Chưa nhập đủ thông tin");
                 }
             })
+
+            // Modal detail phim
+            $(".close, #videoModal").click(function (event) {
+                if ($(event.target).is(".close, #videoModal")) {
+                    $("#videoModal").css("display", "none");
+                    $("#videoModal").find("iframe").attr("src", ""); // Tắt video khi đóng modal
+                }
+            });
         })
+        function showTrailer(link) {
+            $("#videoModal").css("display", "block");
+            $("#videoPlayer").attr("src", link);
+
+        }
     </script>
 
 </head>
@@ -167,12 +180,10 @@
     <span></span>
   </div>
 </div>
-<div th:replace = "fragments/nav :: nav"></div>
+<div th:replace = "~{fragments/nav :: nav}"></div>
 <section class="my-section">
   <div class="container mb-5">
-    <div th:replace = "this :: content"></div>
-<!--    <div th:replace = "fragments :: showing"></div>-->
-<!--    <div th:replace = "fragments :: coming"></div>-->
+    <div th:replace = "~{this :: content}"></div>
 
   </div>
 

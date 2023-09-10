@@ -1,10 +1,11 @@
 package com.codingduo.cinemabookingticket.service.impl;
 
 import com.codingduo.cinemabookingticket.dto.MovieDTO;
+import com.codingduo.cinemabookingticket.model.Genre;
 import com.codingduo.cinemabookingticket.model.Movie;
 import com.codingduo.cinemabookingticket.repository.MovieRepository;
 import com.codingduo.cinemabookingticket.repository.TagMovieRepository;
-import com.codingduo.cinemabookingticket.service.MovieService;
+import com.codingduo.cinemabookingticket.service.IMovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class IMovieService implements MovieService {
+public class MovieService implements IMovieService {
 
     @Autowired
     private MovieRepository movieRepository;
@@ -35,7 +36,9 @@ public class IMovieService implements MovieService {
 
     @Override
     public MovieDTO getOne(Long id) {
-        return convertToMovieDTO(movieRepository.getReferenceById(id));
+        Movie movie = movieRepository.findMovieWithGenresBy(id);
+        if(movie == null) return null;
+        return convertToMovieDTO(movie);
     }
 
     private MovieDTO convertToMovieDTO(Movie movie) {
@@ -51,6 +54,12 @@ public class IMovieService implements MovieService {
         movieDTO.setImgPath(movie.getImagePath());
         movieDTO.setTrailerPath(movie.getTrailerPath());
         movieDTO.setTagId(movie.getTagMovie().getId());
+        // Lấy ds thể loại
+        List<String> genreNames = new ArrayList<>();
+        for (Genre genre : movie.getGenres()) {
+            genreNames.add(genre.getName());
+        }
+        movieDTO.setGenres(genreNames);
         return movieDTO;
     }
 

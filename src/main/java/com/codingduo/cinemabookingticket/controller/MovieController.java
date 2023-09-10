@@ -1,10 +1,8 @@
 package com.codingduo.cinemabookingticket.controller;
 
 import com.codingduo.cinemabookingticket.dto.MovieDTO;
-import com.codingduo.cinemabookingticket.model.Movie;
-import com.codingduo.cinemabookingticket.service.impl.IMovieService;
+import com.codingduo.cinemabookingticket.service.IMovieService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -60,9 +58,12 @@ public class MovieController {
 
     @GetMapping("/{id}")
     public String getMovie(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("movie", movieService.getOne(id));
+        MovieDTO movieDTO = movieService.getOne(id);
+        String genres = String.join(", ", movieDTO.getGenres());
+        model.addAttribute("movie", movieDTO);
+        model.addAttribute("genre", genres);
         model.addAttribute("title", "Chi tiết phim");
-        model.addAttribute("links", new String[]{"infofilm.css"});
+        model.addAttribute("links", new String[]{"detailMovie.css"});
         return "detail_movie";
     }
 
