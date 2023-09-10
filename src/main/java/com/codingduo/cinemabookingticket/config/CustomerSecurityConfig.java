@@ -39,7 +39,7 @@ public class CustomerSecurityConfig {
                         form
                                 .loginPage("/login")
                                 .loginProcessingUrl("/do-login")
-                                .defaultSuccessUrl("/home")
+                                .defaultSuccessUrl("/")
                                 .permitAll());
 
         return http.build();

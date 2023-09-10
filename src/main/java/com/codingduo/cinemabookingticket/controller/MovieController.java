@@ -45,17 +45,6 @@ public class MovieController {
         return "coming_movie";
     }
 
-    @GetMapping("/getAll")
-    @ResponseBody
-    public List<MovieDTO> getAllMovie(Model model) {
-        List<MovieDTO> movieList = movieService.getAll();
-        List<MovieDTO> movieDTOList = new ArrayList<>();
-        for(MovieDTO movie : movieList ) {
-            movieDTOList.add(movie);
-        }
-        return movieDTOList;
-    }
-
     @GetMapping("/{id}")
     public String getMovie(@PathVariable("id") Long id, Model model) {
         MovieDTO movieDTO = movieService.getOne(id);
