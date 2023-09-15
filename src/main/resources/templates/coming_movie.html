@@ -6,9 +6,10 @@
 </head>
 <body>
 
-<div th:fragment="content">
-    <div th:replace = "~{fragments/movie :: coming}"></div>
-</div>
+<th:block th:fragment="content">
+    <div th:replace = "~{fragments/nav :: search-bar}"></div>
+    <div th:replace = "~{fragments/movie :: coming(comingList=${comingList})}"></div>
+</th:block>
 
 </body>
 </html>

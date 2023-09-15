@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<th:block th:fragment="banner(banners)">
+  <div id="myCarousel" class="my-container carousel slide carousel-fade" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div th:each="banner, iterStat : ${banners}">
+        <div th:class="${iterStat.index == 0} ? 'carousel-item active' : 'carousel-item'">
+          <img th:src="@{'/img/banner/' + ${banner.bannerPath}}" alt="..." />
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</th:block>
+
+</body>
+</html>

@@ -1,10 +1,8 @@
 package com.codingduo.cinemabookingticket.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -22,6 +20,7 @@ public class Theater {
     private String name;
 
     private String address;
+
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "theater")
     private List<Room> roomList;

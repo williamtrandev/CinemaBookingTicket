@@ -6,10 +6,11 @@
 </head>
 <body>
 
-<div th:fragment="content">
-    <div th:replace = "~{fragments/movie :: showing}"></div>
-    <div th:replace = "~{fragments/movie :: coming}"></div>
-</div>
+<th:block th:fragment="content">
+    <div th:replace = "~{fragments/banner :: banner(banners=${banners})}"></div>
+    <div th:replace = "~{fragments/movie :: showingByGenre(movieList=${movieList}, genreList=${genreList})}"></div>
+    <div th:replace = "~{fragments/movie :: comingHome(comingList=${comingList})}"></div>
+</th:block>
 
 </body>
 </html>

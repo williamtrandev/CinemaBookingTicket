@@ -109,11 +109,31 @@ public class MovieService implements IMovieService {
     }
 
 
-
-    public List<MovieDTO> getAllByNameLike(String name) {
-        List<Movie> movieList = movieRepository.findAllByNameLike("%"+name+"%");
+    @Override
+    public List<MovieDTO> getAllByNameLikeAndIsComing(String name, boolean isComing) {
+        List<Movie> movieList = movieRepository.findAllByNameLikeAndIsComing("%"+name+"%", isComing);
         List<MovieDTO> movieDTOList = new ArrayList<>();
         for(Movie movie : movieList ) {
+            movieDTOList.add(convertToMovieDTO(movie));
+        }
+        return movieDTOList;
+    }
+
+    @Override
+    public List<MovieDTO> getAllByGenreId(Long id) {
+        List<Movie> movieList = movieRepository.findMoviesByGenreId(id);
+        List<MovieDTO> movieDTOList = new ArrayList<>();
+        for(Movie movie : movieList) {
+            movieDTOList.add(convertToMovieDTO(movie));
+        }
+        return movieDTOList;
+    }
+
+    @Override
+    public List<MovieDTO> getTop6ByIsComingAndIdDesc() {
+        List<Movie> movieList = movieRepository.findTop6ByIsComingOrderByIdDesc(true);
+        List<MovieDTO> movieDTOList = new ArrayList<>();
+        for(Movie movie : movieList) {
             movieDTOList.add(convertToMovieDTO(movie));
         }
         return movieDTOList;

@@ -383,23 +383,29 @@ body.dark .my-sidebar li a:hover .text {
     transition: var(--animate-tran-03);
 }
 .search-box {
+    width: 350px;
     background: var(--second-color);
     border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .search-box i {
     cursor: pointer;
+    background: var(--second-color);
+    padding-left: 0.9rem;
 }
 .search-box input {
-    /* height: 60px; */
-    width: 250px;
+    height: 100%;
+    width: 100%;
     font-size: 1rem;
     font-weight: 500;
     outline: none;
     border: none;
-    border-radius: 6px;
     background: var(--second-color);
     color: var(--text-color);
     border-radius: 6px;
+    padding: 0.8rem;
 }
 .search-box input::placeholder {
     color: var(--text-color);
@@ -535,6 +541,7 @@ body.dark .tooltip-text {
     position: relative;
     width: calc(100% - 250px);
     left: 250px;
+    min-height: 100vh;
     background: var(--body-color);
     transition: var(--animate-tran-05);
 }
@@ -645,12 +652,16 @@ body.dark .title::before {
         #dc4ce6
     );
 }
-.type-film {
-    width: 350px;
-}
+
 .type-film button {
     width: 150px;
+    margin-right: 30px;
 }
+
+.type-film > * {
+    margin-bottom: 30px;
+}
+
 .button-type-film-showing, .button-type-film-coming {
     background: var(--second-color) !important;
     border: none !important;
@@ -828,7 +839,7 @@ body.dark .row-phim .card:hover::after {
     row-gap: 30px;
     /* grid-gap: 20px; */
     justify-content: space-between;
-    margin: 30px 0 50px 0;
+    margin-top: 30px;
 }
 
 
