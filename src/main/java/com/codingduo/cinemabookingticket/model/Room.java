@@ -1,5 +1,6 @@
 package com.codingduo.cinemabookingticket.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +22,7 @@ public class Room {
 
     @Column(name = "num_row")
     private int numRow;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "theater_id", referencedColumnName = "theater_id")

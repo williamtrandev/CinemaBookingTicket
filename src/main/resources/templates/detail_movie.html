@@ -7,7 +7,7 @@
 <body>
 
 <div th:fragment="content">
-    <div th:replace="~{fragments/movie :: detail}"></div>
+    <div th:replace="~{fragments/movie :: detail(movie=${movie})}"></div>
 </div>
 
 </body>

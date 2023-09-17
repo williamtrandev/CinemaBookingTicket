@@ -4,20 +4,75 @@
 </head>
 <body>
 
-<div class="dangchieu" id="showing" th:fragment="showing">
+<div class="sapchieu" th:fragment="comingHome(comingList)">
   <div class="mt-5 title text">
-    <h2 class="mb-0">PHIM ĐANG CHIẾU</h2>
+    <h2 class="mb-0">PHIM SẮP CHIẾU</h2>
   </div>
-  <div class="type-film d-flex justify-content-between align-items-center flex-wrap">
-    <button type="button" class="btn button-type-film-coming active">
+  <div class="slider-wrapper">
+    <div class="slider-buttons text-end">
+      <button class="pre slider-button" id="pre-btn-slider"><i class="fa-solid fa-angle-left"></i></button>
+      <button class="next slider-button" id="next-btn-slider"><i class="fa-solid fa-angle-right"></i></button>
+    </div>
+    <div class="slider">
+
+      <div class="images">
+        <div th:each="movie, iterStat : ${comingList}" class="item" th:style="'--i: ' + ${iterStat.index}">
+          <img th:src="@{'/img/movie/' + ${movie.imgPath}}">
+        </div>
+      </div>
+      <div class="content">
+        <div th:each="movie, iterStat : ${comingList}" class="item" th:classappend="${iterStat.index == 0} ? 'active'">
+          <h3 th:text="${movie.name}"></h3>
+          <div class="des">
+            <span th:text="${movie.description.substring(0, movie.description.lastIndexOf(' ', 200)) + '...'}"></span>
+          </div>
+          <a th:href="@{'/movie/' + ${movie.id}}">Xem thêm</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="dangchieu" th:fragment="showingByGenre(movieList, genreList)">
+  <div class="mt-5 title text">
+    <h2 class="mb-0">PHIM ĐANG CHIẾU THEO THỂ LOẠI</h2>
+  </div>
+  <div class="type-film d-flex align-items-center flex-wrap">
+    <button type="button"
+            class="btn button-type-film-showing active"
+            onclick="handleFetchByGenre(0)">
       Tất cả
     </button>
-    <!-- <button type="button" class="btn button-type-film" id="film-2d">
-      2D
-  </button> -->
-    <button type="button" class="btn button-type-film-coming">
-      3D
-    </button>
+
+    <th:block th:each="genre : ${genreList}">
+      <button type="button" class="btn button-type-film-showing"
+              th:text="${genre.name}"
+              th:attr="onclick='handleFetchByGenre(\'' + ${genre.id} + '\')'">
+      </button>
+    </th:block>
+  </div>
+
+  <div class="row-phim">
+    <div th:each="item : ${movieList}" class="w-100 d-flex justify-content-center">
+      <a class="card" th:href="@{'/movie/' + ${item.id}}">
+        <div class="poster">
+          <img th:src="@{'/img/movie/' + ${item.imgPath}}" alt="poster" />
+        </div>
+        <div class="detail">
+          <h2 class="name-film" th:text="${item.name}"></h2>
+          <h3 class="director" th:text="'Đạo diễn ' + ${item.director}"></h3>
+          <div class="tags d-flex justify-content-center p-2">
+            <!--              <span th:class="${item.name_nhanphim.toLowerCase()}">${item.name_nhanphim}</span>-->
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="dangchieu" id="showing" th:fragment="showing(showingList)">
+  <div class="mt-5 title text">
+    <h2 class="mb-0">PHIM ĐANG CHIẾU</h2>
   </div>
 
   <div class="row-phim">
@@ -38,22 +93,11 @@
   </div>
 </div>
 
-
-<div class="dangchieu" id="coming" th:fragment="coming">
+<div class="dangchieu" id="coming" th:fragment="coming(comingList)">
   <div class="mt-5 title text">
     <h2 class="mb-0">PHIM SẮP CHIẾU</h2>
   </div>
-  <div class="type-film d-flex justify-content-between align-items-center flex-wrap">
-    <button type="button" class="btn button-type-film-coming active" id="all-film-coming">
-      Tất cả
-    </button>
-    <!-- <button type="button" class="btn button-type-film" id="film-2d">
-      2D
-  </button> -->
-    <button type="button" class="btn button-type-film-coming" id="film-3d-coming">
-      3D
-    </button>
-  </div>
+
 
   <div class="row-phim">
     <div th:each="item : ${comingList}" class="w-100 d-flex justify-content-center">
@@ -64,39 +108,195 @@
         <div class="detail">
           <h2 class="name-film" th:text="${item.name}"></h2>
           <h3 class="director" th:text="'Đạo diễn ' + ${item.director}"></h3>
-          <div class="tags d-flex justify-content-center p-2">
-            <!--              <span th:class="${item.name_nhanphim.toLowerCase()}">${item.name_nhanphim}</span>-->
-          </div>
         </div>
       </a>
     </div>
   </div>
 </div>
 
-<div th:fragment = "detail" class="d-flex justify-content-md-between flex-column flex-md-row align-items-center">
-  <div id="videoModal" class="modal-detail">
-    <div class="modal-detail-content">
-      <iframe id="videoPlayer" width="100%" height="600px" src="" frameborder="0" allowfullscreen="true"></iframe>
+<th:block th:fragment = "detail(movie)" >
+    <div class="d-flex justify-content-md-between flex-column flex-md-row align-items-center">
+      <div id="videoModal" class="modal-detail">
+        <div class="modal-detail-content">
+          <iframe id="videoPlayer" width="100%" height="600px" src="" frameborder="0" allowfullscreen="true"></iframe>
+        </div>
+      </div>
+      <div class="card-movie overflow-hidden me-5" >
+        <img th:src="@{'/img/movie/' + ${movie.imgPath}}" alt="" class="w-100 h-100">
+        <div class="play-button" th:attr="onclick='showTrailer(\'' + ${movie.trailerPath} + '\')'"><i class="fa-solid fa-play"></i></div>
+      </div>
+      <div class="card-detail-movie">
+        <h3 th:text = "${movie.name}"></h3>
+        <p>Khởi chiếu: <span th:text="${movie.releaseDate}"></span></p>
+        <p>Thể loại: <span th:text="${genre}"></span></p>
+        <p>Diễn viên: <span th:text="${movie.actors}"></span></p>
+        <p>Đạo diễn: <span th:text="${movie.director}"></span></p>
+        <p>Mô tả phim: <span th:text="${movie.description}"></span></p>
+      </div>
     </div>
-  </div>
-  <div class="card-movie overflow-hidden me-5" >
-    <img th:src="@{'/img/movie/' + ${movie.imgPath}}" alt="" class="w-100 h-100">
-    <div class="play-button" th:attr="onclick='showTrailer(\'' + ${movie.trailerPath} + '\')'"><i class="fa-solid fa-play"></i></div>
-  </div>
-  <div class="card-detail-movie">
-    <h3 th:text = "${movie.name}"></h3>
-    <p>Khởi chiếu: <span th:text="${movie.releaseDate}"></span></p>
-    <p>Thể loại: <span th:text="${genre}"></span></p>
-    <p>Diễn viên: <span th:text="${movie.actors}"></span></p>
-    <p>Đạo diễn: <span th:text="${movie.director}"></span></p>
-    <p>Mô tả phim: <span th:text="${movie.description}"></span></p>
+    <div class="mt-5">
+      <div class="booking-ticket d-flex justify-content-center align-items-center">
+        <div class="days-available d-flex">
+            <script>
+              var daysAvailable = document.querySelector(".days-available");
 
-  </div>
-  </div>
-  <!-- Suất chiếu  -->
-  <div></div>
-</div>
+              // Lấy ngày và thứ hiện tại
+              var currentDate = new Date();
+              var currentDay = currentDate.getDate();
+              var currentMonth = currentDate.getMonth() + 1; // Tháng bắt đầu từ 0
+              var currentYear = currentDate.getFullYear();
+              var currentWeekday = currentDate.getDay(); // 0 là Chủ Nhật, 1 là Thứ 2, ...
 
+              // Tạo 6 ngày kế tiếp
+              for (var i = 0; i <= 5; i++) {
+                  // Tính toán ngày tiếp theo
+                  var nextDate = new Date(currentYear, currentMonth - 1, currentDay + i);
+                  var nextDay = nextDate.getDate();
+                  var nextMonth = nextDate.getMonth() + 1;
+                  var nextYear = nextDate.getFullYear();
+                  var nextWeekday = nextDate.getDay();
+
+                  // Tạo div ngày mới
+                  var newDay = document.createElement("div");
+                  if(i == 0) newDay.className="days active";
+                  else newDay.className = "days";
+                  newDay.setAttribute("data-date", nextYear + "-" + nextMonth + "-" + nextDay);
+                  var dateSpan = document.createElement("span");
+                  dateSpan.textContent = nextDay + "/" + nextMonth;
+                  dateSpan.id = "day" + (i + 1);
+                  var weekdaySpan = document.createElement("span");
+                  var weekdays = ["CN", "Th 2", "Th 3", "Th 4", "Th 5", "Th 6", "Th 7"];
+                  weekdaySpan.textContent = weekdays[nextWeekday];
+                  weekdaySpan.id = "weekday" + (i + 1);
+
+                  newDay.appendChild(dateSpan);
+                  newDay.appendChild(weekdaySpan);
+                  daysAvailable.appendChild(newDay);
+              }
+            </script>
+
+        </div>
+      </div>
+      <div class="my-3 d-flex justify-content-center">
+        <div class="list-group list-group-flush">
+<!--          <div class="list-group-item py-3 px-5" data-bs-toggle="collapse" data-bs-target="#test1" aria-expanded="false"-->
+<!--               aria-controls="test1" style="cursor: pointer;">-->
+<!--            <div class="d-flex align-items-center">-->
+<!--              <img src="./assets/ant.jpg" alt="" class="rounded-circle me-3" style="width: 50px; height: 50px;">-->
+<!--              <span>Coding Duo Quận Cam</span>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div id="test1" class="collapse py-3 px-5 showtimes">-->
+<!--            <div class="type-wrapper">-->
+<!--              <div class="type-ticket mint">2D</div>-->
+<!--              <div class="d-flex flex-wrap">-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="type-wrapper">-->
+<!--              <div class="type-ticket purples">3D</div>-->
+<!--              <div class="d-flex flex-wrap">-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="list-group-item py-3 px-5" data-bs-toggle="collapse" data-bs-target="#test2" aria-expanded="false"-->
+<!--               aria-controls="test2" style="cursor: pointer;">-->
+<!--            <div class="d-flex align-items-center">-->
+<!--              <img src="./assets/ant.jpg" alt="" class="rounded-circle me-3" style="width: 50px; height: 50px;">-->
+<!--              <span>Coding Duo Quận Cam</span>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div id="test2" class="collapse py-3 px-5 showtimes">-->
+<!--            <div class="type-wrapper">-->
+<!--              <div class="type-ticket mint">2D</div>-->
+<!--              <div class="d-flex flex-wrap">-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="type-wrapper">-->
+<!--              <div class="type-ticket purples">3D</div>-->
+<!--              <div class="d-flex flex-wrap">-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          <div class="list-group-item py-3 px-5" data-bs-toggle="collapse" data-bs-target="#test3" aria-expanded="false"-->
+<!--               aria-controls="test3" style="cursor: pointer;">-->
+<!--            <div class="d-flex align-items-center">-->
+<!--              <img src="./assets/ant.jpg" alt="" class="rounded-circle me-3" style="width: 50px; height: 50px;">-->
+<!--              <span>Coding Duo Quận Cam</span>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div id="test3" class="collapse py-3 px-5 showtimes">-->
+<!--            <div class="type-wrapper">-->
+<!--              <div class="type-ticket mint">2D</div>-->
+<!--              <div class="d-flex flex-wrap">-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="type-wrapper">-->
+<!--              <div class="type-ticket purples">3D</div>-->
+<!--              <div class="d-flex flex-wrap">-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+        </div>
+      </div>
+    </div>
+
+
+</th:block>
 
 
 

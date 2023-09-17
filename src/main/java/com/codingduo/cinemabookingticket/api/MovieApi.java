@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -44,9 +45,39 @@ public class MovieApi {
         return movieService.getOne(id);
     }
 
-    @GetMapping("/getAll/{name}")
-    public List<MovieDTO> getAllMovieByNameLike(@PathVariable("name") String name) {
-        return movieService.getAllByNameLike(name);
+    @GetMapping("/getAll/{name}/{isComing}")
+    public List<MovieDTO> getAllMovieByNameLike(@PathVariable("name") String name, @PathVariable("isComing") boolean isComing) {
+        return movieService.getAllByNameLikeAndIsComing(name, isComing);
     }
+
+    @GetMapping("/getAllShowing")
+    public List<MovieDTO> getAllShowing() {
+        List<MovieDTO> movieList = movieService.getAll();
+        List<MovieDTO> showingList = new ArrayList<>();
+        for(MovieDTO movie : movieList) {
+            if(!movie.isComing()) {
+                showingList.add(movie);
+            }
+        }
+        return showingList;
+    }
+
+    @GetMapping("/getAllComing")
+    public List<MovieDTO> getAllComing() {
+        List<MovieDTO> movieList = movieService.getAll();
+        List<MovieDTO> comingList = new ArrayList<>();
+        for(MovieDTO movie : movieList) {
+            if(movie.isComing()) {
+                comingList.add(movie);
+            }
+        }
+        return comingList;
+    }
+
+    @GetMapping("/getAllByGenreId/{id}")
+    public List<MovieDTO> getAllByGenreId(@PathVariable("id") Long id) {
+        return movieService.getAllByGenreId(id);
+    }
+
 
 }

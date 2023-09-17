@@ -43,6 +43,7 @@
 	font-weight: normal;
 }
 
+/* Định dạng modal */
 .modal-detail {
 	display: none;
 	position: fixed;
@@ -50,23 +51,118 @@
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background-color: rgba(0, 0, 0, 0.7);
-	z-index: 3;
+	background: rgba(0, 0, 0, 0.7);
+	z-index: 9999;
+	overflow: auto;
 }
 
+/* Định dạng nội dung modal */
 .modal-detail-content {
 	position: relative;
 	margin: auto;
-	width: 80%;
-	height: 0;
-	padding-bottom: 56.25%;
-	overflow: hidden;
+	width: 100%;
+	max-width: 960px;
+	/* Cố định chiều rộng tối đa cho nội dung */
+	height: 100vh;
+	/* Chiếm toàn màn hình dọc */
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-iframe {
-	position: absolute;
-	top: 0;
-	left: 0;
+/* Định dạng phần iframe (video) */
+iframe#videoPlayer {
 	width: 100%;
-	height: 100%;
+	height: 56.25vw;
+	/* Tính toán chiều cao tương ứng với tỉ lệ 16:9 (100 / 16 * 9) */
+	max-height: 100%;
+}
+
+
+@font-face {
+	font-family: 'Rocher';
+	src: url(https://assets.codepen.io/9632/RocherColorGX.woff2);
+}
+@font-palette-values --Purples {
+	font-family: Rocher;
+	base-palette: 6;
+}
+@font-palette-values --Grays {
+	font-family: Rocher;
+	base-palette: 9;
+}
+@font-palette-values --Mint {
+	font-family: Rocher;
+	base-palette: 7;
+}
+.type-ticket {
+	font-family: 'Rocher';
+}
+.purples {
+	font-palette: --Purples;
+}
+.mint {
+	font-palette: --Mint;
+}
+.grays {
+	font-palette: --Grays;
+}
+
+.days-available .days {
+	min-width: 120px;
+	padding: 8px 12px;
+	cursor: pointer;
+	background-color: #d8e6e9;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+.days-available .days:hover, .days-available .days.active {
+	background-color: #7884e1;
+	color: #d8e6e9;
+}
+.days-available .days:first-child {
+	border-top-left-radius: 12px;
+	border-bottom-left-radius: 12px;
+}
+
+.days-available .days:last-child {
+	border-top-right-radius: 12px;
+	border-bottom-right-radius: 12px;
+}
+.list-group {
+	width: 720px !important;
+	overflow: hidden !important;
+}
+.list-group-item:hover {
+	background-color: #d4e0f6;
+}
+.list-group > .list-group-item:first-of-type {
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+}
+.showtimes {
+	background-color: #f3efff;
+}
+.type-wrapper::after {
+	content: '';
+	width: 50%;
+	height: 1px;
+	display: block;
+	background-color: black;
+	margin: 0 auto;
+}
+.type-wrapper:last-child::after {
+	display: none;
+}
+.type-ticket {
+	font-size: 1.5rem;
+}
+.btn-custom-showtime {
+	padding: 8px 16px !important;
+	border-radius: 0.5rem !important;
+	color: white !important;
+	font-weight: 800 !important;
+	background-color: var(--primary-color) !important;
 }

@@ -2,8 +2,13 @@ package com.codingduo.cinemabookingticket.controller;
 
 import com.codingduo.cinemabookingticket.dto.CustomerDTO;
 import com.codingduo.cinemabookingticket.dto.MovieDTO;
+import com.codingduo.cinemabookingticket.model.Banner;
 import com.codingduo.cinemabookingticket.model.Customer;
+import com.codingduo.cinemabookingticket.model.Genre;
+import com.codingduo.cinemabookingticket.model.Movie;
+import com.codingduo.cinemabookingticket.service.IBannerService;
 import com.codingduo.cinemabookingticket.service.ICustomerService;
+import com.codingduo.cinemabookingticket.service.IGenreService;
 import com.codingduo.cinemabookingticket.service.IMovieService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +33,12 @@ public class AuthController {
     IMovieService movieService;
 
     @Autowired
+    IBannerService bannerService;
+
+    @Autowired
+    IGenreService genreService;
+
+    @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/admin-login")
@@ -46,19 +57,22 @@ public class AuthController {
 //        if(authentication == null || authentication instanceof AnonymousAuthenticationToken){
 //            return "redirect:/login";
 //        }
-        List<MovieDTO> movieList = movieService.getAll();
-        List<MovieDTO> showingList = new ArrayList<>();
-        List<MovieDTO> comingList = new ArrayList<>();
-        for(MovieDTO movie : movieList) {
-            if(movie.isComing()) {
-                comingList.add(movie);
-            } else {
-                showingList.add(movie);
+        List<Banner> bannerList = bannerService.getAll();
+        List<MovieDTO> comingList = movieService.getTop6ByIsComingAndIdDesc();
+        List<MovieDTO> movies = movieService.getAll();
+        List<MovieDTO> movieList = new ArrayList<>();
+        for(MovieDTO movie : movies) {
+            if(!movie.isComing()) {
+                movieList.add(movie);
             }
         }
-//        System.out.println(showingList.toString());
-        model.addAttribute("showingList", showingList);
+        List<Genre> genreList = genreService.getGenreForShowing();
+        System.out.println(comingList.toString());
         model.addAttribute("comingList", comingList);
+        model.addAttribute("movieList", movieList);
+        model.addAttribute("banners", bannerList);
+        model.addAttribute("genreList", genreList);
+        model.addAttribute("links", new String[]{"slider.css"});
         model.addAttribute("title", "Trang chủ");
         return "home";
     }

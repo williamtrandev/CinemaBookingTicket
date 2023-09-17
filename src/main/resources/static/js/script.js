@@ -53,15 +53,15 @@ trig.forEach((element) => {
 
 //--------------------------------------//
 // Xử lý active loại phim
-let typeFilm = $(".button-type-film-showing").toArray();
-let typeClick = $("#all-film-showing"); // Mặc định ban đầu là tất cả film
-typeFilm.forEach((element) => {
-    $(element).click(() => {
-        typeClick.removeClass("active"); // Xóa trạng thái active
-        $(element).addClass("active"); // Thêm trạng thái active
-        typeClick = $(element); // Lưu lại button vừa click
-    });
-});
+//let typeFilm = $(".button-type-film-showing").toArray();
+//let typeClick = $("#all-film-showing"); // Mặc định ban đầu là tất cả film
+//typeFilm.forEach((element) => {
+//    $(element).click(() => {
+//        typeClick.removeClass("active"); // Xóa trạng thái active
+//        $(element).addClass("active"); // Thêm trạng thái active
+//        typeClick = $(element); // Lưu lại button vừa click
+//    });
+//});
 
 let typeFilmComing = $(".button-type-film-coming").toArray();
 let typeClickComing = $("#all-film-coming"); // Mặc định ban đầu là tất cả film
