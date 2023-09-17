@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+<th:block th:fragment="nav">
+    <nav class="my-sidebar close">
+        <header>
+            <a th:href="@{/admin}">
+                <div class="logo">
+                    <div class="brand">W</div>
+                    <div class="text header-text">
+                        <span class="name">CodingDuo</span>
+                    </div>
+                </div>
+            </a>
+            <i class="fa-solid fa-angle-right toggle"></i>
+        </header>
+        <div class="my-menu-bar">
+            <div class="my-menu">
+                <ul class="my-menu-links">
+                    <li class="my-nav-link">
+                        <a th:href="@{/admin/movie}">
+                            <i class="fa-solid fa-film icon"></i>
+                            <span class="nav-text text">Danh sách phim</span>
+                            <span class="tooltip-text">Danh sách phim</span>
+                        </a>
+                    </li>
+                    <li class="my-nav-link">
+                        <a th:href="@{/admin/theater}">
+                            <i class="fa-solid fa-masks-theater icon"></i>
+                            <span class="nav-text text">Danh sách rạp</span>
+                            <span class="tooltip-text">Danh sách rạp</span>
+                        </a>
+                    </li>
+                    <li class="my-nav-link">
+                        <a th:href="@{/admin/customer}">
+                            <i class="fa-solid fa-user icon"></i>
+                            <span class="nav-text text">Danh sách khách hàng</span>
+                            <span class="tooltip-text">Danh sách khách hàng</span>
+                        </a>
+                    </li>
+                    <li class="my-nav-link">
+                        <a th:href="@{/admin/income}">
+                            <i class="fa-solid fa-arrow-trend-up icon"></i>
+                            <span class="nav-text text">Doanh thu</span>
+                            <span class="tooltip-text">Doanh thu</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="bottom-content">
+                <li th:if="${session.user == null}">
+                    <a th:href="@{/login}">
+                        <i class="fa-solid fa-right-to-bracket icon"></i>
+                        <span class="nav-text text">Đăng nhập</span>
+                        <span class="tooltip-text">Đăng nhập</span>
+                    </a>
+                </li>
+                <li th:if="${session.user != null}">
+                    <a th:href="@{/login?logout}">
+                        <i class="fa-solid fa-right-from-bracket icon logout-icon"></i>
+                        <span class="nav-text text">Đăng xuất</span>
+                        <span class="tooltip-text">Đăng xuất</span>
+                    </a>
+                </li>
+                <li class="theme-mode">
+                    <div class="moon-sun">
+                        <i class="far fa-moon icon moon"></i>
+                        <i class="far fa-sun icon sun"></i>
+                    </div>
+                    <span class="theme-mode-text text">Dark Mode</span>
+                    <span class="tooltip-text">Dark/Light Mode</span>
+
+                    <div class="toggle-switch">
+                        <div class="switch"></div>
+                    </div>
+                </li>
+            </div>
+            <div th:if="${session.user != null}" class="user-icon">
+                <a th:href="@{/user}">
+                    <img th:src="@{/img/user.png}" alt="" />
+                    <span th:text="${session.user.name}" class="text"></span>
+                </a>
+            </div>
+        </div>
+    </nav>
+    <nav class="my-sidebar-bottom">
+        <ul class="my-menu-bottom-links">
+            <li class="my-nav-bottom-link">
+                <a th:href="@{/}">
+                    <i class=" fa-solid fa-house-chimney icon"></i>
+                    <span class="nav-text text">Trang chủ</span>
+                </a>
+            </li>
+            <li class="my-nav-bottom-link has-sub-menu">
+                <i class="fa-solid fa-calendar-days icon"></i>
+                <span class="nav-text text">Phim</span>
+                <ul class="sub-menu-nav mid">
+                    <li>
+                        <a th:href="@{/movie/showing}">
+                            <i class=" fa-solid fa-user icon sub-icon"></i>
+                            <span class="sub-menu-text">Đang chiếu</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/movie/coming}">
+                            <i class="fa-solid fa-right-from-bracket icon logout-icon sub-icon"></i>
+                            <span class="sub-menu-text">Sắp chiếu</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="my-nav-bottom-link">
+                <a href="/theater">
+                    <i class="fa-solid fa-masks-theater icon"></i>
+                    <span class="nav-text text">Hệ thống rạp</span>
+                </a>
+            </li>
+            <li class="my-nav-bottom-link has-sub-menu">
+                <i class="fa-sharp fa-solid fa-gear icon"></i>
+                <span class="nav-text text">Cài đặt</span>
+                <ul class="sub-menu-nav">
+                    <li class="theme-mode d-flex flex-column justify-content-center">
+                        <div class="wrapper-toggle-switch d-flex flex-column justify-content-center">
+                            <div class="toggle-switch">
+                                <div class="switch"></div>
+                            </div>
+                            <span class="sub-menu-text">Dark Mode</span>
+                        </div>
+                    </li>
+
+
+                    <li th:if="${session.user == null}">
+                        <a th:href="@{/login}">
+                            <i class="fa-solid fa-right-to-bracket icon"></i>
+                            <span class="nav-text text">Đăng nhập</span>
+                            <span class="tooltip-text">Đăng nhập</span>
+                        </a>
+                    </li>
+                    <li th:if="${session.user != null}">
+                        <a th:href="@{/user}">
+                            <i class="fa-solid fa-user icon sub-icon"></i>
+                            <span class="sub-menu-text">Thông tin</span>
+                        </a>
+                    </li>
+                    <li th:if="${session.user != null}">
+                        <a th:href="@{/login?logout}">
+                            <i class="fa-solid fa-right-from-bracket icon logout-icon"></i>
+                            <span class="nav-text text">Đăng xuất</span>
+                            <span class="tooltip-text">Đăng xuất</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</th:block>
+</body>
+</html>

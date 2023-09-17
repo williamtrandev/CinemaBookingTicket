@@ -45,9 +45,9 @@ public class MovieApi {
         return movieService.getOne(id);
     }
 
-    @GetMapping("/getAll/{name}/{isComing}")
-    public List<MovieDTO> getAllMovieByNameLike(@PathVariable("name") String name, @PathVariable("isComing") boolean isComing) {
-        return movieService.getAllByNameLikeAndIsComing(name, isComing);
+    @GetMapping("/getAll/{name}/{coming}")
+    public List<MovieDTO> getAllMovieByNameLike(@PathVariable("name") String name, @PathVariable("coming") boolean coming) {
+        return movieService.getAllByNameLikeAndComing(name, coming);
     }
 
     @GetMapping("/getAllShowing")

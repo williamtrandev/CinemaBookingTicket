@@ -110,8 +110,8 @@ public class MovieService implements IMovieService {
 
 
     @Override
-    public List<MovieDTO> getAllByNameLikeAndIsComing(String name, boolean isComing) {
-        List<Movie> movieList = movieRepository.findAllByNameLikeAndIsComing("%"+name+"%", isComing);
+    public List<MovieDTO> getAllByNameLikeAndComing(String name, boolean coming) {
+        List<Movie> movieList = movieRepository.findAllByNameLikeAndComing("%"+name+"%", coming);
         List<MovieDTO> movieDTOList = new ArrayList<>();
         for(Movie movie : movieList ) {
             movieDTOList.add(convertToMovieDTO(movie));
@@ -130,8 +130,8 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public List<MovieDTO> getTop6ByIsComingAndIdDesc() {
-        List<Movie> movieList = movieRepository.findTop6ByIsComingOrderByIdDesc(true);
+    public List<MovieDTO> getTop6ByComingAndIdDesc() {
+        List<Movie> movieList = movieRepository.findTop6ByComingOrderByIdDesc(true);
         List<MovieDTO> movieDTOList = new ArrayList<>();
         for(Movie movie : movieList) {
             movieDTOList.add(convertToMovieDTO(movie));

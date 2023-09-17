@@ -40,9 +40,8 @@ public class Movie {
     @Column(columnDefinition = "TINYINT")
     private boolean deleted;
 
-    @JsonProperty("isComing")
     @Column(name = "is_coming", columnDefinition = "TINYINT")
-    private boolean isComing;
+    private boolean coming;
 
     @Column(name = "image_path")
     private String imagePath;

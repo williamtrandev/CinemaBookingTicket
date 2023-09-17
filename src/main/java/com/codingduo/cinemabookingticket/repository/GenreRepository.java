@@ -11,6 +11,6 @@ import java.util.List;
 public interface GenreRepository extends JpaRepository<Genre, Long> {
     @Query("SELECT DISTINCT g FROM Genre g " +
             "INNER JOIN g.movies m " +
-            "WHERE m.isComing = false")
+            "WHERE m.coming = false")
     List<Genre> findGenreNamesForShowingMovies();
 }

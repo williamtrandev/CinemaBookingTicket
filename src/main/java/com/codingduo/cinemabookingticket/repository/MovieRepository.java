@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Long> {
-    List<Movie> findAllByNameLikeAndIsComing(String name, boolean isComing);
+    List<Movie> findAllByNameLikeAndComing(String name, boolean coming);
 
     @Query("SELECT DISTINCT m FROM Movie m LEFT JOIN FETCH m.genres WHERE m.id = :id")
     Movie findMovieWithGenresBy(Long id);
@@ -19,6 +19,6 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
             "WHERE g.id = :genreId")
     List<Movie> findMoviesByGenreId(Long genreId);
 
-    List<Movie> findTop6ByIsComingOrderByIdDesc(boolean isComing);
+    List<Movie> findTop6ByComingOrderByIdDesc(boolean coming);
 
 }

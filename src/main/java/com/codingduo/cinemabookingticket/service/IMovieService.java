@@ -11,10 +11,10 @@ public interface IMovieService {
     Movie delete(Long id);
     List<MovieDTO> getAll();
     MovieDTO getOne(Long id);
-    List<MovieDTO> getAllByNameLikeAndIsComing(String name, boolean isComing);
+    List<MovieDTO> getAllByNameLikeAndComing(String name, boolean coming);
 
     List<MovieDTO> getAllByGenreId(Long id);
 
-    List<MovieDTO> getTop6ByIsComingAndIdDesc();
+    List<MovieDTO> getTop6ByComingAndIdDesc();
 
 }
