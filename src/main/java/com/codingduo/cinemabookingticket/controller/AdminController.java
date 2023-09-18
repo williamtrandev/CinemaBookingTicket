@@ -2,6 +2,8 @@ package com.codingduo.cinemabookingticket.controller;
 
 import com.codingduo.cinemabookingticket.dto.MovieDTO;
 import com.codingduo.cinemabookingticket.dto.TagMovieDTO;
+import com.codingduo.cinemabookingticket.model.Genre;
+import com.codingduo.cinemabookingticket.service.IGenreService;
 import com.codingduo.cinemabookingticket.service.IMovieService;
 import com.codingduo.cinemabookingticket.service.ITagMovieService;
 import com.codingduo.cinemabookingticket.util.FileUploadUtil;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -25,6 +28,9 @@ public class AdminController {
     @Autowired
     private ITagMovieService tagMovieService;
 
+    @Autowired
+    private IGenreService genreService;
+
     @GetMapping("/movie")
     public String admin(Model model) {
         List<MovieDTO> movieList = movieService.getAll();
@@ -36,8 +42,10 @@ public class AdminController {
     @GetMapping("/movie/create")
     public String createMovie(Model model) {
         List<TagMovieDTO> tagMovieList = tagMovieService.getAll();
+        List<Genre> genreList = genreService.getAll();
         model.addAttribute("movieDTO", new MovieDTO());
         model.addAttribute("tagMovieList", tagMovieList);
+        model.addAttribute("genreList", genreList);
         model.addAttribute("title", "Thêm phim");
         model.addAttribute("fTitle", "THÊM PHIM");
         return "create_movie";
@@ -45,11 +53,16 @@ public class AdminController {
 
     @PostMapping("/movie")
     public String createMovieResult(@ModelAttribute MovieDTO movieDTO,
-                                    @RequestParam("image") MultipartFile image) throws IOException {
+                                    @RequestParam("image") MultipartFile image,
+                                    @RequestParam("genre") String[] genre) throws IOException {
         String fileName = StringUtils.cleanPath(image.getOriginalFilename());
         movieDTO.setImgPath(fileName);
         String uploadDir = "src/main/resources/static/img/movie/";
         FileUploadUtil.saveFile(uploadDir, fileName, image);
+
+        List<String> genres = Arrays.asList(genre);
+        movieDTO.setGenres(genres);
+
         movieService.save(movieDTO);
         return "redirect:/admin/movie";
     }

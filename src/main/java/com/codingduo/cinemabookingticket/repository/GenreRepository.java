@@ -13,4 +13,5 @@ public interface GenreRepository extends JpaRepository<Genre, Long> {
             "INNER JOIN g.movies m " +
             "WHERE m.coming = false")
     List<Genre> findGenreNamesForShowingMovies();
+    Genre findByName(String name);
 }

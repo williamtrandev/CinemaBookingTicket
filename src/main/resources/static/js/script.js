@@ -126,3 +126,12 @@ const autoNext = setInterval(nextSlider, 4000);
     };
     setTheme();
 })();
+
+//---------------------------------------//
+// Preview hình trước khi submit //
+$('#movie-image').on('change', (e) => {
+      const image = e.target.files[0];
+      if (image) {
+        $('#preview-image').attr('src', URL.createObjectURL(file))
+      }
+})

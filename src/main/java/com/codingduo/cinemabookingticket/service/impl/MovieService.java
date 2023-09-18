@@ -3,6 +3,7 @@ package com.codingduo.cinemabookingticket.service.impl;
 import com.codingduo.cinemabookingticket.dto.MovieDTO;
 import com.codingduo.cinemabookingticket.model.Genre;
 import com.codingduo.cinemabookingticket.model.Movie;
+import com.codingduo.cinemabookingticket.repository.GenreRepository;
 import com.codingduo.cinemabookingticket.repository.MovieRepository;
 import com.codingduo.cinemabookingticket.repository.TagMovieRepository;
 import com.codingduo.cinemabookingticket.service.IMovieService;
@@ -20,6 +21,9 @@ public class MovieService implements IMovieService {
 
     @Autowired
     private TagMovieRepository tagMovieRepository;
+
+    @Autowired
+    private GenreRepository genreRepository;
 
     @Override
     public List<MovieDTO> getAll() {
@@ -77,6 +81,13 @@ public class MovieService implements IMovieService {
         movie.setImagePath(movieDTO.getImgPath());
         movie.setTrailerPath(movieDTO.getTrailerPath());
         movie.setTagMovie(tagMovieRepository.getReferenceById(movieDTO.getTagId()));
+        // Lấy model thể loại
+        List<Genre> genres = new ArrayList<>();
+        for (String genreName: movieDTO.getGenres()) {
+            Genre genre = genreRepository.findByName(genreName);
+            genres.add(genre);
+        }
+        movie.setGenres(genres);
         return movie;
     }
 
