@@ -7,7 +7,7 @@ import com.codingduo.cinemabookingticket.model.Movie;
 import com.codingduo.cinemabookingticket.service.IGenreService;
 import com.codingduo.cinemabookingticket.service.IMovieService;
 import com.codingduo.cinemabookingticket.service.ITagMovieService;
-import com.codingduo.cinemabookingticket.util.FileUploadUtil;
+import com.codingduo.cinemabookingticket.utils.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -62,24 +63,14 @@ public class AdminController {
     public String createMovieResult(@ModelAttribute MovieDTO movieDTO,
                                     @RequestParam("image") MultipartFile image,
                                     @RequestParam("genre") String[] genre) throws IOException {
+
         String fileName = StringUtils.cleanPath(image.getOriginalFilename());
         movieDTO.setImgPath(fileName);
-//        String uploadDir = "static/img/movie/";
-//        FileUploadUtil.saveFile(uploadDir, fileName, image);
-
         List<String> genres = Arrays.asList(genre);
         movieDTO.setGenres(genres);
         Movie movieSave = movieService.save(movieDTO);
-
-        if(movieSave != null) {
-            try{
-                File saveFile = new ClassPathResource("static/img/movie").getFile();
-                Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + image.getOriginalFilename());
-                Files.copy(image.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        String uploadDir = "public/movie";
+        FileUploadUtil.saveFile(uploadDir, fileName, image);
 
 
         return "redirect:/admin/movie";

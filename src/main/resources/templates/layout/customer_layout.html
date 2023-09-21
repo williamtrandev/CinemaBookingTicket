@@ -18,6 +18,30 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
   <script th:inline="javascript">
+
+        let showingList = [];
+        let showingPath = /*[[@{/api/v1/movie/getAllShowing}]]*/ '';
+        fetch(showingPath)
+            .then(res => res.json())
+            .then(data => {
+                showingList = data;
+            })
+            .catch(err => console.log("showing: error " + err));
+        let comingList = [];
+        let comingPath = /*[[@{/api/v1/movie/getAllComing}]]*/ '';
+        fetch(comingPath)
+            .then(res => res.json())
+            .then(data => {
+                comingList = data;
+            })
+            .catch(err => console.log("coming: error " + err));
+
+        function searchMovies(movies, keyword) {
+            return movies.filter(movie => movie.name.toLowerCase().includes(keyword.toLowerCase()));
+        }
+
+
+
         function renderCard(data) {
             let cardsFilm = "";
             const directHref = /*[[@{/movie}]]*/ '';
@@ -114,6 +138,8 @@
             }
 
         }
+
+
         $(function() {
             $(".wrap-loading").css("display", "none");
 
@@ -121,19 +147,6 @@
             $(".type-film").on("click", ".button-type-film-showing", function() {
                 $(".button-type-film-showing").removeClass("active"); // Xóa trạng thái active cho tất cả các button
                 $(this).addClass("active"); // Thêm trạng thái active cho button vừa click
-            });
-
-            // Dùng fetch API hiển thị tất cả phim ở trang phim đang <chiếu></chiếu>
-            $("#all-film-showing").click(function() {
-                // Fetch API gọi để hiển thị tất cả phim
-                fetch("/film/getAllFilm")
-                    .then((res) => res.text())
-                    .then((data) => {
-                        console.log(data);
-                        $(".row-phim").children().remove();
-                        $(".row-phim").append(data);
-                    })
-                    .catch((err) => console.log(err));
             });
 
 
@@ -179,20 +192,14 @@
                 var lastPart = pathParts[pathParts.length - 1];
                 let coming = lastPart === 'coming' ? 1 : 0;
                 let val = $(this).val().trim();
-                let dynamicPath = /*[[@{/api/v1/movie}]]*/ '';
-                let typeGet = coming === 1 ? 'getAllComing' : 'getAllShowing';
+                // Nếu phần cuối của đường dẫn là coming thì lấy comingList ra để rener.
+                let listChoose = coming === 1 ? comingList : showingList;
                 if (val === "") {
-                    fetch(`${dynamicPath}/${typeGet}`)
-                        .then(res => res.json())
-                        .then((data) => {
-                            $(".row-phim").empty().append(renderCard(data));
-                        });
+                    $(".row-phim").empty().append(renderCard(listChoose));
+
                 } else {
-                    fetch(`${dynamicPath}/getAll/${val}/${coming}`)
-                        .then(res => res.json())
-                        .then((data) => {
-                            $(".row-phim").empty().append(renderCard(data));
-                        });
+                    let data = searchMovies(listChoose, val);
+                    $(".row-phim").empty().append(renderCard(data));
                 }
             });
 

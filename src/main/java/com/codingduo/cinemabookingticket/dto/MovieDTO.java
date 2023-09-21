@@ -23,4 +23,5 @@ public class MovieDTO {
     private Long tagId;
     private boolean deleted;
     private List<String> genres;
+    private String imgPathAtLocal;
 }

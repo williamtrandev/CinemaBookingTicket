@@ -62,4 +62,10 @@ public class Movie {
             inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "genre_id"))
     private Collection<Genre> genres;
 
+
+    @Transient
+    public String getImagePathAtLocal() {
+        if(imagePath == null) return null;
+        return "/public/movie/" + imagePath;
+    }
 }

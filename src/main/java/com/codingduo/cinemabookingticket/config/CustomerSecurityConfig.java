@@ -31,7 +31,7 @@ public class CustomerSecurityConfig {
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
-                                .requestMatchers("/**", "/static/**").permitAll()
+                                .requestMatchers("/**", "/static/**", "/public/**").permitAll()
                                 .requestMatchers("/admin/*").hasAuthority("ADMIN")
                                 .anyRequest().authenticated()
                 )
