@@ -24,7 +24,7 @@
         <div th:each="movie, iterStat : ${comingList}" class="item" th:classappend="${iterStat.index == 0} ? 'active'">
           <h3 th:text="${movie.name}"></h3>
           <div class="des">
-            <span th:text="${movie.description.substring(0, movie.description.lastIndexOf(' ', 200)) + '...'}"></span>
+            <span th:text="${movie.description.length() > 200 ? movie.description.substring(0, movie.description.lastIndexOf(' ', 200)) + '...' : movie.description}"></span>
           </div>
           <a th:href="@{'/movie/' + ${movie.id}}">Xem thêm</a>
         </div>
@@ -365,7 +365,8 @@
   <div class="mt-5 title text">
     <h2 class="mb-0" th:text="${fTitle}"></h2>
   </div>
-  <form th:action="@{/admin/movie}" th:object="${movieDTO}" method="post" enctype="multipart/form-data">
+<!--  <form th:action="@{/admin/movie}" th:object="${movieDTO}" method="post" enctype="multipart/form-data">-->
+    <form th:object="${movieDTO}" id="form" enctype="multipart/form-data">
     <div class="input-group mb-3">
       <span class="input-group-text">Tên phim</span>
       <input type="text" class="form-control" id="movie-name" th:field="*{name}" required>
@@ -434,7 +435,7 @@
 
       <br>
 
-    <input type="submit" value="Submit" class="btn btn-primary mr-3"><input type="reset" value="Reset" class="btn btn-secondary">
+    <input type="button" id="btnSubmit" value="Submit" class="btn btn-primary mr-3"><input type="reset" value="Reset" class="btn btn-secondary">
   </form>
 
 </div>
