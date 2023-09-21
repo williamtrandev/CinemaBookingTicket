@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
 import java.util.List;
+//import java.util.Date;
 
 @RestController
 @RequestMapping("/api/v1/theater")
@@ -24,4 +25,9 @@ public class TheaterApi {
         return theaterService.getAllByDateAndMovieId(date, id);
     }
 
+//    @GetMapping("/test")
+//    public List<TheaterWithShowtimeDTO> test(@RequestParam(name = "date") Date date,
+//                              @RequestParam(name = "id") Long id) {
+//        return theaterService.test(date, id);
+//    }
 }

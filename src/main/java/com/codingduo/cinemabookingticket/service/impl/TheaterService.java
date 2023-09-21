@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+//import java.util.Date;
 
 @Service
 public class TheaterService implements ITheaterService {
@@ -80,4 +81,8 @@ public class TheaterService implements ITheaterService {
         }
         return showTimeDTOList;
     }
+
+//    public List<TheaterWithShowtimeDTO> test(Date date, Long id) {
+//        return theaterRepository.findAllTheatersByDateAndMovieId(date, id);
+//    }
 }
