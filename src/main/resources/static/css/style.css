@@ -840,6 +840,7 @@ body.dark .row-phim .card:hover::after {
     /* grid-gap: 20px; */
     justify-content: space-between;
     margin-top: 30px;
+    grid-column-gap: 2rem;
 }
 
 

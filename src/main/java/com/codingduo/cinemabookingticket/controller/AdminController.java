@@ -41,6 +41,11 @@ public class AdminController {
     @GetMapping("/movie")
     public String admin(Model model) {
         List<MovieDTO> movieList = movieService.getAll();
+        List<TagMovieDTO> tagMovieList = tagMovieService.getAll();
+        List<Genre> genreList = genreService.getAll();
+        model.addAttribute("movieDTO", new MovieDTO());
+        model.addAttribute("tagMovieList", tagMovieList);
+        model.addAttribute("genreList", genreList);
         model.addAttribute("movieList", movieList);
         model.addAttribute("title", "Quản lý phim");
         return "admin";
@@ -64,23 +69,12 @@ public class AdminController {
                                     @RequestParam("genre") String[] genre) throws IOException {
         String fileName = StringUtils.cleanPath(image.getOriginalFilename());
         movieDTO.setImgPath(fileName);
-//        String uploadDir = "static/img/movie/";
-//        FileUploadUtil.saveFile(uploadDir, fileName, image);
+        String uploadDir = "static/img/movie/";
+        FileUploadUtil.saveFile(uploadDir, fileName, image);
 
         List<String> genres = Arrays.asList(genre);
         movieDTO.setGenres(genres);
-        Movie movieSave = movieService.save(movieDTO);
-
-        if(movieSave != null) {
-            try{
-                File saveFile = new ClassPathResource("static/img/movie").getFile();
-                Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + image.getOriginalFilename());
-                Files.copy(image.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
+        movieService.save(movieDTO);
 
         return "redirect:/admin/movie";
     }
