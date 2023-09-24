@@ -9,8 +9,10 @@ import com.codingduo.cinemabookingticket.repository.TagMovieRepository;
 import com.codingduo.cinemabookingticket.service.IMovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -56,6 +58,7 @@ public class MovieService implements IMovieService {
         movieDTO.setDescription(movie.getDescription());
         movieDTO.setComing(movie.isComing());
         movieDTO.setImgPath(movie.getImagePath());
+        movieDTO.setImgPathAtLocal(movie.getImagePathAtLocal());
         movieDTO.setTrailerPath(movie.getTrailerPath());
         movieDTO.setTagId(movie.getTagMovie().getId());
         // Lấy ds thể loại

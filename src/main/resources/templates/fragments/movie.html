@@ -17,7 +17,7 @@
 
       <div class="images">
         <div th:each="movie, iterStat : ${comingList}" class="item" th:style="'--i: ' + ${iterStat.index}">
-          <img th:src="@{'/img/movie/' + ${movie.imgPath}}">
+          <img th:src="@{${movie.imgPathAtLocal}}" >
         </div>
       </div>
       <div class="content">
@@ -56,7 +56,7 @@
     <div th:each="item : ${movieList}" class="w-100 d-flex justify-content-center">
       <a class="card" th:href="@{'/movie/' + ${item.id}}">
         <div class="poster">
-          <img th:src="@{'/img/movie/' + ${item.imgPath}}" alt="poster" />
+          <img th:src= "@{${item.imgPathAtLocal}}" alt="poster" />
         </div>
         <div class="detail">
           <h2 class="name-film" th:text="${item.name}"></h2>
@@ -79,7 +79,7 @@
     <div th:each="item : ${showingList}" class="w-100 d-flex justify-content-center">
       <a class="card" th:href="@{'/movie/' + ${item.id}}">
         <div class="poster">
-          <img th:src="@{'/img/movie/' + ${item.imgPath}}" alt="poster" />
+          <img th:src="@{${item.imgPathAtLocal}}"  alt="poster" />
         </div>
         <div class="detail">
           <h2 class="name-film" th:text="${item.name}"></h2>
@@ -103,7 +103,7 @@
     <div th:each="item : ${comingList}" class="w-100 d-flex justify-content-center">
       <a class="card" th:href="@{'/movie/' + ${item.id}}">
         <div class="poster">
-          <img th:src="@{'/img/movie/' + ${item.imgPath}}" alt="poster" />
+          <img th:src= "@{${item.imgPathAtLocal}}"  alt="poster" />
         </div>
         <div class="detail">
           <h2 class="name-film" th:text="${item.name}"></h2>
@@ -122,7 +122,7 @@
         </div>
       </div>
       <div class="card-movie overflow-hidden me-5" >
-        <img th:src="@{'/img/movie/' + ${movie.imgPath}}" alt="" class="w-100 h-100">
+        <img th:src= "@{${movie.imgPathAtLocal}}"  alt="" class="w-100 h-100">
         <div class="play-button" th:attr="onclick='showTrailer(\'' + ${movie.trailerPath} + '\')'"><i class="fa-solid fa-play"></i></div>
       </div>
       <div class="card-detail-movie">
@@ -314,7 +314,7 @@
     <div th:each="item : ${movieList}" class="w-100 d-flex justify-content-center">
       <a class="card" th:href="@{'/admin/movie/' + ${item.id}}">
         <div class="poster">
-          <img th:src="@{'/img/movie/' + ${item.imgPath}}" alt="poster" />
+          <img th:src= "@{${item.imgPathAtLocal}}"  alt="poster" />
         </div>
         <div class="detail">
           <h2 class="name-film" th:text="${item.name}"></h2>
@@ -336,7 +336,7 @@
     </div>
   </div>
   <div class="card-movie overflow-hidden me-5" >
-    <img th:src="@{'/img/movie/' + ${movie.imgPath}}" alt="" class="w-100 h-100">
+    <img th:src= "@{${movie.imgPathAtLocal}}"  alt="" class="w-100 h-100">
     <div class="play-button" th:attr="onclick='showTrailer(\'' + ${movie.trailerPath} + '\')'"><i class="fa-solid fa-play"></i></div>
   </div>
   <div class="card-detail-movie">

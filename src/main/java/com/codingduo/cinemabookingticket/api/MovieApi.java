@@ -3,23 +3,16 @@ package com.codingduo.cinemabookingticket.api;
 import com.codingduo.cinemabookingticket.dto.MovieDTO;
 import com.codingduo.cinemabookingticket.model.Movie;
 import com.codingduo.cinemabookingticket.service.IMovieService;
-import com.codingduo.cinemabookingticket.service.impl.MovieService;
-import com.codingduo.cinemabookingticket.util.FileUploadUtil;
+import com.codingduo.cinemabookingticket.utils.FileUploadUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,12 +24,12 @@ public class MovieApi {
     private IMovieService movieService;
 
     @PostMapping("/save")
-    public ResponseEntity<Movie> saveMovie(@Valid @RequestBody MovieDTO movieDTO) {
+    public ResponseEntity<Movie> saveMovie(MultipartFile image, @Valid @RequestBody MovieDTO movieDTO) {
         return new ResponseEntity<>(movieService.save(movieDTO), HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Movie> updateMovie(@PathVariable("id") Long id,
+    public ResponseEntity<Movie> updateMovie(MultipartFile image, @PathVariable("id") Long id,
                                              @Valid @RequestBody MovieDTO movieDTO) {
         return new ResponseEntity<>(movieService.update(id, movieDTO), HttpStatus.OK);
     }
@@ -96,22 +89,11 @@ public class MovieApi {
                                     @RequestParam("genre") String[] genre) throws IOException {
         String fileName = StringUtils.cleanPath(image.getOriginalFilename());
         movieDTO.setImgPath(fileName);
-        String uploadDir = "static/img/movie/";
-        FileUploadUtil.saveFile(uploadDir, fileName, image);
-
         List<String> genres = Arrays.asList(genre);
         movieDTO.setGenres(genres);
         Movie movieSave = movieService.save(movieDTO);
-
-//        if(movieSave != null) {
-//            try{
-//                File saveFile = new ClassPathResource("static/img/movie").getFile();
-//                Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + image.getOriginalFilename());
-//                Files.copy(image.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
+        String uploadDir = "public/movie";
+        FileUploadUtil.saveFile(uploadDir, fileName, image);
         return movieDTO;
     }
 

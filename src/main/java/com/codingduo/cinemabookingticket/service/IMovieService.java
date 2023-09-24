@@ -2,6 +2,7 @@ package com.codingduo.cinemabookingticket.service;
 
 import com.codingduo.cinemabookingticket.dto.MovieDTO;
 import com.codingduo.cinemabookingticket.model.Movie;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 

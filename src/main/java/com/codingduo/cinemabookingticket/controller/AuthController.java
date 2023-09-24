@@ -67,7 +67,7 @@ public class AuthController {
             }
         }
         List<Genre> genreList = genreService.getGenreForShowing();
-        System.out.println(comingList.toString());
+        System.out.println(genreList.toString());
         model.addAttribute("comingList", comingList);
         model.addAttribute("movieList", movieList);
         model.addAttribute("banners", bannerList);
