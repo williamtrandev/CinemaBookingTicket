@@ -17,20 +17,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script th:inline="javascript">
         $(function() {
-            $("#btnSubmit").click(()=>{
-                let dynamicPath = /*[[@{/api/v1/movie}]]*/ '';
-                let formBody = new FormData($("#form")[0]);
-                fetch(`${dynamicPath}/create`, {
-                    method: "POST",
-                    body: formBody,
-                })
-                .then(res=>res.json())
-                .then(data=>{
-                    console.log(data);
-                })
-                .catch(err=>console.log(err));
-            })
+
+
+            // Modal detail phim
+            $(".close, #videoModalAdmin").click(function (event) {
+                if ($(event.target).is(".close, #videoModalAdmin")) {
+                    $("#videoModalAdmin").css("display", "none");
+                    $("#videoModalAdmin").find("iframe").attr("src", ""); // Tắt video khi đóng modal
+                }
+            });
         })
+        function showTrailer(link) {
+            $("#videoModalAdmin").css("display", "block");
+            $("#videoPlayerAdmin").attr("src", link);
+        }
     </script>
 </head>
 

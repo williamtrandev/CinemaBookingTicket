@@ -12,6 +12,7 @@ public interface IMovieService {
     Movie delete(Long id);
     List<MovieDTO> getAll();
     MovieDTO getOne(Long id);
+    List<MovieDTO> getAllNotDeleted();
     List<MovieDTO> getAllByNameLikeAndComing(String name, boolean coming);
 
     List<MovieDTO> getAllByGenreId(Long id);

@@ -307,6 +307,7 @@
 
   <!-- Button trigger modal -->
   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#movieModal">
+    <i class="fa-solid fa-plus"></i>
     Thêm phim
   </button>
 
@@ -346,28 +347,48 @@
     <p>Diễn viên: <span th:text="${movie.actors}"></span></p>
     <p>Đạo diễn: <span th:text="${movie.director}"></span></p>
     <p>Mô tả phim: <span th:text="${movie.description}"></span></p>
-    <a href="" class="btn btn-primary">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#movieModal">
       <i class="fa-solid fa-pen-to-square"></i>
       Sửa thông tin
-    </a>
-    <a href="" class="btn btn-danger">
+    </button>
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteMovieModal">
       <i class="fa-solid fa-trash"></i>
       Xóa phim
-    </a>
+    </button>
+  </div>
+
+  <!-- Modal Xóa phim -->
+  <div class="modal fade" id="deleteMovieModal" tabindex="-1" aria-labelledby="deleteMovieModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="deleteMovieModalLabel">Xóa phim</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div th:text="'Bạn có chắc là muốn xóa '+${movie.name}"></div>
+        </div>
+        <div class="modal-footer">
+          <form th:action="@{'/admin/movie/'+${movie.id}}" th:method="delete">
+            <input type="submit" class="btn btn-danger" value="Xóa"></input>
+          </form>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Hủy</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <!-- Suất chiếu  -->
 <div></div>
-</div>
 
 
 <!--Form edit movie-->
-
 <!-- Modal -->
 <div th:fragment = "movie_modal" class="modal fade" id="movieModal" tabindex="-1" role="dialog" aria-labelledby="movieModalTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
     <div class="modal-content">
-      <form th:action="@{/admin/movie}" th:object="${movieDTO}" method="post" enctype="multipart/form-data">
+<!--      <form th:action="@{/admin/movie}" th:object="${movieDTO}" method="post" enctype="multipart/form-data">-->
+      <form th:action="@{${formAction}}" th:object="${movie}" th:method="${formMethod}" enctype="multipart/form-data">
         <div class="modal-header">
           <h5 class="modal-title" id="movieModalLongTitle">Thêm phim</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -378,7 +399,7 @@
                 <div class="row">
                   <div class="mb-3 col-md-6">
                     <label for="movie-name" class="form-label text-white">Tên phim</label>
-                    <input type="text" class="form-control" id="movie-name" th:field="*{name}" required>
+                    <input type="text" class="form-control" id="movie-name" required th:field="*{name}">
                   </div>
 
                   <div class="mb-3 col-md-6">
@@ -408,15 +429,18 @@
                       <input class="form-check-input" id="movie-coming" type="checkbox" th:field="*{coming}">
                   </div>
 
-                  <div class="mb-3 col-md-6">
-                    <label for="movie-image" class="form-label text-white">Poster</label>
-                    <input class="form-control" type="file" id="movie-image" accept="image/png, image/jpeg, image/jpg"
-                           name="image" required>
+                  <div  class="mb-3 col-md-6">
+                    <div class="mb-1">
+                      <label for="movie-image" class="form-label text-white">Poster</label>
+                      <input class="form-control" type="file" id="movie-image" accept="image/png, image/jpeg, image/jpg"
+                             name="image">
+                    </div>
+
+                    <div>
+                      <img th:if="${not #strings.isEmpty(movie.imgPathAtLocal)}" th:src="@{${movie.imgPathAtLocal}}"  alt="poster" />
+                    </div>
                   </div>
 
-<!--                  <div class="mb-3">-->
-<!--                    <img src="#" id="preview-image">-->
-<!--                  </div>-->
 
                   <div class="mb-3 col-md-6">
                     <span class="input-group-text">Link trailer</span>
@@ -446,12 +470,12 @@
                       <input type="checkbox" class="btn-check" th:id="@{'checkbox-'+${genre.id}}" autocomplete="off"
                              name="genre"
                              th:value="${genre.name}"
+                             th:checked="${movie.genres != null && movie.genres.contains(genre.name)}"
                       >
                       <label class="btn btn-outline-light" th:for="@{'checkbox-'+${genre.id}}" th:text="${genre.name}"></label>
                     </div>
                   </div>
                 </div>
-
 
               </div>
 

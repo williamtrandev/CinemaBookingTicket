@@ -8,6 +8,7 @@
 
 <div th:fragment="content">
     <div th:replace="~{fragments/movie :: admin_detail}"></div>
+    <div th:replace = "~{fragments/movie :: movie_modal(fromAction=${formAction}, formMethod=${formMethod})}"></div>
 </div>
 
 </body>

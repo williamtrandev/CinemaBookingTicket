@@ -41,42 +41,43 @@ public class AdminController {
 
     @GetMapping("/movie")
     public String admin(Model model) {
-        List<MovieDTO> movieList = movieService.getAll();
+        List<MovieDTO> movieList = movieService.getAllNotDeleted();
         List<TagMovieDTO> tagMovieList = tagMovieService.getAll();
         List<Genre> genreList = genreService.getAll();
-        model.addAttribute("movieDTO", new MovieDTO());
+        model.addAttribute("movie", new MovieDTO());
         model.addAttribute("tagMovieList", tagMovieList);
         model.addAttribute("genreList", genreList);
         model.addAttribute("movieList", movieList);
         model.addAttribute("title", "Quản lý phim");
+        model.addAttribute("formAction", "/admin/movie");
+        model.addAttribute("formMethod", "post");
         return "admin";
     }
 
-    @GetMapping("/movie/create")
-    public String createMovie(Model model) {
-        List<TagMovieDTO> tagMovieList = tagMovieService.getAll();
-        List<Genre> genreList = genreService.getAll();
-        model.addAttribute("movieDTO", new MovieDTO());
-        model.addAttribute("tagMovieList", tagMovieList);
-        model.addAttribute("genreList", genreList);
-        model.addAttribute("title", "Thêm phim");
-        model.addAttribute("fTitle", "THÊM PHIM");
-        return "create_movie";
-    }
+//    @GetMapping("/movie/create")
+//    public String createMovie(Model model) {
+//        List<TagMovieDTO> tagMovieList = tagMovieService.getAll();
+//        List<Genre> genreList = genreService.getAll();
+//        model.addAttribute("movieDTO", new MovieDTO());
+//        model.addAttribute("tagMovieList", tagMovieList);
+//        model.addAttribute("genreList", genreList);
+//        model.addAttribute("title", "Thêm phim");
+//        model.addAttribute("fTitle", "THÊM PHIM");
+//        return "create_movie";
+//    }
 
     @PostMapping("/movie")
-    public String createMovieResult(@ModelAttribute MovieDTO movieDTO,
-                                    @RequestParam("image") MultipartFile image,
-                                    @RequestParam("genre") String[] genre) throws IOException {
+    public String createMovie(@ModelAttribute("movie") MovieDTO movie,
+                              @RequestParam("image") MultipartFile image,
+                              @RequestParam("genre") String[] genre) throws IOException {
 
         String fileName = StringUtils.cleanPath(image.getOriginalFilename());
-        movieDTO.setImgPath(fileName);
+        movie.setImgPath(fileName);
         List<String> genres = Arrays.asList(genre);
-        movieDTO.setGenres(genres);
-        Movie movieSave = movieService.save(movieDTO);
+        movie.setGenres(genres);
+        movieService.save(movie);
         String uploadDir = "public/movie";
         FileUploadUtil.saveFile(uploadDir, fileName, image);
-
 
         return "redirect:/admin/movie";
     }
@@ -84,11 +85,40 @@ public class AdminController {
     @GetMapping("/movie/{id}")
     public String getMovie(@PathVariable("id") Long id, Model model) {
         MovieDTO movieDTO = movieService.getOne(id);
+        List<TagMovieDTO> tagMovieList = tagMovieService.getAll();
+        List<Genre> genreList = genreService.getAll();
         String genres = String.join(", ", movieDTO.getGenres());
         model.addAttribute("movie", movieDTO);
         model.addAttribute("genre", genres);
+        model.addAttribute("tagMovieList", tagMovieList);
+        model.addAttribute("genreList", genreList);
         model.addAttribute("title", "Chi tiết phim");
         model.addAttribute("links", new String[]{"detailMovie.css"});
+        model.addAttribute("formAction", "/admin/movie/"+id);
+        model.addAttribute("formMethod", "put");
         return "admin_detail_movie";
+    }
+
+    @PutMapping("/movie/{id}")
+    public String updateMovie(@PathVariable("id") Long id, @ModelAttribute MovieDTO movieDTO,
+                              @RequestParam("image") MultipartFile image,
+                              @RequestParam("genre") String[] genre) throws IOException {
+        String fileName = StringUtils.cleanPath(image.getOriginalFilename());
+        if (!image.isEmpty()) {
+            movieDTO.setImgPath(fileName);
+            String uploadDir = "public/movie";
+            FileUploadUtil.saveFile(uploadDir, fileName, image);
+        }
+        List<String> genres = Arrays.asList(genre);
+        movieDTO.setGenres(genres);
+        movieService.update(id, movieDTO);
+
+        return "redirect:/admin/movie/"+id;
+    }
+
+    @DeleteMapping("/movie/{id}")
+    public String deleteMovie(@PathVariable("id") Long id) {
+        movieService.delete(id);
+        return "redirect:/admin/movie";
     }
 }
