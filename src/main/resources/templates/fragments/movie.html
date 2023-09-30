@@ -158,8 +158,10 @@
 
                   // Tạo div ngày mới
                   var newDay = document.createElement("div");
-                  if(i == 0) newDay.className="days active";
-                  else newDay.className = "days";
+                  if(i == 0) {
+                      newDay.style="border-top-left-radius: 12px; border-bottom-left-radius: 12px;"
+                  }
+                  newDay.className = "days";
                   newDay.setAttribute("data-date", nextYear + "-" + nextMonth + "-" + nextDay);
                   var dateSpan = document.createElement("span");
                   dateSpan.textContent = nextDay + "/" + nextMonth;
@@ -179,118 +181,6 @@
       </div>
       <div class="my-3 d-flex justify-content-center">
         <div class="list-group list-group-flush">
-<!--          <div class="list-group-item py-3 px-5" data-bs-toggle="collapse" data-bs-target="#test1" aria-expanded="false"-->
-<!--               aria-controls="test1" style="cursor: pointer;">-->
-<!--            <div class="d-flex align-items-center">-->
-<!--              <img src="./assets/ant.jpg" alt="" class="rounded-circle me-3" style="width: 50px; height: 50px;">-->
-<!--              <span>Coding Duo Quận Cam</span>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div id="test1" class="collapse py-3 px-5 showtimes">-->
-<!--            <div class="type-wrapper">-->
-<!--              <div class="type-ticket mint">2D</div>-->
-<!--              <div class="d-flex flex-wrap">-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="type-wrapper">-->
-<!--              <div class="type-ticket purples">3D</div>-->
-<!--              <div class="d-flex flex-wrap">-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div class="list-group-item py-3 px-5" data-bs-toggle="collapse" data-bs-target="#test2" aria-expanded="false"-->
-<!--               aria-controls="test2" style="cursor: pointer;">-->
-<!--            <div class="d-flex align-items-center">-->
-<!--              <img src="./assets/ant.jpg" alt="" class="rounded-circle me-3" style="width: 50px; height: 50px;">-->
-<!--              <span>Coding Duo Quận Cam</span>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div id="test2" class="collapse py-3 px-5 showtimes">-->
-<!--            <div class="type-wrapper">-->
-<!--              <div class="type-ticket mint">2D</div>-->
-<!--              <div class="d-flex flex-wrap">-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="type-wrapper">-->
-<!--              <div class="type-ticket purples">3D</div>-->
-<!--              <div class="d-flex flex-wrap">-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-
-<!--          <div class="list-group-item py-3 px-5" data-bs-toggle="collapse" data-bs-target="#test3" aria-expanded="false"-->
-<!--               aria-controls="test3" style="cursor: pointer;">-->
-<!--            <div class="d-flex align-items-center">-->
-<!--              <img src="./assets/ant.jpg" alt="" class="rounded-circle me-3" style="width: 50px; height: 50px;">-->
-<!--              <span>Coding Duo Quận Cam</span>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div id="test3" class="collapse py-3 px-5 showtimes">-->
-<!--            <div class="type-wrapper">-->
-<!--              <div class="type-ticket mint">2D</div>-->
-<!--              <div class="d-flex flex-wrap">-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="type-wrapper">-->
-<!--              <div class="type-ticket purples">3D</div>-->
-<!--              <div class="d-flex flex-wrap">-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
         </div>
       </div>
     </div>
