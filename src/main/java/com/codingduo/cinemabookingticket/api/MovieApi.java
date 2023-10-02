@@ -24,20 +24,39 @@ public class MovieApi {
     private IMovieService movieService;
 
     @PostMapping("/save")
-    public ResponseEntity<Movie> saveMovie(MultipartFile image, @Valid @RequestBody MovieDTO movieDTO) {
+    public ResponseEntity<MovieDTO> saveMovie(@ModelAttribute MovieDTO movieDTO,
+                                           @RequestParam("image") MultipartFile image,
+                                           @RequestParam("genre") String[] genre) throws IOException {
+        String fileName = StringUtils.cleanPath(image.getOriginalFilename());
+        movieDTO.setImgPath(fileName);
+        List<String> genres = Arrays.asList(genre);
+        movieDTO.setGenres(genres);
+        String uploadDir = "public/movie";
+        FileUploadUtil.saveFile(uploadDir, fileName, image);
+
         return new ResponseEntity<>(movieService.save(movieDTO), HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Movie> updateMovie(MultipartFile image, @PathVariable("id") Long id,
-                                             @Valid @RequestBody MovieDTO movieDTO) {
+    public ResponseEntity<MovieDTO> updateMovie(@PathVariable("id") Long id,
+                                             @ModelAttribute MovieDTO movieDTO,
+                                             @RequestParam("image") MultipartFile image,
+                                             @RequestParam("genre") String[] genre) throws IOException {
+        if (!image.isEmpty()) {
+            String fileName = StringUtils.cleanPath(image.getOriginalFilename());
+            movieDTO.setImgPath(fileName);
+            String uploadDir = "public/movie";
+            FileUploadUtil.saveFile(uploadDir, fileName, image);
+        }
+        List<String> genres = Arrays.asList(genre);
+        movieDTO.setGenres(genres);
         return new ResponseEntity<>(movieService.update(id, movieDTO), HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Movie> deteleMovie(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(movieService.delete(id), HttpStatus.OK);
-    }
+//    @DeleteMapping("/delete/{id}")
+//    public ResponseEntity<Movie> deteleMovie(@PathVariable("id") Long id) {
+//        return new ResponseEntity<>(movieService.delete(id), HttpStatus.OK);
+//    }
 
     @GetMapping("/getAll")
     public List<MovieDTO> getAllMovie() {
@@ -83,18 +102,18 @@ public class MovieApi {
         return movieService.getAllByGenreId(id);
     }
 
-    @PostMapping("/create")
-    public MovieDTO createMovieResult(@ModelAttribute MovieDTO movieDTO,
-                                    @RequestParam("image") MultipartFile image,
-                                    @RequestParam("genre") String[] genre) throws IOException {
-        String fileName = StringUtils.cleanPath(image.getOriginalFilename());
-        movieDTO.setImgPath(fileName);
-        List<String> genres = Arrays.asList(genre);
-        movieDTO.setGenres(genres);
-        Movie movieSave = movieService.save(movieDTO);
-        String uploadDir = "public/movie";
-        FileUploadUtil.saveFile(uploadDir, fileName, image);
-        return movieDTO;
-    }
+//    @PostMapping("/create")
+//    public MovieDTO createMovieResult(@ModelAttribute MovieDTO movieDTO,
+//                                    @RequestParam("image") MultipartFile image,
+//                                    @RequestParam("genre") String[] genre) throws IOException {
+//        String fileName = StringUtils.cleanPath(image.getOriginalFilename());
+//        movieDTO.setImgPath(fileName);
+//        List<String> genres = Arrays.asList(genre);
+//        movieDTO.setGenres(genres);
+//        Movie movieSave = movieService.save(movieDTO);
+//        String uploadDir = "public/movie";
+//        FileUploadUtil.saveFile(uploadDir, fileName, image);
+//        return movieDTO;
+//    }
 
 }

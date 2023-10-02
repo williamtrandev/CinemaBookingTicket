@@ -341,13 +341,18 @@
     <div class="play-button" th:attr="onclick='showTrailer(\'' + ${movie.trailerPath} + '\')'"><i class="fa-solid fa-play"></i></div>
   </div>
   <div class="card-detail-movie">
-    <h3 th:text = "${movie.name}"></h3>
-    <p>Khởi chiếu: <span th:text="${movie.releaseDate}"></span></p>
-    <p>Thể loại: <span th:text="${genre}"></span></p>
-    <p>Diễn viên: <span th:text="${movie.actors}"></span></p>
-    <p>Đạo diễn: <span th:text="${movie.director}"></span></p>
-    <p>Mô tả phim: <span th:text="${movie.description}"></span></p>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#movieModal">
+    <div class="detail-movie">
+      <h3 th:text = "${movie.name}"></h3>
+      <p>Khởi chiếu: <span th:text="${movie.releaseDate}"></span></p>
+      <p>Thể loại: <span th:text="${genre}"></span></p>
+      <p>Diễn viên: <span th:text="${movie.actors}"></span></p>
+      <p>Đạo diễn: <span th:text="${movie.director}"></span></p>
+      <p>Mô tả phim: <span th:text="${movie.description}"></span></p>
+    </div>
+
+    <button id="updateMovieBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#movieModal"
+            th:attr="data-id=${movie.id}"
+    >
       <i class="fa-solid fa-pen-to-square"></i>
       Sửa thông tin
     </button>
@@ -388,7 +393,8 @@
   <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
     <div class="modal-content">
 <!--      <form th:action="@{/admin/movie}" th:object="${movieDTO}" method="post" enctype="multipart/form-data">-->
-      <form th:action="@{${formAction}}" th:object="${movie}" th:method="${formMethod}" enctype="multipart/form-data">
+<!--      <form th:action="@{${formAction}}" th:object="${movie}" th:method="${formMethod}" enctype="multipart/form-data">-->
+      <form id="movieForm" th:object="${movie}" enctype="multipart/form-data">
         <div class="modal-header">
           <h5 class="modal-title" id="movieModalLongTitle">Thêm phim</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -433,11 +439,13 @@
                     <div class="mb-1">
                       <label for="movie-image" class="form-label text-white">Poster</label>
                       <input class="form-control" type="file" id="movie-image" accept="image/png, image/jpeg, image/jpg"
-                             name="image">
+                             name="image"
+                             th:required="${imageRequired}"
+                      >
                     </div>
 
                     <div>
-                      <img th:if="${not #strings.isEmpty(movie.imgPathAtLocal)}" th:src="@{${movie.imgPathAtLocal}}"  alt="poster" />
+                      <img th:if="${not #strings.isEmpty(movie.imgPathAtLocal)}" th:src="@{${movie.imgPathAtLocal}}"  alt="poster" th:class="img-fluid" />
                     </div>
                   </div>
 
@@ -481,8 +489,9 @@
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <input type="submit" value="Submit" class="btn btn-primary mr-3">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+          <button type="reset" class="btn btn-secondary">Reset</button>
+          <button type="button" class="btn btn-primary mr-3" id="movieSubmitBtn" th:text="${btn}"></button>
         </div>
       </form>
     </div>

@@ -107,12 +107,13 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public Movie save(MovieDTO movieDTO) {
-        return movieRepository.save(convertToMovie(movieDTO));
+    public MovieDTO save(MovieDTO movieDTO) {
+        Movie movie = movieRepository.save(convertToMovie(movieDTO));
+        return convertToMovieDTO(movie);
     }
 
     @Override
-    public Movie update(Long id, MovieDTO movieDTO) {
+    public MovieDTO update(Long id, MovieDTO movieDTO) {
         Movie existingMovie = movieRepository.getReferenceById(id);
         existingMovie.setName(movieDTO.getName());
         existingMovie.setDirector(movieDTO.getDirector());
@@ -126,14 +127,16 @@ public class MovieService implements IMovieService {
         }
         existingMovie.setTrailerPath(movieDTO.getTrailerPath());
         existingMovie.setTagMovie(tagMovieRepository.getReferenceById(movieDTO.getTagId()));
-        return movieRepository.save(existingMovie);
+        Movie movie = movieRepository.save(existingMovie);
+        return convertToMovieDTO(movie);
     }
 
     @Override
-    public Movie delete(Long id) {
+    public MovieDTO delete(Long id) {
         Movie existingMovie = movieRepository.getReferenceById(id);
         existingMovie.setDeleted(true);
-        return movieRepository.save(existingMovie);
+        Movie movie = movieRepository.save(existingMovie);
+        return convertToMovieDTO(movie);
     }
 
     @Override

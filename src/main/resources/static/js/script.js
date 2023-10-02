@@ -132,6 +132,6 @@ const autoNext = setInterval(nextSlider, 4000);
 $('#movie-image').on('change', (e) => {
       const image = e.target.files[0];
       if (image) {
-        $('#preview-image').attr('src', URL.createObjectURL(file))
+        $('#preview-image').attr('src', URL.createObjectURL(image))
       }
 })
