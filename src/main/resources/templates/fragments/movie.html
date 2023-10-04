@@ -313,7 +313,9 @@
 
   <div class="row-phim">
     <div th:each="item : ${movieList}" class="w-100 d-flex justify-content-center">
+
       <a class="card" th:href="@{'/admin/movie/' + ${item.id}}">
+
         <div class="poster">
           <img th:src= "@{${item.imgPathAtLocal}}"  alt="poster" />
         </div>
@@ -325,6 +327,32 @@
           </div>
         </div>
       </a>
+      <button type="button" class="btn btn-danger deleteMovieBtn"
+              data-bs-toggle="modal"
+              data-bs-target="#deleteMovieModal1"
+              th:attr="data-id=${item.id},data-name=${item.name}"
+      ><i class="fa-solid fa-trash"></i></button>
+    </div>
+  </div>
+
+  <!-- Modal Xóa phim -->
+  <div class="modal fade" id="deleteMovieModal1" tabindex="-1" aria-labelledby="deleteMovieModalLabel1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="deleteMovieModalLabel1">Xóa phim</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div>Bạn có chắc là muốn xóa <span id="deleteMovieName"></span></div>
+        </div>
+        <div class="modal-footer">
+          <form action="" th:method="delete" id="deleteMovieForm">
+            <input type="submit" class="btn btn-danger" value="Xóa"></input>
+          </form>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Hủy</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -371,7 +399,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div th:text="'Bạn có chắc là muốn xóa '+${movie.name}"></div>
+          <div>Bạn có chắc là muốn xóa <span th:text="${movie.name}"></span></div>
         </div>
         <div class="modal-footer">
           <form th:action="@{'/admin/movie/'+${movie.id}}" th:method="delete">

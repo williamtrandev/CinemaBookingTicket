@@ -17,6 +17,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script th:inline="javascript">
         $(function() {
+            $(".deleteMovieBtn").click(function() {
+                console.log("click");
+                const name = $(this).data("name");
+                const id = $(this).data("id");
+                const directHref = /*[[@{/admin/movie}]]*/ '';
+                const action = `${directHref}/${id}`
+                $('#deleteMovieName').html(name);
+                $('#deleteMovieForm').attr('action', action);
+            });
 
             // Modal detail phim
             $(".close, #videoModalAdmin").click(function (event) {

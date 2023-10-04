@@ -13,5 +13,5 @@ $(function() {
             $("#movieModal").modal("hide");
         })
         .catch(err => console.log(err));
-    })
+    });
 })

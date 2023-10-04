@@ -815,6 +815,11 @@ body.dark .row-phim .card {
     animation: spin 2.5s linear infinite;
 }
 
+.row-phim .btn {
+    position: relative;
+    height: fit-content;
+}
+
 body.dark .row-phim .card:hover::before,
 body.dark .row-phim .card:hover::after {
     background-image: linear-gradient(
