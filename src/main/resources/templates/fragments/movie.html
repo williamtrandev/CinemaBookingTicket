@@ -327,7 +327,7 @@
           </div>
         </div>
       </a>
-      <button type="button" class="btn btn-danger deleteMovieBtn"
+      <button type="button" class="btn btn-danger delete-movie-btn"
               data-bs-toggle="modal"
               data-bs-target="#deleteMovieModal1"
               th:attr="data-id=${item.id},data-name=${item.name}"
@@ -347,15 +347,17 @@
           <div>Bạn có chắc là muốn xóa <span id="deleteMovieName"></span></div>
         </div>
         <div class="modal-footer">
-          <form action="" th:method="delete" id="deleteMovieForm">
-            <input type="submit" class="btn btn-danger" value="Xóa"></input>
-          </form>
+<!--          <form action="" th:method="delete" id="deleteMovieForm">-->
+<!--            <button type="submit" class="btn btn-danger" id="deleteMovieBtn">Xóa</button>-->
+<!--          </form>-->
+          <button type="button" class="btn btn-danger" id="deleteMovieBtn">Xóa</button>
           <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Hủy</button>
         </div>
       </div>
     </div>
   </div>
 </div>
+
 
 <!--Chi tiết phim admin-->
 <div th:fragment = "admin_detail" class="d-flex justify-content-md-between flex-column flex-md-row align-items-center">

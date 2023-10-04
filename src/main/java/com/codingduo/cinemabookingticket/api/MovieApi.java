@@ -53,10 +53,10 @@ public class MovieApi {
         return new ResponseEntity<>(movieService.update(id, movieDTO), HttpStatus.OK);
     }
 
-//    @DeleteMapping("/delete/{id}")
-//    public ResponseEntity<Movie> deteleMovie(@PathVariable("id") Long id) {
-//        return new ResponseEntity<>(movieService.delete(id), HttpStatus.OK);
-//    }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<MovieDTO> deteleMovie(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(movieService.delete(id), HttpStatus.OK);
+    }
 
     @GetMapping("/getAll")
     public List<MovieDTO> getAllMovie() {

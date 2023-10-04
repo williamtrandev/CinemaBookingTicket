@@ -11,7 +11,7 @@ $(function() {
         .then(data => {
             $(".card-movie").empty().append(renderImage(data));
             $(".detail-movie").empty().append(renderDetail(data));
-            $("#movieForm")[0].reset();
+            
             $("#movieModal").modal("hide");
         })
         .catch(err => console.log(err));
