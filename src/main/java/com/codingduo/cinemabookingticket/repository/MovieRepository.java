@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Long> {
     List<Movie> findAllByNameLikeAndComing(String name, boolean coming);
+    List<Movie> findAllByDeleted(boolean deleted);
 
     @Query("SELECT DISTINCT m FROM Movie m LEFT JOIN FETCH m.genres WHERE m.id = :id")
     Movie findMovieWithGenresBy(Long id);

@@ -47,6 +47,19 @@ public class MovieService implements IMovieService {
         return convertToMovieDTO(movie);
     }
 
+    @Override
+    public List<MovieDTO> getAllNotDeleted() {
+        List<Movie> movies = movieRepository.findAllByDeleted(false);
+        List<MovieDTO> movieDTOs = new ArrayList<>();
+
+        for (Movie movie : movies) {
+            MovieDTO movieDTO = convertToMovieDTO(movie);
+            movieDTOs.add(movieDTO);
+        }
+
+        return movieDTOs;
+    }
+
     private MovieDTO convertToMovieDTO(Movie movie) {
         MovieDTO movieDTO = new MovieDTO();
         movieDTO.setId(movie.getId());
@@ -69,7 +82,6 @@ public class MovieService implements IMovieService {
         movieDTO.setGenres(genreNames);
         return movieDTO;
     }
-
 
     private Movie convertToMovie(MovieDTO movieDTO) {
         Movie movie = new Movie();
@@ -95,12 +107,13 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public Movie save(MovieDTO movieDTO) {
-        return movieRepository.save(convertToMovie(movieDTO));
+    public MovieDTO save(MovieDTO movieDTO) {
+        Movie movie = movieRepository.save(convertToMovie(movieDTO));
+        return convertToMovieDTO(movie);
     }
 
     @Override
-    public Movie update(Long id, MovieDTO movieDTO) {
+    public MovieDTO update(Long id, MovieDTO movieDTO) {
         Movie existingMovie = movieRepository.getReferenceById(id);
         existingMovie.setName(movieDTO.getName());
         existingMovie.setDirector(movieDTO.getDirector());
@@ -109,19 +122,22 @@ public class MovieService implements IMovieService {
         existingMovie.setDuration(movieDTO.getDuration());
         existingMovie.setDescription(movieDTO.getDescription());
         existingMovie.setComing(movieDTO.isComing());
-        existingMovie.setImagePath(movieDTO.getImgPath());
+        if (movieDTO.getImgPath() != null) { // Nếu hình không thay đổi
+            existingMovie.setImagePath(movieDTO.getImgPath());
+        }
         existingMovie.setTrailerPath(movieDTO.getTrailerPath());
         existingMovie.setTagMovie(tagMovieRepository.getReferenceById(movieDTO.getTagId()));
-        return movieRepository.save(existingMovie);
+        Movie movie = movieRepository.save(existingMovie);
+        return convertToMovieDTO(movie);
     }
 
     @Override
-    public Movie delete(Long id) {
+    public MovieDTO delete(Long id) {
         Movie existingMovie = movieRepository.getReferenceById(id);
         existingMovie.setDeleted(true);
-        return movieRepository.save(existingMovie);
+        Movie movie = movieRepository.save(existingMovie);
+        return convertToMovieDTO(movie);
     }
-
 
     @Override
     public List<MovieDTO> getAllByNameLikeAndComing(String name, boolean coming) {

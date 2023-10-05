@@ -7,11 +7,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface IMovieService {
-    Movie save(MovieDTO movieDTO);
-    Movie update(Long id, MovieDTO movieDTO);
-    Movie delete(Long id);
+    MovieDTO save(MovieDTO movieDTO);
+    MovieDTO update(Long id, MovieDTO movieDTO);
+    MovieDTO delete(Long id);
     List<MovieDTO> getAll();
     MovieDTO getOne(Long id);
+    List<MovieDTO> getAllNotDeleted();
     List<MovieDTO> getAllByNameLikeAndComing(String name, boolean coming);
 
     List<MovieDTO> getAllByGenreId(Long id);

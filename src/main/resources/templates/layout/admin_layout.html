@@ -17,20 +17,96 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script th:inline="javascript">
         $(function() {
-            $("#btnSubmit").click(()=>{
-                let dynamicPath = /*[[@{/api/v1/movie}]]*/ '';
-                let formBody = new FormData($("#form")[0]);
-                fetch(`${dynamicPath}/create`, {
-                    method: "POST",
-                    body: formBody,
-                })
-                .then(res=>res.json())
-                .then(data=>{
-                    console.log(data);
-                })
-                .catch(err=>console.log(err));
-            })
+            $(".delete-movie-btn").click(function(e) {
+                const name = $(this).data("name");
+                const id = $(this).data("id");
+                //const directHref = /*[[@{/admin/movie}]]*/ '';
+                //const action = `${directHref}/${id}`
+                $('#deleteMovieName').html(name);
+
+                const removeTag = e.target;
+                $("#deleteMovieBtn").click(function() {
+                    let dynamicPath = /*[[@{/api/v1/movie}]]*/ '';
+                    
+                    fetch(`${dynamicPath}/delete/${id}`, {
+                        method: "DELETE",
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        //$(removeTag).remove();
+                        $(removeTag).parent().remove();
+                        $("#deleteMovieModal1").modal("hide");
+                    })
+                    .catch(err => console.log(err));
+                });
+            });
+
+            // Modal detail phim
+            $(".close, #videoModalAdmin").click(function (event) {
+                if ($(event.target).is(".close, #videoModalAdmin")) {
+                    $("#videoModalAdmin").css("display", "none");
+                    $("#videoModalAdmin").find("iframe").attr("src", ""); // Tắt video khi đóng modal
+                }
+            });
         })
+
+        function showTrailer(link) {
+            $("#videoModalAdmin").css("display", "block");
+            $("#videoPlayerAdmin").attr("src", link);
+        }
+
+        function renderCard(data) {
+            let cardsFilm = "";
+            const directHref = /*[[@{/admin/movie}]]*/ '';
+            const directImg = /*[[@{/public/movie}]]*/ '';
+            
+            const name = data.name;
+            const director = data.director;
+            //const tag = obj.name_nhanphim;
+            //const tagClass = tag.toLowerCase();
+            const href =  `${directHref}/${data.id}`;
+            const poster = `${directImg}/${data.imgPath}`;
+
+            cardsFilm +=
+                `<div class='w-100 d-flex justify-content-center'>
+                    <a class='card' href='${href}'>
+                        <div class='poster'>
+                            <img src='${poster}' alt='poster' />
+                        </div>
+                        <div class='detail'>
+                            <h2 class='name-film'>
+                                ${name}
+                            </h2>
+                            <h3 class='director'>Đạo diễn ${director}</h3>
+                        </div>
+                    </a>
+                </div>`;
+
+            return cardsFilm;
+        }
+
+        function renderDetail(data) {
+            let detail = "";
+            const genre = data.genres.join(", ");
+            detail += 
+                `<h3>${data.name}</h3>
+                <p>Khởi chiếu: <span>${data.releaseDate}</span></p>
+                <p>Thể loại: <span>${genre}</span></p>
+                <p>Diễn viên: <span>${data.actors}</span></p>
+                <p>Đạo diễn: <span>${data.director}</span></p>
+                <p>Mô tả phim: <span>${data.description}</span></p>`;
+            return detail;
+        }
+
+        function renderImage(data) {
+            let card = "";
+            const directImg = /*[[@{/public/movie}]]*/ '';
+            const poster = `${directImg}/${data.imgPath}`;
+            card += 
+                `<img src= "${poster}"  alt="" class="w-100 h-100">
+                <div class="play-button" onclick="showTrailer(${data.trailerPath})"><i class="fa-solid fa-play"></i></div>`;
+            return card;
+        }
     </script>
 </head>
 
@@ -46,13 +122,11 @@
 
 </section>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous"></script>
 <script th:src="@{/js/script.js}"></script>
 <th:block th:if = "${scripts}">
-    <th:block th:replace = "${scripts}"/>
-    <script th:each="jsFile : scripts" th:src="@{'/js/' + @{jsFile}}"></script>
+    <script th:each="jsFile : ${scripts}"  th:src="@{'/js/' + ${jsFile}}"></script>
 </th:block>
 </body>
 
