@@ -3,7 +3,8 @@ let addBtns = $(".add-product");
 let minusBtns = $(".minus-product");
 let productInfo = $("#product-buying");
 let num = JSON.parse(sessionStorage.getItem("gheDaChon")).length;
-let total = parseInt($(".price-ticket").text().replaceAll(".", "")) * num;
+let price = JSON.parse(sessionStorage.getItem("bookingInfo")).price;
+let total = parseInt(price) * num;
 $(".price-total-ticket").text(total.toLocaleString('vi-VN') + " VND");
 
 // Kiểm tra nếu số lượng món > 0 thì cho giảm nữa
@@ -25,10 +26,8 @@ if(productInfo.find("p").length == 0) {
 }
 
 function checkExist(name) {
-	if(productInfo.find(name).length > 0) {
-		return true;
-	}
-	return false;
+	return productInfo.find(name).length > 0;
+
 }
 
 
@@ -37,7 +36,7 @@ addBtns.click((event)=>{
 		$(".msg-has-no").remove();
 	}
 	let tds = $(event.target).closest("tr").find("td");
-	let price = parseInt(tds.last().text().replaceAll(".", ""));
+	let price = parseInt(tds.last().text().replaceAll(",", ""));
 	let targetInput = $(event.target).siblings('.num-product');	// Tìm ô input tương ứng
 	let numProduct = parseInt(targetInput.val()) + 1;	// Tăng số lượng
 	targetInput.val(numProduct); 	// Gán lại giá trị cho ô input
@@ -61,7 +60,7 @@ addBtns.click((event)=>{
 minusBtns.click((event)=> {
 	let minusTarget = $(event.target);	// Tìm nút giảm số lượng
 	let tds = $(event.target).closest("tr").find("td");
-	let price = parseInt(tds.last().text().replaceAll(".", ""));
+	let price = parseInt(tds.last().text().replaceAll(",", ""));
 	let targetInput = minusTarget.siblings('.num-product');	// Tìm ô input tương ứng
 	let numProduct = parseInt(targetInput.val());	// Lấy giá trị ô input
 	let tdFirst = $(event.target).closest("tr").find("td")[0]; // Lấy thẻ td đầu tiên để lấy tên sản phẩm

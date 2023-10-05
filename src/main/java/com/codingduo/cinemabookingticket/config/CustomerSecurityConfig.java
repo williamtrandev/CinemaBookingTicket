@@ -38,11 +38,10 @@ public class CustomerSecurityConfig {
         http
                 .csrf((csrf) -> csrf.disable())
                 .sessionManagement((sessionManagement) ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
                                 .requestMatchers("/**", "/static/**", "/public/**").permitAll()
-                                .requestMatchers("/admin/*").hasAuthority("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .formLogin(form ->

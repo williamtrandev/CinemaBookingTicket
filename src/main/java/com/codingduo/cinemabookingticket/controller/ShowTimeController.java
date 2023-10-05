@@ -1,14 +1,13 @@
 package com.codingduo.cinemabookingticket.controller;
 
+import com.codingduo.cinemabookingticket.dto.ComboDTO;
 import com.codingduo.cinemabookingticket.dto.MovieDTO;
 import com.codingduo.cinemabookingticket.dto.SeatDTO;
+import com.codingduo.cinemabookingticket.model.Combo;
 import com.codingduo.cinemabookingticket.model.HistoryDetail;
 import com.codingduo.cinemabookingticket.model.Seat;
 import com.codingduo.cinemabookingticket.model.ShowTime;
-import com.codingduo.cinemabookingticket.service.IHistoryDetailService;
-import com.codingduo.cinemabookingticket.service.IRoomService;
-import com.codingduo.cinemabookingticket.service.ISeatService;
-import com.codingduo.cinemabookingticket.service.IShowTimeService;
+import com.codingduo.cinemabookingticket.service.*;
 import com.codingduo.cinemabookingticket.utils.MappingUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -19,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,6 +38,12 @@ public class ShowTimeController {
 
     @Autowired
     private IHistoryDetailService historyDetailService;
+
+    @Autowired
+    private IComboService comboService;
+
+    @Autowired
+    private IMailService mailService;
 
     @GetMapping("")
     public String bookingPage(Principal principal,
@@ -83,13 +89,25 @@ public class ShowTimeController {
 
         // Đẩy qua view
         model.addAttribute("seats", classifySeatList);
-        System.out.println("seat list" + seatList.size());
-        System.out.println("classify list" + classifySeatList.get(0));
-
 
         // Link css
         model.addAttribute("links", new String[]{"booking.css"});
 
+        // Link script
+        model.addAttribute("scripts", new String[]{"booking.js"});
         return "booking";
     }
+
+    @GetMapping("/chooseFood")
+    public String chooseFood(Model model) {
+        model.addAttribute("title", "Chọn bắp nước");
+        model.addAttribute("links", new String[]{"chooseFood.css"});
+        model.addAttribute("scripts", new String[]{"booking.js", "chonbapnuoc.js"});
+        // Lấy danh sách các combo chưa bị xóa
+        List<Combo> comboList = comboService.getAllByDeleted(false);
+        model.addAttribute("combo", comboList);
+        return "choose_food";
+    }
+
+
 }

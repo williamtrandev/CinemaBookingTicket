@@ -12,6 +12,20 @@ import java.util.List;
 
 public class CustomerDetails implements UserDetails {
     private Customer customer;
+    List<SimpleGrantedAuthority> authorities=null;
+    public Customer getUser() {
+        return customer;
+    }
+
+    public void setUser(Customer customer) {
+        this.customer = customer;
+    }
+
+    public void setAuthorities(List<SimpleGrantedAuthority> authorities)
+    {
+        this.authorities = authorities;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
@@ -19,10 +33,14 @@ public class CustomerDetails implements UserDetails {
         return authorities;
     }
 
+    public Long getId() {
+        return customer.getId();
+    }
     @Override
     public String getPassword() {
         return customer.getPassword();
     }
+
 
     @Override
     public String getUsername() {

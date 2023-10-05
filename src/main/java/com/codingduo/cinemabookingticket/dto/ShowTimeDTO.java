@@ -18,4 +18,5 @@ public class ShowTimeDTO {
     private Long idMovie;
     private Long idTicket;
     private Long idRoom;
+    private double price;
 }

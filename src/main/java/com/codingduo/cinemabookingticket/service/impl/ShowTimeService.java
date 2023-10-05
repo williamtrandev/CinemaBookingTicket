@@ -39,6 +39,7 @@ public class ShowTimeService implements IShowTimeService {
         showTimeDTO.setIdRoom(showTime.getRoom().getId());
         showTimeDTO.setIdTicket(showTime.getTicket().getId());
         showTimeDTO.setIdMovie(showTime.getMovie().getId());
+        showTimeDTO.setPrice(showTime.getTicket().getPrice());
         return showTimeDTO;
     }
 }

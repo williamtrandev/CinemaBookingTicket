@@ -74,7 +74,7 @@
         }
 
         function handleDirectBooking(button) {
-
+            const name = $(".card-detail-movie h3").text();
             const showtime = JSON.parse(button.getAttribute('data-booking'));
             const timeShow = showtime.timeShow.slice(0, 5);
             const typeArray = ['2D', '3D'];
@@ -82,12 +82,17 @@
             const showDate = showtime.dateShow;
             const showtimeId = showtime.id; // Id của suất chiếu
             const roomId = showtime.idRoom; // Id của phòng chiếu
+
+            const price = showtime.price;
             const bookingInfo = {
+                name,
                 timeShow,
                 ticketType,
                 showDate,
                 showtimeId,
-                roomId
+                roomId,
+                price
+
             };
             sessionStorage.setItem('bookingInfo', JSON.stringify(bookingInfo));
             const direct = /*[[@{/booking}]]*/ '';
@@ -169,15 +174,34 @@
             });
             $("#checkout").click(function() {
                 $(".wrap-loading").css('display', 'block');
+                const seatList = JSON.parse(sessionStorage.getItem("gheDaChon"));
+                // Chuyển sang dạng A1, B1...
+                const outputArray = seatList.map(item => `${item.row}${item.pos}`);
+                const infoSeats = outputArray.join(', ');
+                const productBuying =  $("#product-buying");
+                console.log(productBuying);
+                let contents = [];
+                productBuying.find("p").each(function() {
+                  // Lấy nội dung của từng phần tử <p>
+                  var content = $(this).text();
+
+                  // Thêm nội dung vào mảng contents
+                  contents.push(content);
+                });
+                const infoCombo = contents.join(", ");
+                const seatIds = seatList.map(item => item.id);
                 const data = {
-                    lichsu: {
-                        soluongve: JSON.parse(sessionStorage.getItem("gheDaChon")).length,
-                        ghedat: sessionStorage.getItem("gheHienThi"),
-                        tongtien: $(".price-total-ticket").text().replaceAll(".", "").replace(" VND", "")
-                    },
-                    data_datcho: sessionStorage.getItem('gheDaChon')
+                    total: $(".price-total-ticket").text().replaceAll(".", "").replace(" VND", ""),
+                    seatIds: seatIds,
+                  // Tiếp tục chỗ này
+                    showTimeId: JSON.parse(sessionStorage.getItem("bookingInfo")).showtimeId,
+                    infoSeats: infoSeats,
+                    infoCombo: infoCombo
+                    // infoSeats: JSON.parse(sessionStorage.getItem(""))
                 }
-                fetch("/booking/checkout", {
+
+                let dynamicPath = /*[[@{/api/v1/history/save}]]*/ '';
+                fetch(dynamicPath, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -185,10 +209,10 @@
                         body: JSON.stringify(data)
 
                     })
-                    .then(res => res.text())
+                    .then(res => res.json())
                     .then((data) => {
                         if (data) {
-                            window.location.href = data;
+                            console.log(data);
                         } else {
                             alert("Thất bại");
                         }
