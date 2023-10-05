@@ -25,8 +25,6 @@ public class Admin {
 
     private String password;
 
-    @OneToOne(mappedBy = "admin", cascade = CascadeType.ALL)
-    private Theater theater;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "admins_roles", joinColumns = @JoinColumn(name = "admin_id", referencedColumnName = "admin_id"),

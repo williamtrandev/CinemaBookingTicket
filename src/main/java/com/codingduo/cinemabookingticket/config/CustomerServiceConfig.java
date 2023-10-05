@@ -24,8 +24,10 @@ public class CustomerServiceConfig implements UserDetailsService {
         if(customer == null){
             throw new UsernameNotFoundException("Could not find email");
         }
-        return new User(customer.getEmail(),
-                customer.getPassword(),
-                authorities);
+        CustomerDetails customUserDetail = new CustomerDetails();
+        customUserDetail.setUser(customer);
+        customUserDetail.setAuthorities(authorities);
+
+        return customUserDetail;
     }
 }

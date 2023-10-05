@@ -17,6 +17,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
   <script th:inline="javascript">
 
         let showingList = [];
@@ -40,12 +42,10 @@
             return movies.filter(movie => movie.name.toLowerCase().includes(keyword.toLowerCase()));
         }
 
-
-
         function renderCard(data) {
             let cardsFilm = "";
             const directHref = /*[[@{/movie}]]*/ '';
-            const directImg = /*[[@{/img/movie}]]*/ '';
+            const directImg = /*[[@{/public/movie}]]*/ '';
             data.forEach(obj => {
                 const name = obj.name;
                 const director = obj.director;
@@ -72,52 +72,69 @@
 
             return cardsFilm;
         }
-        function renderTheater(data) {
-            let theaterHTML = "";
+
+        function handleDirectBooking(button) {
+            const name = $(".card-detail-movie h3").text();
+            const showtime = JSON.parse(button.getAttribute('data-booking'));
+            const timeShow = showtime.timeShow.slice(0, 5);
+            const typeArray = ['2D', '3D'];
+            const ticketType = typeArray[showtime.idTicket - 1];
+            const showDate = showtime.dateShow;
+            const showtimeId = showtime.id; // Id của suất chiếu
+            const roomId = showtime.idRoom; // Id của phòng chiếu
+
+            const price = showtime.price;
+            const bookingInfo = {
+                name,
+                timeShow,
+                ticketType,
+                showDate,
+                showtimeId,
+                roomId,
+                price
+
+            };
+            sessionStorage.setItem('bookingInfo', JSON.stringify(bookingInfo));
+            const direct = /*[[@{/booking}]]*/ '';
+            window.location.href = `${direct}?id=${roomId}&showtime=${showtimeId}`;
+        }
+
+        function renderShowTime(data) {
+            let showTimeHtml = "";
             let showtimeList = [];
             let ticketIds = []; // Danh sách các ticketId duy nhất
-            const directImg = /*[[@{/img/avatar/avatar_app.jpg}]]*/ '';
+            const directImg = /*[[@{/public/avatar/avatar_app.jpg}]]*/ '';
 
-            data.forEach((obj) => {
-                obj.showTimeList.forEach(function(showTime) {
-                    let ticketId = showTime.idTicket;
+            data.forEach((showTime) => {
+                let ticketId = showTime.idTicket;
 
-                    if(!showtimeList[ticketId]) {
-                        showtimeList[ticketId] = [];
-                    }
-                    if(!ticketIds.includes(ticketId)) {
-                        ticketIds.push(ticketId);
-                    }
-                    showtimeList[ticketId].push(showTime);
-                });
-                theaterHTML +=
-                `<div class="list-group-item py-3 px-5" data-bs-toggle="collapse"
-                    data-bs-target="#cd${obj.id}" aria-expanded="false"
-                    aria-controls="cd${obj.id}" style="cursor: pointer;">
-                    <div class="d-flex align-items-center">
-                      <img src=${directImg} alt="" class="rounded-circle me-3" style="width: 50px; height: 50px;">
-                      <span>${obj.name}</span>
-                    </div>
-                </div>
-                    <div id="cd${obj.id}" class="collapse py-3 px-5 showtimes">`;
-                ticketIds.forEach((id) => {
+                if(!showtimeList[ticketId]) {
+                    showtimeList[ticketId] = [];
+                }
+                if(!ticketIds.includes(ticketId)) {
+                    ticketIds.push(ticketId);
+                }
+                showtimeList[ticketId].push(showTime);
+            });
+            if(showtimeList.length == 0) return "";
+            showTimeHtml += `<div class="py-3 px-5 showtimes">`;
+            ticketIds.forEach((id) => {
 
-                    let typeArray = ['2D', '3D'];
-                    let type = typeArray[id-1];
-                    theaterHTML +=
-                        `<div class="type-wrapper">
-                            <div class="type-ticket mint">${type}</div>
-                            <div class="d-flex flex-wrap">`;
-                    showtimeList[id].forEach((showtime) => {
-                        theaterHTML +=
-                            `<button class="btn btn-custom-showtime me-3 mb-3">${showtime.timeShow}</button>`;
-                    })
-                    theaterHTML += `</div>`;
-
+                let typeArray = ['2D', '3D'];
+                let type = typeArray[id-1];
+                showTimeHtml += `
+                    <div class="type-wrapper">
+                        <div class="type-ticket mint">${type}</div>
+                        <div class="d-flex flex-wrap">`;
+                showtimeList[id].forEach((showtime) => {
+                    let jsonShowtime = JSON.stringify(showtime);
+                    showTimeHtml +=
+                        `<button class="btn btn-custom-showtime me-3 mb-3" data-booking='${jsonShowtime}' onclick="handleDirectBooking(this)">${showtime.timeShow.slice(0, 5)}</button>`;
                 })
-                theaterHTML += `</div>`;
+                showTimeHtml += `</div>`;
             })
-            return theaterHTML;
+            showTimeHtml += `</div>`;
+            return showTimeHtml;
         }
         function handleFetchByGenre(idGenre) {
             let dynamicPath = /*[[@{/api/v1/movie}]]*/ '';
@@ -157,15 +174,34 @@
             });
             $("#checkout").click(function() {
                 $(".wrap-loading").css('display', 'block');
+                const seatList = JSON.parse(sessionStorage.getItem("gheDaChon"));
+                // Chuyển sang dạng A1, B1...
+                const outputArray = seatList.map(item => `${item.row}${item.pos}`);
+                const infoSeats = outputArray.join(', ');
+                const productBuying =  $("#product-buying");
+                console.log(productBuying);
+                let contents = [];
+                productBuying.find("p").each(function() {
+                  // Lấy nội dung của từng phần tử <p>
+                  var content = $(this).text();
+
+                  // Thêm nội dung vào mảng contents
+                  contents.push(content);
+                });
+                const infoCombo = contents.join(", ");
+                const seatIds = seatList.map(item => item.id);
                 const data = {
-                    lichsu: {
-                        soluongve: JSON.parse(sessionStorage.getItem("gheDaChon")).length,
-                        ghedat: sessionStorage.getItem("gheHienThi"),
-                        tongtien: $(".price-total-ticket").text().replaceAll(".", "").replace(" VND", "")
-                    },
-                    data_datcho: sessionStorage.getItem('gheDaChon')
+                    total: $(".price-total-ticket").text().replaceAll(".", "").replace(" VND", ""),
+                    seatIds: seatIds,
+                  // Tiếp tục chỗ này
+                    showTimeId: JSON.parse(sessionStorage.getItem("bookingInfo")).showtimeId,
+                    infoSeats: infoSeats,
+                    infoCombo: infoCombo
+                    // infoSeats: JSON.parse(sessionStorage.getItem(""))
                 }
-                fetch("/booking/checkout", {
+
+                let dynamicPath = /*[[@{/api/v1/history/save}]]*/ '';
+                fetch(dynamicPath, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -173,10 +209,10 @@
                         body: JSON.stringify(data)
 
                     })
-                    .then(res => res.text())
+                    .then(res => res.json())
                     .then((data) => {
                         if (data) {
-                            window.location.href = data;
+                            console.log(data);
                         } else {
                             alert("Thất bại");
                         }
@@ -209,7 +245,7 @@
 
                 // Thêm lớp "active" vào thẻ "days" được click
                 $(this).addClass("active");
-                let dynamicPath = /*[[@{/api/v1/theater/getAllByDateAndMovieId}]]*/ '';
+                let dynamicPath = /*[[@{/api/v1/movie/getAllShowTime}]]*/ '';
                 // Lấy URL hiện tại
                 let currentURL = window.location.href;
 
@@ -223,8 +259,9 @@
                 fetch(`${dynamicPath}?date=${date}&id=${idMovie}`)
                     .then(res => res.json())
                     .then(data => {
-                        console.log(renderTheater(data))
-                        $(".list-group").empty().append(renderTheater(data));
+                        console.log(data)
+                        // console.log(renderShowTime(data))
+                        $(".list-group").empty().append(renderShowTime(data));
                     })
             });
 

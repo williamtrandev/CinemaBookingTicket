@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+<th:block th:fragment="chooseSeat(infoMovie, tagName, genre)">
+    <div class="steps d-flex justify-content-md-end justify-content-between container">
+        <p class="step active">
+            <span>01</span> CHỌN GHẾ
+        </p>
+        <p class="step">
+            <span>02</span> CHỌN BẮP NƯỚC VÀ THANH TOÁN
+        </p>
+    </div>
+    <div class="container d-flex justify-content-between">
+        <div class="chonkhunggiovaghe position-relative">
+            <div class="time">
+                <div class="grid-container">
+                    <h3 th:text="${infoMovie.name}"></h3>
+                    <div class="time-and-type d-flex flex-md-row align-items-center justify-content-center">
+                        <div class="time-duration-phim d-flex justify-content-center align-items-center me-3">
+                            <i class="fa-solid fa-clock" style="font-size: 1.5rem; margin-right: 10px;"></i>
+                            <span class="time-minutes" style="font-size: 1.1rem;" ><th:block th:text="${infoMovie.duration}"></th:block> phút</span>
+                        </div>
+                        <div class="type-phim-btn d-flex justify-content-center align-items-center" style="font-size: 1.1rem;" th:text="${tagName}"></div>
+                    </div>
+                    <div class="khunggio">
+                        <p class="pb-2 text-center" style="font-size: 1.2rem;" id="date-show">Ngày chiếu: </p>
+                    </div>
+                    <div class="showtime">
+                        <p class="pb-2 text-center" style="font-size: 1.2rem;"><span style="margin-right:20px;" id="type-ticket">Loại vé: </span> <span id="time-show">Giờ chiếu: </span></p>
+                    </div>
+            </div>
+
+            <!-- Màn hình và ghế -->
+            <div class="screen-and-seat position-relative">
+                <div class="screen w-100 my-md-5 position-relative"
+                     style="height: 80px;">
+                    <img th:src="@{/public/others/screen.png}" alt="" style="width: 100%; height: 100%; object-fit: contain">
+                </div>
+
+                <div class="seats container-fluid">
+                    <script th:inline="javascript">
+                        function intToChar(num) {
+                            return String.fromCharCode('A'.charCodeAt(0) + num);
+                        }
+
+                        let row = 0;
+                        const seats = /*[[${seats}]]*/;
+                        let htmls = ``;
+                        $.each(seats, function(index, item) {
+                            let id = item.id;
+                            let vitri = index % 14 + 1;
+                            let trangthai = (item.sold === true) ? "sold" : "";
+
+                            if (vitri == 1) { // Vị trí = 0 báo hiệu bắt đầu hàng mới
+                                htmls += "<div class='row-seat mt-2'>";
+                                var charRow = intToChar(row);
+                                htmls += "<div class='col-seat-name' style='width: 30px; cursor: default;'><span class='text w-100 h-100 d-flex justify-content-center align-items-center'>" + charRow + "</span></div>";
+                                htmls += `<div class='col-seat'><div class='seat w-100 ${trangthai}' data-pos='${index}' data-ghe='${id}' style='padding-bottom: 100%' choose='false'></div></div>`;
+                            } else if (vitri == 4 || vitri == 10) {
+                                htmls += `<div class='col-seat'><div class='seat w-100 ${trangthai}' data-pos='${index}' data-ghe='${id}' style='padding-bottom: 100%' choose='false'></div></div>`;
+                                htmls += "<div class='col-seat'></div>";
+                            } else if (vitri == 14) {
+                                htmls += `<div class='col-seat'><div class='seat w-100 ${trangthai}' data-pos='${index}' data-ghe='${id}' style='padding-bottom: 100%' choose='false'></div></div>`;
+                                var charRow = intToChar(row);
+                                htmls += "<div class='col-seat-name' style='width: 30px; cursor: default;'><span class='text w-100 h-100 d-flex justify-content-center align-items-center'>" + charRow + "</span></div>";
+                                row++;
+                                htmls += "</div>";
+                            } else {
+                                htmls += `<div class='col-seat'><div class='seat w-100 ${trangthai}' data-pos='${index}' data-ghe='${id}' style='padding-bottom: 100%' choose='false'></div></div>`;
+                            }
+                        });
+                        $(".seats").append(htmls);
+                    </script>
+                </div>
+
+                <div class="desc-seat w-100 d-flex justify-content-around justify-content-md-center mt-5 position-relative">
+                    <div class="choosing-desc-seat d-flex justify-content-center align-items-center me-md-5" style="cursor: default !important;">
+                        <div class="col-seat me-3">
+                            <div class="w-100" style="background-color: #FF6A6A;padding-bottom: 100%; margin-right: 10px; cursor: default;border-radius: 5px;cursor: pointer;"></div>
+                        </div>
+                        <span class="text">Đang chọn</span>
+                    </div>
+                    <div class="booking-desc-seat d-flex justify-content-center align-items-center me-md-5" style="cursor: default !important;">
+                        <div class="col-seat me-3">
+                            <div class="w-100" style="padding-bottom: 100%; margin-right: 10px; cursor: default;background-color: #B5B5B5;border-radius: 5px;cursor: pointer;"></div>
+                        </div>
+                        <span class="text">Ghế đơn</span>
+                    </div>
+                    <div class="sold-desc-seat d-flex justify-content-center align-items-center me-md-5" style="cursor: default !important;">
+                        <div class="col-seat me-3">
+                            <div class="w-100" style="background-color: #695CFE;padding-bottom: 100%; margin-right: 10px; cursor: default;border-radius: 5px;cursor: pointer;"></div>
+                        </div>
+                        <span class="text">Đã bán</span>
+                    </div>
+                </div>
+            </div>
+            <script th:inline="javascript">
+			function intToChar(num) {
+				const code = 'A'.charCodeAt(0);
+				return String.fromCharCode(code + num);
+			}
+
+			function handleChonGhe() {
+				let gheDaChon = [];
+				$(".seat.choosing").each(function() {
+                    let num = parseInt($(this).attr("data-ghe")) / 14;
+					let row = intToChar(num);
+					let pos = parseInt($(this).attr("data-ghe")) % 14;
+                    let id = parseInt($(this).attr("data-ghe"));
+
+					gheDaChon.push({
+						"row": row,
+						"pos": pos,
+                        "id": id,
+					});
+				})
+				if (gheDaChon.length > 0) {
+					// Gửi dữ liệu qua cho trang chọn bắp nước
+					sessionStorage.setItem("gheDaChon", JSON.stringify(gheDaChon));
+                    const dynamicPath = /*[[@{/booking/chooseFood}]]*/ '';
+					window.location.href = dynamicPath;
+				} else {
+                    Toastify({
+                        text: "Vui lòng chọn ghế!",
+                        duration: 3000,
+                        gravity: "top",
+                        position: "right",
+                        style: {
+                            background: "linear-gradient(to top, #ff0844 0%, #ffb199 100%)"
+                        },
+                    }).showToast();
+				}
+			}
+		</script>
+            <div class="next-step d-flex justify-content-center align-items-center" style="cursor: pointer;" onclick="handleChonGhe()">
+                <i class="fa-solid fa-arrow-right" style="color: white; font-size: 1.2rem;"></i>
+            </div>
+        </div>
+
+    </div>
+</th:block>
+
+
+<th:block th:fragment="chooseFood">
+    <div class="steps d-flex justify-content-md-end justify-content-between container">
+        <p class="step">
+            <span>01</span> CHỌN GHẾ
+        </p>
+        <p class="step active">
+            <span>02</span> CHỌN BẮP NƯỚC VÀ THANH TOÁN
+        </p>
+    </div>
+    <div class="container d-flex justify-content-md-between flex-column flex-md-row align-items-center">
+        <div class="card-choose">
+            <div class="card-title-film card-item-ticket">
+                <h4 style="color: white; font-weight: bold;" id="name-movie"></h4>
+<!--                <div class="type-phim-btn d-flex justify-content-center align-items-center" style="font-size: 1.1rem;" id="type-ticket"></div>-->
+            </div>
+            <div class="card-desc card-item-ticket">
+                <p class="sub-title-card-item-ticket">Thông tin vé</p>
+                <p>Giá mỗi vé: <span class="price-ticket"></span></p>
+                <p><span id="time-show"></span></p>
+                <p><span id="date-show"></span></p>
+                <p><span id="type-ticket"></span></p>
+                <p>Ghế: <span class="ghe"></span></p>
+            </div>
+            <div class="card-desc card-item-ticket">
+                <p class="sub-title-card-item-ticket">Thông tin sản phẩm</p>
+                <p id="product-buying"></p>
+            </div>
+            <div class="card-item-ticket">
+                <p class="sub-title-card-item-ticket">Tổng: <span class="price-total-ticket"></span></p>
+            </div>
+        </div>
+        <div class="foods-and-drinks position-relative">
+            <h3 class="text">Lựa chọn Combo</h3>
+            <div class="table-responsive table-scroll" data-mdb-perfect-scrollbar="true" style="position: relative;">
+                <table class="table mb-0 text-center">
+                    <thead style="background-color: #696969;">
+                    <tr>
+                        <th scope="col">Combo</th>
+                        <th scope="col">Số lượng</th>
+                        <th scope="col">Giá (VND)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${combo}">
+                            <td>
+                                <div class='d-flex justify-content-center'>
+                                    <div class='wrapper-product'>
+                                        <img th:src="@{'/public/combo/' + ${item.imagePath}}" alt=''>
+                                        <div class='wrapper-product-detail'>
+                                            <span style='font-weight: bold; color: black' class='name-product' th:id='${item.id}' th:text="${item.nameCombo}"></span>
+                                            <span th:text="${item.detail}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="wrapper-product">
+                                    <div class="minus-product action-product disabled">-</div>
+                                    <input type="number" value="0" readonly class="num-product">
+                                    <div class="add-product action-product">+</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="wrapper-product" th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')}"></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="next-step d-flex justify-content-center align-items-center" style="cursor: pointer;" id="checkout">
+                <i class="fa-solid fa-arrow-right" style="color: white; font-size: 1.2rem;"></i>
+            </div>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

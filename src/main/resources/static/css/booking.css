@@ -1,0 +1,361 @@
+.my-section.chonbapnuoc {
+	padding: 50px 0 !important;
+}
+.steps {
+	margin-bottom: 50px;
+}
+.step {
+	margin-right: 30px;
+	padding-bottom: 15px;
+	font-weight: 500;
+}
+.step.active {
+	border-bottom: 2px solid #695CFE;
+}
+.step span {
+	font-weight: 800;
+}
+
+.grid-container {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: auto auto;
+	gap: 2rem; /* Adjust the gap between items as needed */
+}
+.grid-container h3 {
+	text-align: center;
+	grid-column: 1 / 2;
+	grid-row: 1 / 2;
+}
+.grid-container .time-and-type {
+	grid-column: 2 / 2;
+	grid-row: 1 / 2;
+}
+
+.chonkhunggiovaghe {
+	/* width: calc(100% - 280px); */
+	width: 100%;
+	padding-bottom: 70px;
+}
+.khunggio {
+	grid-column: 1 / 2;
+	grid-row: 2 / 2;
+}
+.khunggio p, .showtime p {
+	border-bottom: 1px solid #696969;
+}
+.khunggio .row .circle {
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	background-color: #989191;
+	cursor: pointer;
+}
+.khunggio .row .circle i {
+	color: #ddd;
+}
+.days {
+	cursor: pointer;
+}
+.days span {
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.days.active span {
+	background-color: #FF6A6A;
+}
+
+.wrapper-title-chon-phim h3 {
+	max-width: 50%;
+}
+.type-phim-btn {
+	width: 90px;
+	height: 40px;
+	border-radius: 15px;
+	background-color: #FF6A6A;
+}
+.showtime {
+	grid-column: 2 / 2;
+	grid-row: 2 / 2;
+}
+.times span {
+	width: 45px;
+	border-radius: 8px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.times.active span {
+	background-color: #FF6A6A;
+}
+.days, .times {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
+
+.screen::before {
+	position: absolute;
+	content: 'MÀN HÌNH';
+	font-weight: 800;
+	font-size: 1.2rem;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+}
+body.dark .steps, body.dark .chonkhunggiovaghe 	{
+	color: var(--text-color);
+}
+
+.row-seat {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.col-seat {
+	width: var(--seat-width);
+	height: var(--seat-height);
+}
+.col-seat-name {
+	font-size: 20px;
+	width: 20px;
+}
+.seat {
+	background-color: #B5B5B5;
+	border-radius: 5px;
+	cursor: pointer;
+}
+.seat.choosing {
+	background-color: #FF6A6A;
+}
+.seat.sold {
+	background-color: #695CFE;
+}
+.next-step {
+	position: absolute;
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	background-color: #FF6A6A;
+	bottom: 0;
+	right: 0;
+	transform: translateX(-50%);
+}
+
+/* Chọn bắp nước */
+.card-choose {
+	max-width: 300px;
+}
+.card-item-ticket {
+	background-color: #696969;
+	padding: 20px;
+	border-bottom: 1px solid #eee;
+	color: white;
+}
+.card-item-ticket:first-child {
+	border-radius: 10px 10px 0 0;
+}
+.card-item-ticket:last-child {
+	border-radius: 0 0 10px 10px;
+	border-bottom: none;
+}
+.card-desc {
+	padding-bottom: 0;
+}
+.price-total-ticket {
+	color: #FF6A6A;
+	font-size: 1.2rem;
+	font-weight: bold;
+}
+.sub-title-card-item-ticket {
+	color: #FAEBD7;
+}
+.foods-and-drinks {
+	width: calc(100% - 400px);
+	padding-bottom: 70px;
+}
+.wrapper-product img {
+	width: 120px;
+	height: 100px;
+	object-fit: contain;
+}
+table {
+	background: #F6F5FF;
+}
+
+table td,
+table th {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+table tr:nth-child(even) {
+	background: #EEEEEE;
+}
+thead th {
+	color: #fff;
+}
+table td {
+	height: 130px;
+	color: #7C6AEA;
+	/* min-width: 150px; */
+
+}
+table td .wrapper-product {
+	/* width: 100%; */
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+table tr td:first-child .wrapper-product {
+	width: 450px;
+	justify-content: initial;
+}
+
+table td .wrapper-product input {
+	width: 40px;
+	height: 40px;
+	border-radius: 5px;
+	text-align: center;
+	border: none;
+	background-color: #ddd;
+	margin: 0 10px;
+}
+table td .wrapper-product input:focus {
+	outline: none;
+}
+table td .wrapper-product-detail {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	margin-left: 30px;
+}
+table td .wrapper-product-detail span {
+	color: #6E6A6A;
+}
+/* Ẩn dấu mũi tên của input type number */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+	-moz-appearance: textfield;
+}
+.table-scroll {
+	border-radius: .5rem;
+}
+
+.table-scroll table thead th {
+	font-size: 1.25rem;
+}
+thead {
+	top: 0;
+	position: sticky;
+}
+.action-product {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	background-color: #695CFE;
+	font-size: 1.3rem;
+	cursor: pointer;
+	color: white;
+}
+.action-product.disabled {
+	background-color: #ADA7FB;
+}
+/* // Extra small devices (portrait phones, less than 576px) */
+@media screen and (max-width: 767px) {
+    :root {
+		--seat-width: 20px;
+    	--seat-height: 20px;
+	}
+	.col-seat-name {
+		font-size: 15px;
+		width: 15px;
+	}
+	.my-section {
+		left: 0 !important;
+		width: 100% !important;
+	}
+	.khunggio, .showtime {
+		width: 100%;
+		margin-top: 20px;
+	}
+	.step {
+		font-size: 0.8rem;
+		margin: 0 !important;
+	}
+	.card-choose {
+		margin-bottom: 20px;
+	}
+	.card-choose, .foods-and-drinks {
+		width: 100%;
+	}
+
+	.wrapper-product-detail {
+		margin-left: 0 !important;
+		align-items: center !important;
+	}
+	table tr td:first-child .wrapper-product {
+		width: unset !important;
+		justify-content: initial;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+}
+
+/* // Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+	.my-section {
+		left: 0 !important;
+		width: 100% !important;
+	}
+	.col-seat-name {
+		font-size: 16px;
+		width: 16px;
+	}
+	.card-choose {
+		margin-bottom: 20px;
+	}
+	.card-choose, .foods-and-drinks {
+		width: 100%;
+	}
+	.wrapper-product {
+		justify-content: center;
+	}
+	.wrapper-product-detail {
+		margin-left: 0 !important;
+		align-items: center !important;
+	}
+}
+/* // Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    :root {
+		--seat-width: 30px;
+    	--seat-height: 30px;
+	}
+}
+
+/* // Large devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+
+}
+
+/* // Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+}

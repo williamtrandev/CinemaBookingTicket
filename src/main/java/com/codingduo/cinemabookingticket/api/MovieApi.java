@@ -1,8 +1,10 @@
 package com.codingduo.cinemabookingticket.api;
 
 import com.codingduo.cinemabookingticket.dto.MovieDTO;
+import com.codingduo.cinemabookingticket.dto.ShowTimeDTO;
 import com.codingduo.cinemabookingticket.model.Movie;
 import com.codingduo.cinemabookingticket.service.IMovieService;
+import com.codingduo.cinemabookingticket.service.IShowTimeService;
 import com.codingduo.cinemabookingticket.utils.FileUploadUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +25,9 @@ import java.util.List;
 public class MovieApi {
     @Autowired
     private IMovieService movieService;
+
+    @Autowired
+    private IShowTimeService showTimeService;
 
     @PostMapping("/save")
     public ResponseEntity<MovieDTO> saveMovie(@ModelAttribute MovieDTO movieDTO,
@@ -116,4 +122,9 @@ public class MovieApi {
 //        return movieDTO;
 //    }
 
+    @GetMapping("/getAllShowTime")
+    public List<ShowTimeDTO> getAllShowTimeByMovie(@RequestParam(name = "date") Date date,
+                                                   @RequestParam(name = "id") Long id) {
+        return showTimeService.getShowTimeByMovieAndDateShow(id, date);
+    }
 }

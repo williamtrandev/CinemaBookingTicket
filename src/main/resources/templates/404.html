@@ -1,0 +1,34 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Trang không tồn tại</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,900" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" th:href="@{/css/404.css}"  />
+
+
+</head>
+
+<body>
+
+<div id="notfound">
+    <div class="notfound">
+        <div class="notfound-404">
+            <h1 th:style="'background-image:url(' + @{/public/others/404.jpg} + '); background-repeat: no-repeat'">Oops!</h1>
+        </div>
+        <h2>404 - Trang không tồn tại</h2>
+        <p>Trang bạn đang tìm kiếm không tồn tại. Quay về trang chủ để tìm kiếm phim yêu thích bạn nhé!</p>
+    <a th:href="@{/}">Quay về trang chủ</a>
+    </div>
+</div>
+
+</body>
+
+</html>

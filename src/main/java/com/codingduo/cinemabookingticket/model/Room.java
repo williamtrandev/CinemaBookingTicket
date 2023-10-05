@@ -23,11 +23,6 @@ public class Room {
     @Column(name = "num_row")
     private int numRow;
 
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "theater_id", referencedColumnName = "theater_id")
-    private Theater theater;
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "room")
     private List<ShowTime> showTimeList;
 
