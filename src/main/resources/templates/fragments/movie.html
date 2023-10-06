@@ -202,7 +202,7 @@
   </button>
 
   <div class="row-phim">
-    <div th:each="item : ${movieList}" class="w-100 d-flex justify-content-center">
+    <div th:each="item : ${movieList}" class="w-100 d-flex justify-content-center" style="position: relative">
 
       <a class="card" th:href="@{'/admin/movie/' + ${item.id}}">
 
@@ -216,12 +216,20 @@
             <!--              <span th:class="${item.name_nhanphim.toLowerCase()}">${item.name_nhanphim}</span>-->
           </div>
         </div>
+
       </a>
-      <button type="button" class="btn btn-danger delete-movie-btn"
-              data-bs-toggle="modal"
-              data-bs-target="#deleteMovieModal1"
-              th:attr="data-id=${item.id},data-name=${item.name}"
-      ><i class="fa-solid fa-trash"></i></button>
+      <div style="position: absolute; top: 10px; right: 20px" class="d-flex align-items-center">
+        <input class="form-check-input me-2" type="checkbox" value=""
+               style="height: 32px; width: 32px; margin-top: 0 !important;"
+               th:attr="data-id=${item.id},data-name=${item.name}">
+        <button type="button" class="btn btn-danger delete-movie-btn"
+                style="height: 32px"
+                data-bs-toggle="modal"
+                data-bs-target="#deleteMovieModal1"
+                th:attr="data-id=${item.id}, data-name=${item.name}"
+        ><i class="fa-solid fa-trash"></i></button>
+      </div>
+
     </div>
   </div>
 

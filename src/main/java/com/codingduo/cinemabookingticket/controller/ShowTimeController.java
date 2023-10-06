@@ -46,18 +46,21 @@ public class ShowTimeController {
     private IMailService mailService;
 
     @GetMapping("")
-    public String bookingPage(Principal principal,
-                              HttpSession session, Model model,
-                              @RequestParam(name="id") Long idRoom,
-                              @RequestParam(name="showtime") Long idShowtime) {
+    public String bookingPage(HttpSession session, Model model,
+                              @RequestParam(name="id", required = false) Long idRoom,
+                              @RequestParam(name="showtime", required = false) Long idShowtime) {
+        if(idRoom == null || idShowtime == null) {
+            return "redirect:/";
+        }
         // Nếu chưa đăng nhập thì bắt đăng nhập rồi mới cho đặt vé
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if(authentication == null || authentication instanceof AnonymousAuthenticationToken){
-//            return "redirect:/login";
-//        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication == null || authentication instanceof AnonymousAuthenticationToken) {
+            return "redirect:/login";
+        }
+
         ShowTime showTimeCheck = showTimeService.getShowTimeByIdAndRoomId(idShowtime, idRoom);
         if(showTimeCheck == null) {
-            return "404";
+            return "error/400";
         }
 
         // Title

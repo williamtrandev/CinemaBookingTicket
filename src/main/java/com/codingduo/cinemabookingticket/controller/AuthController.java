@@ -56,10 +56,7 @@ public class AuthController {
 
     @GetMapping("/")
     public String home(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication == null || authentication instanceof AnonymousAuthenticationToken){
-            return "redirect:/login";
-        }
+
         List<Banner> bannerList = bannerService.getAll();
         List<MovieDTO> comingList = movieService.getTop6ByComingAndIdDesc();
         List<MovieDTO> movies = movieService.getAll();
