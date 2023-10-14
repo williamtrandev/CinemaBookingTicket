@@ -62,6 +62,22 @@ public class AdminController {
         return "admin";
     }
 
+    @GetMapping("/deleted-movie")
+    public String deletedMovie(Model model) {
+        List<MovieDTO> movieList = movieService.getAllDeleted();
+        List<TagMovieDTO> tagMovieList = tagMovieService.getAll();
+        List<Genre> genreList = genreService.getAll();
+        model.addAttribute("movie", new MovieDTO());
+        model.addAttribute("tagMovieList", tagMovieList);
+        model.addAttribute("genreList", genreList);
+        model.addAttribute("movieList", movieList);
+        model.addAttribute("title", "Quản lý phim");
+//        model.addAttribute("imageRequired", "true");
+//        model.addAttribute("btn", "Thêm");
+//        model.addAttribute("scripts", new String[]{"addMovie.js"});
+        return "admin_movie_deleted";
+    }
+
 //    @GetMapping("/movie/create")
 //    public String createMovie(Model model) {
 //        List<TagMovieDTO> tagMovieList = tagMovieService.getAll();

@@ -60,6 +60,19 @@ public class MovieService implements IMovieService {
         return movieDTOs;
     }
 
+    @Override
+    public List<MovieDTO> getAllDeleted() {
+        List<Movie> movies = movieRepository.findAllByDeleted(true);
+        List<MovieDTO> movieDTOs = new ArrayList<>();
+
+        for (Movie movie : movies) {
+            MovieDTO movieDTO = convertToMovieDTO(movie);
+            movieDTOs.add(movieDTO);
+        }
+
+        return movieDTOs;
+    }
+
     private MovieDTO convertToMovieDTO(Movie movie) {
         MovieDTO movieDTO = new MovieDTO();
         movieDTO.setId(movie.getId());
@@ -127,6 +140,13 @@ public class MovieService implements IMovieService {
         }
         existingMovie.setTrailerPath(movieDTO.getTrailerPath());
         existingMovie.setTagMovie(tagMovieRepository.getReferenceById(movieDTO.getTagId()));
+        // Lấy model thể loại
+        List<Genre> genres = new ArrayList<>();
+        for (String genreName: movieDTO.getGenres()) {
+            Genre genre = genreRepository.findByName(genreName);
+            genres.add(genre);
+        }
+        existingMovie.setGenres(genres);
         Movie movie = movieRepository.save(existingMovie);
         return convertToMovieDTO(movie);
     }
@@ -138,6 +158,14 @@ public class MovieService implements IMovieService {
         Movie movie = movieRepository.save(existingMovie);
         return convertToMovieDTO(movie);
     }
+
+//    @Override
+//    public MovieDTO forceDelete(Long id) {
+//        Movie movie = movieRepository.getReferenceById(id);
+//        MovieDTO movieDTO = convertToMovieDTO(movie);
+//        movieRepository.delete(movie);
+//        return movieDTO;
+//    }
 
     @Override
     public List<MovieDTO> getAllByNameLikeAndComing(String name, boolean coming) {
@@ -167,5 +195,13 @@ public class MovieService implements IMovieService {
             movieDTOList.add(convertToMovieDTO(movie));
         }
         return movieDTOList;
+    }
+
+    @Override
+    public MovieDTO restore(Long id) {
+        Movie existingMovie = movieRepository.getReferenceById(id);
+        existingMovie.setDeleted(false);
+        Movie movie = movieRepository.save(existingMovie);
+        return convertToMovieDTO(movie);
     }
 }

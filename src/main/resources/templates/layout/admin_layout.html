@@ -33,12 +33,24 @@
                     })
                     .then(res => res.json())
                     .then(data => {
-                        //$(removeTag).remove();
-                        $(removeTag).parent().remove();
+                        $(removeTag).closest(".box").remove();
                         $("#deleteMovieModal1").modal("hide");
                     })
                     .catch(err => console.log(err));
                 });
+            });
+
+            $(".restore-movie-btn").click(function(e) {
+                const id = $(this).data("id");
+                let dynamicPath = /*[[@{/api/v1/movie}]]*/ '';
+                fetch(`${dynamicPath}/restore/${id}`, {
+                    method: "PUT",
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        $(e.target).closest(".box").remove();
+                    })
+                    .catch(err => console.log(err));
             });
 
             // Modal detail phim
@@ -59,7 +71,8 @@
             let cardsFilm = "";
             const directHref = /*[[@{/admin/movie}]]*/ '';
             const directImg = /*[[@{/public/movie}]]*/ '';
-            
+
+            const id = data.id;
             const name = data.name;
             const director = data.director;
             //const tag = obj.name_nhanphim;
@@ -68,7 +81,7 @@
             const poster = `${directImg}/${data.imgPath}`;
 
             cardsFilm +=
-                `<div class='w-100 d-flex justify-content-center'>
+                `<div class='w-100 d-flex justify-content-center box' style='position: relative'>
                     <a class='card' href='${href}'>
                         <div class='poster'>
                             <img src='${poster}' alt='poster' />
@@ -80,6 +93,19 @@
                             <h3 class='director'>Đạo diễn ${director}</h3>
                         </div>
                     </a>
+                    <div style='position: absolute; top: 10px; right: 20px' class='d-flex align-items-center'>
+                        <input class='form-check-input me-2' type='checkbox' value=''
+                               style='height: 32px; width: 32px; margin-top: 0 !important;'
+                               data-id='${id}'
+                               data-name='${name}'>
+                        <button type='button' class='btn btn-danger delete-movie-btn'
+                                style='height: 32px'
+                                data-bs-toggle='modal'
+                                data-bs-target='#deleteMovieModal1'
+                                data-id='${id}'
+                                data-name='${name}'
+                        ><i class='fa-solid fa-trash'></i></button>
+                     </div>
                 </div>`;
 
             return cardsFilm;
