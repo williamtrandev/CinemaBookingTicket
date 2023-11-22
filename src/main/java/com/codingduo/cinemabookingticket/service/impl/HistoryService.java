@@ -69,4 +69,10 @@ public class HistoryService implements IHistoryService {
         return historyRepository.save(history);
     }
 
+    @Override
+    public List<History> getAllByCustomer(Long id) {
+        Customer customer = customerRepository.getReferenceById(id);
+        return historyRepository.findAllByCustomer(customer);
+    }
+
 }

@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface IHistoryService {
     History save(HistoryDTO historyDTO);
+    List<History> getAllByCustomer(Long id);
 }

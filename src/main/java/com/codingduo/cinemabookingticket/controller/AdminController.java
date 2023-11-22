@@ -1,12 +1,13 @@
 package com.codingduo.cinemabookingticket.controller;
 
+import com.codingduo.cinemabookingticket.dto.CustomerDTO;
 import com.codingduo.cinemabookingticket.dto.MovieDTO;
 import com.codingduo.cinemabookingticket.dto.TagMovieDTO;
+import com.codingduo.cinemabookingticket.model.Customer;
 import com.codingduo.cinemabookingticket.model.Genre;
+import com.codingduo.cinemabookingticket.model.History;
 import com.codingduo.cinemabookingticket.model.Movie;
-import com.codingduo.cinemabookingticket.service.IGenreService;
-import com.codingduo.cinemabookingticket.service.IMovieService;
-import com.codingduo.cinemabookingticket.service.ITagMovieService;
+import com.codingduo.cinemabookingticket.service.*;
 import com.codingduo.cinemabookingticket.utils.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -38,6 +39,12 @@ public class AdminController {
 
     @Autowired
     private IGenreService genreService;
+
+    @Autowired
+    private ICustomerService customerService;
+
+    @Autowired
+    private IHistoryService historyService;
 
     @GetMapping("/movie")
     public String admin(Model model) {
@@ -125,5 +132,23 @@ public class AdminController {
     public String deleteMovie(@PathVariable("id") Long id) {
         movieService.delete(id);
         return "redirect:/admin/movie";
+    }
+
+    @GetMapping("/customer")
+    public String customersPage(Model model) {
+        List<CustomerDTO> customerDTOList =customerService.getAll();
+        model.addAttribute("customers", customerDTOList);
+        model.addAttribute("title", "Danh sách khách hàng");
+        return "admin_customers";
+    }
+
+    @GetMapping("/customer/{id}")
+    public String CustomerDetailPage(@PathVariable("id") Long id, Model model) {
+        CustomerDTO customerDTO = customerService.getInfo(id);
+        List<History> histories = historyService.getAllByCustomer(id);
+        model.addAttribute("customer", customerDTO);
+        model.addAttribute("histories", histories);
+        model.addAttribute("title", "Chi tiết khách hàng");
+        return "admin_customer_detail";
     }
 }

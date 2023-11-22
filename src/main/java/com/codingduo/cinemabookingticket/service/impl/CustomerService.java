@@ -7,10 +7,23 @@ import com.codingduo.cinemabookingticket.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class CustomerService implements ICustomerService {
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Override
+    public List<CustomerDTO> getAll() {
+        List<CustomerDTO> customerDTOList = new ArrayList<>();
+        List<Customer> customers = customerRepository.findAll();
+        for (Customer customer: customers) {
+            customerDTOList.add(convertToCustomerDTO(customer));
+        }
+        return customerDTOList;
+    }
 
     @Override
     public Customer findByEmail(String email) {

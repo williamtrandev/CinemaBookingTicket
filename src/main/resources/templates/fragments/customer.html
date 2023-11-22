@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+<div th:fragment="all_customer" class="row">
+    <div th:each="customer : ${customers}" class="col-6">
+        <a th:href="@{'/admin/customer/'+${customer.id}}" class="customer-card bg-light text-dark card flex-row justify-content-between align-items-center mb-3 p-3" style="cursor: pointer">
+            <i class="fa-regular fa-user fa-xl me-3"></i>
+            <div class="me-auto">
+                <div th:text="${customer.name}" class="fs-5 fw-bold"></div>
+                <div th:text="${customer.email}"></div>
+            </div>
+            <div class="fs-4"><span th:text="${customer.point}"></span> điểm</div>
+        </a>
+    </div>
+</div>
+
+<div th:fragment="customer_detail">
+    <div class="title text">
+        <h2 class="mb-0">Thông tin khách hàng</h2>
+    </div>
+    <div class="bg-light text-dark card flex-row justify-content-between align-items-center mb-3 p-3">
+        <i class="fa-regular fa-user fa-2xl me-3"></i>
+        <div class="me-auto">
+            <h4 th:text="${customer.name}"></h4>
+            <h5 th:text="${customer.email}"></h5>
+        </div>
+        <div class="fs-3"><span th:text="${customer.point}"></span> điểm</div>
+    </div>
+    <div class="mt-4 title text">
+        <h2 class="mb-0">Lịch sử đặt vé</h2>
+    </div>
+    <div th:each="history : ${histories}">
+        <div class="card bg-light mb-3 p-3">
+            <div class="fs-5" th:text="'Ngày đặt: '+${#dates.format(history.dateBooking, 'dd-MM-yyyy')}"></div>
+            <div>
+                <table class="table table-borderless">
+                    <thead>
+                    <tr>
+                        <th scope="col">Phim</th>
+                        <th scope="col">Ngày chiếu</th>
+                        <th scope="col">Giờ chiếu</th>
+                        <th scope="col">Phòng chiếu</th>
+                        <th scope="col">Loại vé</th>
+                        <th scope="col">Giá vé</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="detail : ${history.historyDetailList}">
+                        <td th:text="${detail.showTime.movie.name}"></td>
+                        <td th:text="${#dates.format(detail.showTime.dateShow, 'dd-MM-yyyy')}"></td>
+                        <td th:text="${#dates.format(detail.showTime.timeShow, 'HH:mm')}"></td>
+                        <td th:text="${detail.showTime.room.id}"></td>
+                        <td th:text="${detail.showTime.ticket.name}"></td>
+                        <td><span th:text="${#numbers.formatDecimal(detail.showTime.ticket.price, 0, 'COMMA', 0, 'POINT')}"></span> <i class="fa-solid fa-dong-sign"></i></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="fs-5">Tổng tiền: <span th:text="${#numbers.formatDecimal(history.total, 0, 'COMMA', 0, 'POINT')}"></span> <i class="fa-solid fa-dong-sign"></i></div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

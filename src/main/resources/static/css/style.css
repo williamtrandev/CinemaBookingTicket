@@ -559,7 +559,7 @@ footer {
     background: var(--second-color);
 }
 footer i {
-    color: var((var(--text-color)));
+    color: var(--text-color);
 }
 footer a:hover {
     color: var(--primary-color) !important;
@@ -848,7 +848,9 @@ body.dark .row-phim .card:hover::after {
     grid-column-gap: 2rem;
 }
 
-
+.customer-card:hover {
+    scale: 1.02;
+}
 
 
 @keyframes spin {
