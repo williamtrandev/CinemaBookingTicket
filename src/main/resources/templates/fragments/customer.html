@@ -58,6 +58,24 @@
                     </tr>
                     </tbody>
                 </table>
+                <table class="table table-borderless">
+                    <thead>
+                    <tr>
+                        <th scope="col">Combo</th>
+                        <th scope="col">Chi tiết</th>
+                        <th scope="col">Số lượng</th>
+                        <th scope="col">Giá</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="comboDetail : ${history.comboHistoryList}">
+                        <td th:text="${comboDetail.combo.nameCombo}"></td>
+                        <td th:text="${comboDetail.combo.detail}"></td>
+                        <td><span th:text="${#numbers.formatDecimal(comboDetail.combo.price, 0, 'COMMA', 0, 'POINT')}"></span> <i class="fa-solid fa-dong-sign"></i></td>
+                        <td th:text="${comboDetail.quantity}"></td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="fs-5">Tổng tiền: <span th:text="${#numbers.formatDecimal(history.total, 0, 'COMMA', 0, 'POINT')}"></span> <i class="fa-solid fa-dong-sign"></i></div>
         </div>
