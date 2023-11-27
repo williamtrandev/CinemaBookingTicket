@@ -9,7 +9,7 @@
         <h2 class="mb-0">Danh sách combo</h2>
     </div>
     <div class="mb-4">
-        <button class="my-btn"
+        <button class="my-btn" id="addComboBtn"
                  data-bs-toggle="modal" data-bs-target="#comboModal"
         ><i class="fas fa-plus me-2"></i>Combo</button>
     </div>
@@ -48,6 +48,7 @@
                 </td>
                 <td>
                     <button type="button" class="btn btn-primary update-btn"
+                            data-bs-toggle="modal" data-bs-target="#comboModal"
                             th:attr="data-id=${item.id}, data-name=${item.nameCombo}, data-detail=${item.detail}, data-price=${item.price}"
                     ><i class="fa-solid fa-pen-to-square"></i></button>
                     <button type="button" class="btn btn-danger delete-btn"
@@ -71,15 +72,15 @@
                     <form id="comboForm" th:object="${combo}" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="comboName" class="form-label fs-6">Tên Combo</label>
-                            <input type="text" class="form-control" id="comboName" th:field="*{name}" required>
+                            <input type="text" name="name" class="form-control" id="comboName" th:field="*{name}" required>
                         </div>
                         <div class="form-floating mb-3">
                             <textarea class="form-control" id="comboDetail" placeholder="Leave a comment here" th:field="*{detail}" required></textarea>
-                            <label for="comboDetail" class="fs-6">Chi tiết Combo</label>
+                            <label for="comboDetail" name="detail" class="fs-6">Chi tiết Combo</label>
                         </div>
                         <div class="mb-3">
                             <label for="comboPrice" class="form-label fs-6">Giá</label>
-                            <input type="text" class="form-control" id="comboPrice" th:field="*{price}" required>
+                            <input type="text" name="price" class="form-control" id="comboPrice" th:field="*{price}" required>
                         </div>
                         <div class="mb-3">
                             <label for="comboImage" class="form-label fs-6">Hình ảnh</label>
@@ -93,7 +94,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button type="button" class="btn btn-primary" id="submitBtn">Lưu</button>
+                    <button type="button" class="btn btn-primary" id="addBtn">Lưu</button>
+                    <button type="button" class="btn btn-primary" id="updateBtn">Lưu</button>
                 </div>
             </div>
         </div>
@@ -117,8 +119,15 @@
         </div>
     </div>
     <script th:inline="javascript">
+        var updateId;
+        var updateBtn;
         $(function () {
-            $("#submitBtn").click(()=>{
+            $("#addComboBtn").click(function () {
+                $("#updateBtn").hide();
+                $("#addBtn").show();
+            });
+
+            $("#addBtn").click(()=>{
                 let dynamicPath = /*[[@{/api/v1/combo}]]*/ '';
                 let dynamicImagePath = /*[[@{/public/combo}]]*/ '';
                 let formBody = new FormData($("#comboForm")[0]);
@@ -157,12 +166,90 @@
                                         <div class="wrapper-product">${data.price.toLocaleString("en-US")}</div>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-primary update-btn"><i class="fa-solid fa-pen-to-square"></i></button>
-                                        <button type="button" class="btn btn-danger delete-btn"><i class="fa-solid fa-trash"></i></button>
+                                        <button type="button" class="btn btn-primary update-btn"
+                                            data-bs-toggle="modal" data-bs-target="#comboModal"
+                                            data-id="${data.id}"
+                                            data-name="${data.nameCombo}"
+                                            data-detail="${data.detail}"
+                                            data-price="${data.price}"
+                                        ><i class="fa-solid fa-pen-to-square"></i></button>
+                                        <button type="button" class="btn btn-danger delete-btn"
+                                            data-bs-toggle="modal" data-bs-target="#deleteComboModal"
+                                            data-id="${data.id}"
+                                            data-name="${data.nameCombo}"
+                                        ><i class="fa-solid fa-trash"></i></button>
                                     </td>
                                 </tr>
                             `);
                             $("#comboForm")[0].reset();
+                            $("#comboModal").modal("hide");
+                        }
+                    })
+                    .catch(err => console.log(err));
+            });
+
+            $(".combo-row").on("click", ".update-btn", function () {
+                $("#updateBtn").show();
+                $("#addBtn").hide();
+                $("#comboName").val($(this).data("name"));
+                $("#comboDetail").val($(this).data("detail"));
+                $("#comboPrice").val(parseFloat($(this).data("price")));
+                updateId = $(this).data("id");
+                updateBtn = $(this);
+            });
+
+            $("#updateBtn").click(() => {
+                const dynamicPath = /*[[@{/api/v1/combo}]]*/ '';
+                const dynamicImagePath = /*[[@{/public/combo}]]*/ '';
+                const formBody = new FormData($("#comboForm")[0]);
+                fetch(`${dynamicPath}/${updateId}`, {
+                    method: "PUT",
+                    body: formBody,
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.message) {
+                            Toastify({
+                                text: "Cập nhật không thành công",
+                                className: "warning",
+                                style: {
+                                    background: "linear-gradient(to right, #ff9900, #ffcc00)",
+                                },
+                                duration: 3000,
+                                gravity: "top",
+                                position: "right",
+                            }).showToast();
+                        } else {
+                            updateBtn.closest("tr").empty().append(`
+                                    <td>
+                                        <div class='d-flex justify-content-center'>
+                                            <div class='wrapper-product'>
+                                                <img src="${dynamicImagePath}/${data.imagePath}" alt=''>
+                                                <div class='wrapper-product-detail'>
+                                                    <span style='font-weight: bold; color: black' class='name-product'>${data.nameCombo}</span>
+                                                    <span>${data.detail}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="wrapper-product">${data.price.toLocaleString("en-US")}</div>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary update-btn"
+                                            data-bs-toggle="modal" data-bs-target="#comboModal"
+                                            data-id="${data.id}"
+                                            data-name="${data.nameCombo}"
+                                            data-detail="${data.detail}"
+                                            data-price="${data.price}"
+                                        ><i class="fa-solid fa-pen-to-square"></i></button>
+                                        <button type="button" class="btn btn-danger delete-btn"
+                                            data-bs-toggle="modal" data-bs-target="#deleteComboModal"
+                                            data-id="${data.id}"
+                                            data-name="${data.nameCombo}"
+                                        ><i class="fa-solid fa-trash"></i></button>
+                                    </td>
+                                `);
                             $("#comboModal").modal("hide");
                         }
                     })

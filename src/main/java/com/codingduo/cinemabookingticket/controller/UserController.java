@@ -22,9 +22,6 @@ public class UserController {
 
     @GetMapping
     public String userPage(Model model, Principal principal) {
-        if (principal == null) {
-            return "redirect:/login";
-        }
         String email = ((UserSystemDetails) ((Authentication) principal).getPrincipal()).getUsername();
         UserSystem customer = customerService.findByEmail(email);
         List<History> historyList = customer.getHistoryList();

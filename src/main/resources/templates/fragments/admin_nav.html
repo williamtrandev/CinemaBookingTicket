@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
 </head>
 <body>
@@ -57,15 +57,22 @@
                 </ul>
             </div>
             <div class="bottom-content">
-                <li th:if="${session.user == null}">
+                <li sec:authorize="isAnonymous()">
                     <a th:href="@{/login}">
                         <i class="fa-solid fa-right-to-bracket icon"></i>
                         <span class="nav-text text">Đăng nhập</span>
                         <span class="tooltip-text">Đăng nhập</span>
                     </a>
                 </li>
-                <li th:if="${session.user != null}">
-                    <a th:href="@{/login?logout}">
+                <li sec:authorize="isAuthenticated()">
+                    <a th:href="@{/admin/user}">
+                        <i class="fa-solid fa-user icon"></i>
+                        <span class="nav-text text">Tài khoản</span>
+                        <span class="tooltip-text">Tài khoản</span>
+                    </a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <a th:href="@{/logout}">
                         <i class="fa-solid fa-right-from-bracket icon logout-icon"></i>
                         <span class="nav-text text">Đăng xuất</span>
                         <span class="tooltip-text">Đăng xuất</span>
@@ -83,12 +90,6 @@
                         <div class="switch"></div>
                     </div>
                 </li>
-            </div>
-            <div th:if="${session.user != null}" class="user-icon">
-                <a th:href="@{/user}">
-                    <img th:src="@{/img/user.png}" alt="" />
-                    <span th:text="${session.user.name}" class="text"></span>
-                </a>
             </div>
         </div>
     </nav>
