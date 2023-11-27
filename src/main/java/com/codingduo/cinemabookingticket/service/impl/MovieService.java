@@ -3,13 +3,16 @@ package com.codingduo.cinemabookingticket.service.impl;
 import com.codingduo.cinemabookingticket.dto.MovieDTO;
 import com.codingduo.cinemabookingticket.model.Genre;
 import com.codingduo.cinemabookingticket.model.Movie;
+import com.codingduo.cinemabookingticket.repository.GenreRepository;
 import com.codingduo.cinemabookingticket.repository.MovieRepository;
 import com.codingduo.cinemabookingticket.repository.TagMovieRepository;
 import com.codingduo.cinemabookingticket.service.IMovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -20,6 +23,9 @@ public class MovieService implements IMovieService {
 
     @Autowired
     private TagMovieRepository tagMovieRepository;
+
+    @Autowired
+    private GenreRepository genreRepository;
 
     @Override
     public List<MovieDTO> getAll() {
@@ -41,6 +47,32 @@ public class MovieService implements IMovieService {
         return convertToMovieDTO(movie);
     }
 
+    @Override
+    public List<MovieDTO> getAllNotDeleted() {
+        List<Movie> movies = movieRepository.findAllByDeletedOrderByIdDesc(false);
+        List<MovieDTO> movieDTOs = new ArrayList<>();
+
+        for (Movie movie : movies) {
+            MovieDTO movieDTO = convertToMovieDTO(movie);
+            movieDTOs.add(movieDTO);
+        }
+
+        return movieDTOs;
+    }
+
+    @Override
+    public List<MovieDTO> getAllDeleted() {
+        List<Movie> movies = movieRepository.findAllByDeletedOrderByIdDesc(true);
+        List<MovieDTO> movieDTOs = new ArrayList<>();
+
+        for (Movie movie : movies) {
+            MovieDTO movieDTO = convertToMovieDTO(movie);
+            movieDTOs.add(movieDTO);
+        }
+
+        return movieDTOs;
+    }
+
     private MovieDTO convertToMovieDTO(Movie movie) {
         MovieDTO movieDTO = new MovieDTO();
         movieDTO.setId(movie.getId());
@@ -52,6 +84,7 @@ public class MovieService implements IMovieService {
         movieDTO.setDescription(movie.getDescription());
         movieDTO.setComing(movie.isComing());
         movieDTO.setImgPath(movie.getImagePath());
+        movieDTO.setImgPathAtLocal(movie.getImagePathAtLocal());
         movieDTO.setTrailerPath(movie.getTrailerPath());
         movieDTO.setTagId(movie.getTagMovie().getId());
         // Lấy ds thể loại
@@ -62,7 +95,6 @@ public class MovieService implements IMovieService {
         movieDTO.setGenres(genreNames);
         return movieDTO;
     }
-
 
     private Movie convertToMovie(MovieDTO movieDTO) {
         Movie movie = new Movie();
@@ -77,16 +109,24 @@ public class MovieService implements IMovieService {
         movie.setImagePath(movieDTO.getImgPath());
         movie.setTrailerPath(movieDTO.getTrailerPath());
         movie.setTagMovie(tagMovieRepository.getReferenceById(movieDTO.getTagId()));
+        // Lấy model thể loại
+        List<Genre> genres = new ArrayList<>();
+        for (String genreName: movieDTO.getGenres()) {
+            Genre genre = genreRepository.findByName(genreName);
+            genres.add(genre);
+        }
+        movie.setGenres(genres);
         return movie;
     }
 
     @Override
-    public Movie save(MovieDTO movieDTO) {
-        return movieRepository.save(convertToMovie(movieDTO));
+    public MovieDTO save(MovieDTO movieDTO) {
+        Movie movie = movieRepository.save(convertToMovie(movieDTO));
+        return convertToMovieDTO(movie);
     }
 
     @Override
-    public Movie update(Long id, MovieDTO movieDTO) {
+    public MovieDTO update(Long id, MovieDTO movieDTO) {
         Movie existingMovie = movieRepository.getReferenceById(id);
         existingMovie.setName(movieDTO.getName());
         existingMovie.setDirector(movieDTO.getDirector());
@@ -95,23 +135,41 @@ public class MovieService implements IMovieService {
         existingMovie.setDuration(movieDTO.getDuration());
         existingMovie.setDescription(movieDTO.getDescription());
         existingMovie.setComing(movieDTO.isComing());
-        existingMovie.setImagePath(movieDTO.getImgPath());
+        if (movieDTO.getImgPath() != null) { // Nếu hình không thay đổi
+            existingMovie.setImagePath(movieDTO.getImgPath());
+        }
         existingMovie.setTrailerPath(movieDTO.getTrailerPath());
         existingMovie.setTagMovie(tagMovieRepository.getReferenceById(movieDTO.getTagId()));
-        return movieRepository.save(existingMovie);
+        // Lấy model thể loại
+        List<Genre> genres = new ArrayList<>();
+        for (String genreName: movieDTO.getGenres()) {
+            Genre genre = genreRepository.findByName(genreName);
+            genres.add(genre);
+        }
+        existingMovie.setGenres(genres);
+        Movie movie = movieRepository.save(existingMovie);
+        return convertToMovieDTO(movie);
     }
 
     @Override
-    public Movie delete(Long id) {
+    public MovieDTO delete(Long id) {
         Movie existingMovie = movieRepository.getReferenceById(id);
         existingMovie.setDeleted(true);
-        return movieRepository.save(existingMovie);
+        Movie movie = movieRepository.save(existingMovie);
+        return convertToMovieDTO(movie);
     }
 
+//    @Override
+//    public MovieDTO forceDelete(Long id) {
+//        Movie movie = movieRepository.getReferenceById(id);
+//        MovieDTO movieDTO = convertToMovieDTO(movie);
+//        movieRepository.delete(movie);
+//        return movieDTO;
+//    }
 
     @Override
-    public List<MovieDTO> getAllByNameLikeAndIsComing(String name, boolean isComing) {
-        List<Movie> movieList = movieRepository.findAllByNameLikeAndIsComing("%"+name+"%", isComing);
+    public List<MovieDTO> getAllByNameLikeAndComing(String name, boolean coming) {
+        List<Movie> movieList = movieRepository.findAllByNameLikeAndComingOrderByIdDesc("%"+name+"%", coming);
         List<MovieDTO> movieDTOList = new ArrayList<>();
         for(Movie movie : movieList ) {
             movieDTOList.add(convertToMovieDTO(movie));
@@ -130,12 +188,20 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public List<MovieDTO> getTop6ByIsComingAndIdDesc() {
-        List<Movie> movieList = movieRepository.findTop6ByIsComingOrderByIdDesc(true);
+    public List<MovieDTO> getTop6ByComingAndIdDesc() {
+        List<Movie> movieList = movieRepository.findTop6ByComingAndDeletedOrderByIdDesc(true, false);
         List<MovieDTO> movieDTOList = new ArrayList<>();
         for(Movie movie : movieList) {
             movieDTOList.add(convertToMovieDTO(movie));
         }
         return movieDTOList;
+    }
+
+    @Override
+    public MovieDTO restore(Long id) {
+        Movie existingMovie = movieRepository.getReferenceById(id);
+        existingMovie.setDeleted(false);
+        Movie movie = movieRepository.save(existingMovie);
+        return convertToMovieDTO(movie);
     }
 }

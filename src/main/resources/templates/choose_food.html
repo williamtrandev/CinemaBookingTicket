@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/customer_layout :: page(title=${title}, links=${links}, scripts=${scripts})}">
+<head>
+
+</head>
+<body>
+
+<th:block th:fragment="content">
+  <div th:replace="~{fragments/booking :: chooseFood}"></div>
+</th:block>
+
+</body>
+</html>

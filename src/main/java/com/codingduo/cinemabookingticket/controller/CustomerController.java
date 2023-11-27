@@ -1,8 +1,8 @@
 package com.codingduo.cinemabookingticket.controller;
 
 import com.codingduo.cinemabookingticket.dto.CustomerDTO;
-import com.codingduo.cinemabookingticket.model.Customer;
-import com.codingduo.cinemabookingticket.service.ICustomerService;
+import com.codingduo.cinemabookingticket.model.UserSystem;
+import com.codingduo.cinemabookingticket.service.IUserSystemService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/customer")
 public class CustomerController {
     @Autowired
-    private ICustomerService customerService;
+    private IUserSystemService customerService;
 
 
 
@@ -20,8 +20,9 @@ public class CustomerController {
         return customerService.getInfo(id);
     }
 
-    @PutMapping("/update")
-    public Customer updateInfo(@Valid @RequestBody CustomerDTO customerDTO) {
-        return customerService.update(customerDTO);
-    }
+//    @PutMapping("/update")
+//    public UserSystem updateInfo(@Valid @RequestBody CustomerDTO customerDTO) {
+//        return customerService.update(customerDTO);
+//    }
+
 }

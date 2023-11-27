@@ -10,7 +10,7 @@
     <div class="carousel-inner">
       <div th:each="banner, iterStat : ${banners}">
         <div th:class="${iterStat.index == 0} ? 'carousel-item active' : 'carousel-item'">
-          <img th:src="@{'/img/banner/' + ${banner.bannerPath}}" alt="..." />
+          <img th:src="@{${banner.imagePathAtLocal}}" alt="..." />
         </div>
       </div>
     </div>

@@ -18,4 +18,10 @@ public class Banner {
 
     @Column(name = "banner_path")
     private String bannerPath;
+
+    @Transient
+    public String getImagePathAtLocal() {
+        if(bannerPath == null) return null;
+        return "/public/banner/" + bannerPath;
+    }
 }

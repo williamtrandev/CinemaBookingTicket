@@ -17,14 +17,14 @@
 
       <div class="images">
         <div th:each="movie, iterStat : ${comingList}" class="item" th:style="'--i: ' + ${iterStat.index}">
-          <img th:src="@{'/img/movie/' + ${movie.imgPath}}">
+          <img th:src="@{${movie.imgPathAtLocal}}" >
         </div>
       </div>
       <div class="content">
         <div th:each="movie, iterStat : ${comingList}" class="item" th:classappend="${iterStat.index == 0} ? 'active'">
           <h3 th:text="${movie.name}"></h3>
           <div class="des">
-            <span th:text="${movie.description.substring(0, movie.description.lastIndexOf(' ', 200)) + '...'}"></span>
+            <span th:text="${movie.description.length() > 200 ? movie.description.substring(0, movie.description.lastIndexOf(' ', 200)) + '...' : movie.description}"></span>
           </div>
           <a th:href="@{'/movie/' + ${movie.id}}">Xem thêm</a>
         </div>
@@ -56,7 +56,7 @@
     <div th:each="item : ${movieList}" class="w-100 d-flex justify-content-center">
       <a class="card" th:href="@{'/movie/' + ${item.id}}">
         <div class="poster">
-          <img th:src="@{'/img/movie/' + ${item.imgPath}}" alt="poster" />
+          <img th:src= "@{${item.imgPathAtLocal}}" alt="poster" />
         </div>
         <div class="detail">
           <h2 class="name-film" th:text="${item.name}"></h2>
@@ -79,7 +79,7 @@
     <div th:each="item : ${showingList}" class="w-100 d-flex justify-content-center">
       <a class="card" th:href="@{'/movie/' + ${item.id}}">
         <div class="poster">
-          <img th:src="@{'/img/movie/' + ${item.imgPath}}" alt="poster" />
+          <img th:src="@{${item.imgPathAtLocal}}"  alt="poster" />
         </div>
         <div class="detail">
           <h2 class="name-film" th:text="${item.name}"></h2>
@@ -103,7 +103,7 @@
     <div th:each="item : ${comingList}" class="w-100 d-flex justify-content-center">
       <a class="card" th:href="@{'/movie/' + ${item.id}}">
         <div class="poster">
-          <img th:src="@{'/img/movie/' + ${item.imgPath}}" alt="poster" />
+          <img th:src= "@{${item.imgPathAtLocal}}"  alt="poster" />
         </div>
         <div class="detail">
           <h2 class="name-film" th:text="${item.name}"></h2>
@@ -122,7 +122,7 @@
         </div>
       </div>
       <div class="card-movie overflow-hidden me-5" >
-        <img th:src="@{'/img/movie/' + ${movie.imgPath}}" alt="" class="w-100 h-100">
+        <img th:src= "@{${movie.imgPathAtLocal}}"  alt="" class="w-100 h-100">
         <div class="play-button" th:attr="onclick='showTrailer(\'' + ${movie.trailerPath} + '\')'"><i class="fa-solid fa-play"></i></div>
       </div>
       <div class="card-detail-movie">
@@ -158,8 +158,10 @@
 
                   // Tạo div ngày mới
                   var newDay = document.createElement("div");
-                  if(i == 0) newDay.className="days active";
-                  else newDay.className = "days";
+                  if(i == 0) {
+                      newDay.style="border-top-left-radius: 12px; border-bottom-left-radius: 12px;"
+                  }
+                  newDay.className = "days";
                   newDay.setAttribute("data-date", nextYear + "-" + nextMonth + "-" + nextDay);
                   var dateSpan = document.createElement("span");
                   dateSpan.textContent = nextDay + "/" + nextMonth;
@@ -179,118 +181,6 @@
       </div>
       <div class="my-3 d-flex justify-content-center">
         <div class="list-group list-group-flush">
-<!--          <div class="list-group-item py-3 px-5" data-bs-toggle="collapse" data-bs-target="#test1" aria-expanded="false"-->
-<!--               aria-controls="test1" style="cursor: pointer;">-->
-<!--            <div class="d-flex align-items-center">-->
-<!--              <img src="./assets/ant.jpg" alt="" class="rounded-circle me-3" style="width: 50px; height: 50px;">-->
-<!--              <span>Coding Duo Quận Cam</span>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div id="test1" class="collapse py-3 px-5 showtimes">-->
-<!--            <div class="type-wrapper">-->
-<!--              <div class="type-ticket mint">2D</div>-->
-<!--              <div class="d-flex flex-wrap">-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="type-wrapper">-->
-<!--              <div class="type-ticket purples">3D</div>-->
-<!--              <div class="d-flex flex-wrap">-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div class="list-group-item py-3 px-5" data-bs-toggle="collapse" data-bs-target="#test2" aria-expanded="false"-->
-<!--               aria-controls="test2" style="cursor: pointer;">-->
-<!--            <div class="d-flex align-items-center">-->
-<!--              <img src="./assets/ant.jpg" alt="" class="rounded-circle me-3" style="width: 50px; height: 50px;">-->
-<!--              <span>Coding Duo Quận Cam</span>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div id="test2" class="collapse py-3 px-5 showtimes">-->
-<!--            <div class="type-wrapper">-->
-<!--              <div class="type-ticket mint">2D</div>-->
-<!--              <div class="d-flex flex-wrap">-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="type-wrapper">-->
-<!--              <div class="type-ticket purples">3D</div>-->
-<!--              <div class="d-flex flex-wrap">-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-
-<!--          <div class="list-group-item py-3 px-5" data-bs-toggle="collapse" data-bs-target="#test3" aria-expanded="false"-->
-<!--               aria-controls="test3" style="cursor: pointer;">-->
-<!--            <div class="d-flex align-items-center">-->
-<!--              <img src="./assets/ant.jpg" alt="" class="rounded-circle me-3" style="width: 50px; height: 50px;">-->
-<!--              <span>Coding Duo Quận Cam</span>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div id="test3" class="collapse py-3 px-5 showtimes">-->
-<!--            <div class="type-wrapper">-->
-<!--              <div class="type-ticket mint">2D</div>-->
-<!--              <div class="d-flex flex-wrap">-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="type-wrapper">-->
-<!--              <div class="type-ticket purples">3D</div>-->
-<!--              <div class="d-flex flex-wrap">-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--                <button class="btn btn-custom-showtime me-3 mb-3">15:30</button>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
         </div>
       </div>
     </div>
@@ -299,7 +189,291 @@
 </th:block>
 
 
+<!--ADMIN-->
+<div class="dangchieu" id="all-movie" th:fragment="all_movie">
+  <div class="mt-5 title text">
+    <h2 class="mb-0">DANH SÁCH PHIM</h2>
+  </div>
 
+  <div>
+    <a th:href="@{/admin/deleted-movie}" class="btn btn-success mb-3">Phim đã xóa</a>
+  </div>
+
+  <div>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#movieModal">
+      <i class="fa-solid fa-plus"></i>
+      Thêm phim
+    </button>
+  </div>
+
+  <div class="row-phim">
+    <div th:each="item : ${movieList}" class="w-100 d-flex justify-content-center box" style="position: relative">
+
+      <a class="card" th:href="@{'/admin/movie/' + ${item.id}}">
+
+        <div class="poster">
+          <img th:src= "@{${item.imgPathAtLocal}}"  alt="poster" />
+        </div>
+        <div class="detail">
+          <h2 class="name-film" th:text="${item.name}"></h2>
+          <h3 class="director" th:text="'Đạo diễn ' + ${item.director}"></h3>
+          <div class="tags d-flex justify-content-center p-2">
+            <!--              <span th:class="${item.name_nhanphim.toLowerCase()}">${item.name_nhanphim}</span>-->
+          </div>
+        </div>
+
+      </a>
+      <div style="position: absolute; top: 10px; right: 20px" class="d-flex align-items-center">
+        <input class="form-check-input me-2" type="checkbox" value=""
+               style="height: 32px; width: 32px; margin-top: 0 !important;"
+               th:attr="data-id=${item.id},data-name=${item.name}">
+        <button type="button" class="btn btn-danger delete-movie-btn"
+                style="height: 32px"
+                data-bs-toggle="modal"
+                data-bs-target="#deleteMovieModal1"
+                th:attr="data-id=${item.id}, data-name=${item.name}"
+        ><i class="fa-solid fa-trash"></i></button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal Xóa phim -->
+  <div class="modal fade" id="deleteMovieModal1" tabindex="-1" aria-labelledby="deleteMovieModalLabel1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="deleteMovieModalLabel1">Xóa phim</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div>Bạn có chắc là muốn xóa <span id="deleteMovieName"></span></div>
+        </div>
+        <div class="modal-footer">
+<!--          <form action="" th:method="delete" id="deleteMovieForm">-->
+<!--            <button type="submit" class="btn btn-danger" id="deleteMovieBtn">Xóa</button>-->
+<!--          </form>-->
+          <button type="button" class="btn btn-danger" id="deleteMovieBtn">Xóa</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Hủy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--Chi tiết phim admin-->
+<div th:fragment = "admin_detail" class="d-flex justify-content-md-between flex-column flex-md-row align-items-center">
+  <div id="videoModalAdmin" class="modal-detail">
+    <div class="modal-detail-content">
+      <iframe id="videoPlayerAdmin" width="100%" height="600px" src="" frameborder="0" allowfullscreen="true"></iframe>
+    </div>
+  </div>
+  <div class="card-movie overflow-hidden me-5" >
+    <img th:src= "@{${movie.imgPathAtLocal}}"  alt="" class="w-100 h-100">
+    <div class="play-button" th:attr="onclick='showTrailer(\'' + ${movie.trailerPath} + '\')'"><i class="fa-solid fa-play"></i></div>
+  </div>
+  <div class="card-detail-movie">
+    <div class="detail-movie">
+      <h3 th:text = "${movie.name}"></h3>
+      <p>Khởi chiếu: <span th:text="${movie.releaseDate}"></span></p>
+      <p>Thể loại: <span th:text="${genre}"></span></p>
+      <p>Diễn viên: <span th:text="${movie.actors}"></span></p>
+      <p>Đạo diễn: <span th:text="${movie.director}"></span></p>
+      <p>Mô tả phim: <span th:text="${movie.description}"></span></p>
+    </div>
+
+    <button id="updateMovieBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#movieModal"
+            th:attr="data-id=${movie.id}"
+    >
+      <i class="fa-solid fa-pen-to-square"></i>
+      Sửa thông tin
+    </button>
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteMovieModal">
+      <i class="fa-solid fa-trash"></i>
+      Xóa phim
+    </button>
+  </div>
+
+  <!-- Modal Xóa phim -->
+  <div class="modal fade" id="deleteMovieModal" tabindex="-1" aria-labelledby="deleteMovieModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="deleteMovieModalLabel">Xóa phim</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div>Bạn có chắc là muốn xóa <span th:text="${movie.name}"></span></div>
+        </div>
+        <div class="modal-footer">
+          <form th:action="@{'/admin/movie/'+${movie.id}}" th:method="delete">
+            <input type="submit" class="btn btn-danger" value="Xóa"></input>
+          </form>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Hủy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Suất chiếu  -->
+<div></div>
+
+
+<!--Form edit movie-->
+<!-- Modal -->
+<div th:fragment = "movie_modal" class="modal fade" id="movieModal" tabindex="-1" role="dialog" aria-labelledby="movieModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+<!--      <form th:action="@{/admin/movie}" th:object="${movieDTO}" method="post" enctype="multipart/form-data">-->
+<!--      <form th:action="@{${formAction}}" th:object="${movie}" th:method="${formMethod}" enctype="multipart/form-data">-->
+      <form id="movieForm" th:object="${movie}" enctype="multipart/form-data">
+        <div class="modal-header">
+          <h5 class="modal-title" id="movieModalLongTitle">Thêm phim</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body bg-secondary bg-gradient">
+
+              <div class="container">
+                <div class="row">
+                  <div class="mb-3 col-md-6">
+                    <label for="movie-name" class="form-label text-white">Tên phim</label>
+                    <input type="text" class="form-control" id="movie-name" required th:field="*{name}">
+                  </div>
+
+                  <div class="mb-3 col-md-6">
+                    <label for="movie-director" class="form-label text-white">Đạo diễn</label>
+                    <input type="text" class="form-control" id="movie-director" th:field="*{director}" required>
+                  </div>
+
+                  <div class="input-group mb-3 col-md-12">
+                    <span class="input-group-text">Diễn viên</span>
+                    <input type="text" class="form-control" id="movie-actors" th:field="*{actors}" required>
+                  </div>
+
+                  <div class="mb-3 col-md-3">
+                    <div class="mb-2">
+                      <label for="movie-release-day" class="form-label text-white mb-3">Ngày chiếu</label>
+                      <input type="date" class="form-control" id="movie-release-day" th:field="*{releaseDate}" required>
+                    </div>
+
+                    <div class="">
+                      <label for="movie-duration" class="form-label text-white">Thời lượng (phút)</label>
+                      <input type="number" class="form-control" id="movie-duration" th:field="*{duration}" required>
+                    </div>
+                  </div>
+
+                  <div class="mb-3 col-md-3">
+                      <label for="movie-coming" class="form-label text-white">Sắp chiếu</label>
+                      <input class="form-check-input" id="movie-coming" type="checkbox" th:field="*{coming}">
+                  </div>
+
+                  <div  class="mb-3 col-md-6">
+                    <div class="mb-1">
+                      <label for="movie-image" class="form-label text-white">Poster</label>
+                      <input class="form-control" type="file" id="movie-image" accept="image/png, image/jpeg, image/jpg"
+                             name="image"
+                             th:required="${imageRequired}"
+                      >
+                    </div>
+
+                    <div>
+                      <img th:if="${not #strings.isEmpty(movie.imgPathAtLocal)}" th:src="@{${movie.imgPathAtLocal}}"  alt="poster" th:class="img-fluid" />
+                    </div>
+                  </div>
+
+
+                  <div class="mb-3 col-md-6">
+                    <span class="input-group-text">Link trailer</span>
+                    <input type="text" id="movie-trailer-path" class="form-control" th:field="*{trailerPath}" required>
+                  </div>
+
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control" id="movie-description" style="height: 100px" th:field="*{description}"></textarea>
+                        <label for="movie-description">Mô tả</label>
+                    </div>
+
+                  <label class="form-label text-white">Nhãn phim</label>
+                  <div class="btn-group mb-3" role="group">
+                    <div th:each="tagMovie : ${tagMovieList}">
+                      <input class="btn-check" type="radio" name="tagMovie" th:id="@{'radio-'+${tagMovie.id}}"
+                             th:value="${tagMovie.id}"
+                             th:field="*{tagId}">
+                      <label class="btn btn-outline-light" th:for="@{'radio-'+${tagMovie.id}}"
+                             th:text="${tagMovie.name}"
+                      ></label>
+                    </div>
+                  </div>
+
+                  <label class="form-label text-white">Thể loại</label>
+                  <div class="btn-group mb-3">
+                    <div th:each="genre : ${genreList}">
+                      <input type="checkbox" class="btn-check" th:id="@{'checkbox-'+${genre.id}}" autocomplete="off"
+                             name="genre"
+                             th:value="${genre.name}"
+                             th:checked="${movie.genres != null && movie.genres.contains(genre.name)}"
+                      >
+                      <label class="btn btn-outline-light" th:for="@{'checkbox-'+${genre.id}}" th:text="${genre.name}"></label>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+          <button type="reset" class="btn btn-secondary">Reset</button>
+          <button type="button" class="btn btn-primary mr-3" id="movieSubmitBtn" th:text="${btn}"></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!--Danh sach phim da xoa-->
+<div class="dangchieu" id="all-movie-deleted" th:fragment="all_movie_deleted">
+  <div class="mt-5 title text">
+    <h2 class="mb-0">DANH SÁCH PHIM</h2>
+  </div>
+
+  <div>
+    <a th:href="@{/admin/movie}" class="btn btn-success mb-3">Danh sách phim</a>
+  </div>
+
+  <div class="row-phim">
+    <div th:each="item : ${movieList}" class="w-100 d-flex justify-content-center box" style="position: relative">
+
+      <div class="card">
+
+        <div class="poster">
+          <img th:src= "@{${item.imgPathAtLocal}}"  alt="poster" />
+        </div>
+        <div class="detail">
+          <h2 class="name-film" th:text="${item.name}"></h2>
+          <h3 class="director" th:text="'Đạo diễn ' + ${item.director}"></h3>
+          <div class="tags d-flex justify-content-center p-2">
+            <!--              <span th:class="${item.name_nhanphim.toLowerCase()}">${item.name_nhanphim}</span>-->
+          </div>
+        </div>
+
+      </div>
+      <div style="position: absolute; top: 10px; right: 20px" class="d-flex align-items-center">
+        <input class="form-check-input me-2" type="checkbox" value=""
+               style="height: 32px; width: 32px; margin-top: 0 !important;"
+               th:attr="data-id=${item.id}, data-name=${item.name}">
+        <button type="button" class="btn btn-success restore-movie-btn"
+                style="height: 32px"
+                th:attr="data-id=${item.id}, data-name=${item.name}"
+        ><i class="fa-solid fa-trash-can-arrow-up"></i></button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!--Danh sach phim da xoa end-->
 
     <script>
       function handleBooking(elem) {

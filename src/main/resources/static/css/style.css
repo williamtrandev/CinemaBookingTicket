@@ -559,7 +559,7 @@ footer {
     background: var(--second-color);
 }
 footer i {
-    color: var((var(--text-color)));
+    color: var(--text-color);
 }
 footer a:hover {
     color: var(--primary-color) !important;
@@ -815,6 +815,11 @@ body.dark .row-phim .card {
     animation: spin 2.5s linear infinite;
 }
 
+.row-phim .btn {
+    position: relative;
+    height: fit-content;
+}
+
 body.dark .row-phim .card:hover::before,
 body.dark .row-phim .card:hover::after {
     background-image: linear-gradient(
@@ -840,6 +845,11 @@ body.dark .row-phim .card:hover::after {
     /* grid-gap: 20px; */
     justify-content: space-between;
     margin-top: 30px;
+    grid-column-gap: 2rem;
+}
+
+.customer-card:hover {
+    scale: 1.02;
 }
 
 
