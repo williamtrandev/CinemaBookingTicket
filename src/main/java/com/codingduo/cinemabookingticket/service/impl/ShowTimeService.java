@@ -5,6 +5,7 @@ import com.codingduo.cinemabookingticket.model.ShowTime;
 import com.codingduo.cinemabookingticket.repository.ShowtimeRepository;
 import com.codingduo.cinemabookingticket.service.IShowTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -29,6 +30,27 @@ public class ShowTimeService implements IShowTimeService {
     public ShowTime getShowTimeByIdAndRoomId(Long showtimeId, Long roomId) {
         return showtimeRepository.findShowTimeByIdAndRoomId(showtimeId, roomId);
     }
+
+    @Override
+    public List<ShowTime> getShowTimeByMovie(Long id) {
+        return showtimeRepository.findShowTimesByMovieId(id);
+    }
+
+    @Override
+    public List<ShowTime> getAllByDateShowAndRoom(Date dateShow, Long roomId) {
+        return showtimeRepository.findShowTimesByDateShowAndRoomId(dateShow, roomId);
+    }
+
+    @Override
+    public ShowTime save(ShowTime showTime) {
+        return showtimeRepository.save(showTime);
+    }
+
+    @Override
+    public ShowTime getOne(Long id) {
+        return showtimeRepository.getReferenceById(id);
+    }
+
 
     private ShowTimeDTO convertToShowTimeDTO(ShowTime showTime) {
         ShowTimeDTO showTimeDTO = new ShowTimeDTO();

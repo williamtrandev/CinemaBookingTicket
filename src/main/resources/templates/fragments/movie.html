@@ -264,61 +264,337 @@
 
 
 <!--Chi tiết phim admin-->
-<div th:fragment = "admin_detail" class="d-flex justify-content-md-between flex-column flex-md-row align-items-center">
-  <div id="videoModalAdmin" class="modal-detail">
-    <div class="modal-detail-content">
-      <iframe id="videoPlayerAdmin" width="100%" height="600px" src="" frameborder="0" allowfullscreen="true"></iframe>
+<div th:fragment = "admin_detail">
+  <div class="d-flex justify-content-md-between flex-column flex-md-row align-items-center">
+    <div id="videoModalAdmin" class="modal-detail">
+      <div class="modal-detail-content">
+        <iframe id="videoPlayerAdmin" width="100%" height="600px" src="" frameborder="0" allowfullscreen="true"></iframe>
+      </div>
     </div>
-  </div>
-  <div class="card-movie overflow-hidden me-5" >
-    <img th:src= "@{${movie.imgPathAtLocal}}"  alt="" class="w-100 h-100">
-    <div class="play-button" th:attr="onclick='showTrailer(\'' + ${movie.trailerPath} + '\')'"><i class="fa-solid fa-play"></i></div>
-  </div>
-  <div class="card-detail-movie">
-    <div class="detail-movie">
-      <h3 th:text = "${movie.name}"></h3>
-      <p>Khởi chiếu: <span th:text="${movie.releaseDate}"></span></p>
-      <p>Thể loại: <span th:text="${genre}"></span></p>
-      <p>Diễn viên: <span th:text="${movie.actors}"></span></p>
-      <p>Đạo diễn: <span th:text="${movie.director}"></span></p>
-      <p>Mô tả phim: <span th:text="${movie.description}"></span></p>
+    <div class="card-movie overflow-hidden me-5" >
+      <img th:src= "@{${movie.imgPathAtLocal}}"  alt="" class="w-100 h-100">
+      <div class="play-button" th:attr="onclick='showTrailer(\'' + ${movie.trailerPath} + '\')'"><i class="fa-solid fa-play"></i></div>
+    </div>
+    <div class="card-detail-movie">
+      <div class="detail-movie">
+        <h3 th:text = "${movie.name}"></h3>
+        <p>Khởi chiếu: <span th:text="${movie.releaseDate}"></span></p>
+        <p>Thời lượng: <span th:id="duration" th:text="${movie.duration}"></span> <span>phút</span></p>
+        <p>Thể loại: <span th:text="${genre}"></span></p>
+        <p>Diễn viên: <span th:text="${movie.actors}"></span></p>
+        <p>Đạo diễn: <span th:text="${movie.director}"></span></p>
+        <p>Mô tả phim: <span th:text="${movie.description}"></span></p>
+      </div>
+
+      <button id="updateMovieBtn" style="padding: 8px 16px" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#movieModal"
+              th:attr="data-id=${movie.id}"
+      >
+        <i class="fa-solid fa-pen-to-square me-2"></i>
+        Sửa thông tin
+      </button>
+      <button type="button" style="padding: 8px 16px" class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#deleteMovieModal">
+        <i class="fa-solid fa-trash me-2"></i>
+        Xóa phim
+      </button>
+
+      <button class="btn btn-custom-showtime ms-3" style="font-weight: normal !important;" data-bs-toggle="modal" data-bs-target="#addShowTime">Thêm suất chiếu</button>
     </div>
 
-    <button id="updateMovieBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#movieModal"
-            th:attr="data-id=${movie.id}"
-    >
-      <i class="fa-solid fa-pen-to-square"></i>
-      Sửa thông tin
-    </button>
-    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteMovieModal">
-      <i class="fa-solid fa-trash"></i>
-      Xóa phim
-    </button>
-  </div>
+    <!-- Modal Thêm suất chiếu -->
+    <div class="modal fade" id="addShowTime" tabindex="-1" aria-labelledby="addShowTimeLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="addShowTimeLabel">Thêm suất chiếu</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="room" class="form-label" style="font-size: 1.2rem">Phòng chiếu</label>
+              <select id="room" class="form-select">
+                <option value="none" disabled selected>Chọn phòng</option>
+                <option th:each="room : ${roomList}" th:value="${room.id}" th:text="'Phòng ' + ${room.id}" th:attr="data-id=${room.id}"></option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="ticket" class="form-label" style="font-size: 1.2rem">Loại vé</label>
+              <select id="ticket" class="form-select">
+                <option value="none" disabled selected>Chọn vé</option>
+                <option th:each="ticket : ${ticketList}" th:value="${ticket.id}" th:text="${ticket.name}" th:attr="data-id=${ticket.id}"></option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="datepicker" class="form-label" style="font-size: 1.2rem">Ngày chiếu</label>
+              <input id="datepicker" />
+            </div>
+            <div class="mb-3">
+              <label for="timepicker" class="form-label" style="font-size: 1.2rem">Giờ chiếu</label>
+              <input id="timepicker" />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-custom-showtime" style="font-weight: normal !important;" id="btn-add">Thêm</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <!-- Modal Xóa phim -->
-  <div class="modal fade" id="deleteMovieModal" tabindex="-1" aria-labelledby="deleteMovieModalLabel" aria-hidden="true">
+
+    <!-- Modal Xóa phim -->
+    <div class="modal fade" id="deleteMovieModal" tabindex="-1" aria-labelledby="deleteMovieModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="deleteMovieModalLabel">Xóa phim</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div>Bạn có chắc là muốn xóa <span th:text="${movie.name}"></span></div>
+          </div>
+          <div class="modal-footer">
+            <form th:action="@{'/admin/movie/'+${movie.id}}" th:method="delete">
+              <input type="submit" class="btn btn-danger" value="Xóa"></input>
+            </form>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Hủy</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+  <!--  Modal chỉnh sửa xuất chiếu -->
+  <div class="modal fade" id="changeShowTime" tabindex="-1" aria-labelledby="changeShowTimeLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="deleteMovieModalLabel">Xóa phim</h1>
+          <h1 class="modal-title fs-5" id="changeShowTimeLabel">Chỉnh sửa suất chiếu</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div>Bạn có chắc là muốn xóa <span th:text="${movie.name}"></span></div>
+          <div class="mb-3">
+            <label for="roomEdit" class="form-label" style="font-size: 1.2rem">Phòng chiếu</label>
+            <select id="roomEdit" class="form-select">
+              <option value="none" disabled selected>Chọn phòng</option>
+              <option th:each="room : ${roomList}" th:value="${room.id}" th:text="'Phòng ' + ${room.id}" th:attr="data-id=${room.id}"></option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="ticketEdit" class="form-label" style="font-size: 1.2rem">Loại vé</label>
+            <select id="ticketEdit" class="form-select">
+              <option value="none" disabled selected>Chọn vé</option>
+              <option th:each="ticket : ${ticketList}" th:value="${ticket.id}" th:text="${ticket.name}" th:attr="data-id=${ticket.id}"></option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="datepickerEdit" class="form-label" style="font-size: 1.2rem">Ngày chiếu</label>
+            <input id="datepickerEdit" />
+          </div>
+          <div class="mb-3">
+            <label for="timepickerEdit" class="form-label" style="font-size: 1.2rem">Giờ chiếu</label>
+            <input id="timepickerEdit" />
+          </div>
         </div>
         <div class="modal-footer">
-          <form th:action="@{'/admin/movie/'+${movie.id}}" th:method="delete">
-            <input type="submit" class="btn btn-danger" value="Xóa"></input>
-          </form>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Hủy</button>
+          <button type="button" class="btn btn-custom-showtime" style="font-weight: normal !important;" id="btn-edit">Chỉnh sửa</button>
         </div>
       </div>
     </div>
   </div>
+  <div class="mt-4">
+    <!-- Danh sách các suất chiếu  -->
+    <table class="content-table">
+      <thead>
+      <tr>
+        <th>STT</th>
+        <th>Ngày chiếu</th>
+        <th>Giờ chiếu</th>
+        <th>Loại vé</th>
+        <th>Phòng</th>
+        <th>Thao tác</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="showtime, showtimeIndex : ${showTimeList}">
+        <td th:text="${showtimeIndex.index + 1}">1</td>
+        <td th:text="${showtime.dateShow}">30/11/2023</td>
+        <td th:text="${showtime.timeShow}">9:30</td>
+        <td th:text="${showtime.ticket.name}">9:30</td>
+        <td th:text="${showtime.room.id}">1</td>
+        <td>
+          <button class="my-btn btn-change-showtime"
+                  th:attr="data-id=${showtime.id}"
+                  style="background: linear-gradient(to left bottom, #5ebaee, #dbe3ff, #ecb3fe); color: #0c244b">
+            Chỉnh sửa
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <script>
+    var date = new Date();
+    var today = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+
+    $('#datepicker').datepicker({
+      format: "dd/mm/yyyy",
+      uiLibrary: 'bootstrap5',
+      minDate: today
+    });
+    $('#timepicker').timepicker({
+      uiLibrary: 'bootstrap5',
+    });
+
+    $('#datepickerEdit').datepicker({
+      format: "dd/mm/yyyy",
+      uiLibrary: 'bootstrap5',
+      minDate: today
+    });
+    $('#timepickerEdit').timepicker({
+      uiLibrary: 'bootstrap5',
+    });
+    function selectOptionByText(text) {
+      $('#ticketEdit option').filter(function() {
+        return $(this).text() === text;
+      }).prop('selected', true);
+    }
+    $(function() {
+      console.log(parseInt($('tbody tr').last().find('td').first().text()) + 1)
+
+      $('#btn-add').click(function() {
+        const roomId = $('#room').val();
+        const ticketId = $('#ticket').val();
+        const parts = $('#datepicker').val().split('/');
+        const [day, month, year] = parts;
+        const dateShow = `${year}-${month}-${day}`;
+        const timeVal = $('#timepicker').val();
+        const timeShow = `${timeVal}:00`;
+        const movieId = window.location.href.split("/").pop();
+        const duration = $('#duration').text();
+        console.log(roomId, ticketId, dateShow, timeShow, movieId, duration);
+        fetch(`/cinema/api/v1/showtime`, {
+          method: "POST",
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({roomId, ticketId, dateShow, timeShow, movieId, duration})
+        })
+            .then(res => {
+              if(res.ok) {
+                return res.json();
+              } else {
+                return res.json().then(data => {
+                  Swal.fire({
+                    title: 'Lỗi',
+                    html: `Phòng đang được sử dụng trong khoảng thời gian:<br/>
+                            ${data.startShowing} - ${data.endShowing}`,
+                    icon: 'error',
+                  });
+                });
+              }
+            })
+            .then(data => {
+              if (data && !data.hasOwnProperty('startShowing')) {
+                console.log(data);
+                Swal.fire({
+                  title: "Thành công",
+                  text: "Thêm suất chiếu thành công",
+                  icon: "success"
+                });
+                let newIndex = parseInt($('tbody tr').last().find('td').first().text()) + 1;
+                let ticketName = $('#ticket option:selected').text();
+                let newTr = `<tr>
+                  <td>${newIndex}</td>
+                  <td>${data.dateShow}</td>
+                  <td>${data.timeShow}</td>
+                  <td>${ticketName}</td>
+                  <td>${roomId}</td>
+                  <td>
+                    <button class="my-btn btn-change-showtime"
+                            data-id=${data.id}
+                            style="background: linear-gradient(to left bottom, #5ebaee, #dbe3ff, #ecb3fe); color: #0c244b"
+                            >
+                      Chỉnh sửa
+                    </button>
+                  </td>
+                </tr>`;
+                $('tbody').append(newTr);
+              }
+            })
+            .catch(err => {
+              console.error(err);
+              Swal.fire({
+                title: "Lỗi",
+                text: "Thêm suất chiếu không thành công",
+                icon: "error"
+              });
+            })
+      })
+      let id = null;
+      $('tbody').on('click', '.btn-change-showtime', function() {
+        id = $(this).data('id');
+        let tds = $(this).closest('tr').find('td');
+        $('#roomEdit').val(tds.eq(4).text());
+        console.log(selectOptionByText(tds.eq(3).text()))
+        $('#ticketEdit').val();
+        $('#changeShowTime').modal('show');
+      })
+
+      $('#btn-edit').click(function() {
+        const roomId = $('#roomEdit').val();
+        const ticketId = $('#ticketEdit').val();
+        const parts = $('#datepickerEdit').val().split('/');
+        const [day, month, year] = parts;
+        const dateShow = `${year}-${month}-${day}`;
+        const timeVal = $('#timepickerEdit').val();
+        const timeShow = `${timeVal}:00`;
+        const movieId = window.location.href.split("/").pop();
+        const duration = $('#duration').text();
+        console.log(roomId, ticketId, dateShow, timeShow, movieId, duration);
+        fetch(`/cinema/api/v1/showtime/${id}`, {
+          method: "PUT",
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({roomId, ticketId, dateShow, timeShow, movieId, duration})
+        })
+                .then(res => {
+                  if(res.ok) {
+                    return res.json();
+                  } else {
+                    return res.json().then(data => {
+                      Swal.fire({
+                        title: 'Lỗi',
+                        html: `Phòng đang được sử dụng trong khoảng thời gian:<br/>
+                            ${data.startShowing} - ${data.endShowing}`,
+                        icon: 'error',
+                      });
+                    });
+                  }
+                })
+                .then(data => {
+                  if (data && !data.hasOwnProperty('startShowing')) {
+                    console.log(data);
+                    Swal.fire({
+                      title: "Thành công",
+                      text: "Thay đổi suất chiếu thành công",
+                      icon: "success"
+                    });
+                    setTimeout(() => {
+                      window.location.reload();
+                    }, 1000);
+                  }
+                })
+                .catch(err => {
+                  console.error(err);
+                  Swal.fire({
+                    title: "Lỗi",
+                    text: "Thay đổi suất chiếu không thành công",
+                    icon: "error"
+                  });
+                })
+      })
+    })
+  </script>
 </div>
+
 <!-- Suất chiếu  -->
-<div></div>
+
 
 
 <!--Form edit movie-->

@@ -13,6 +13,7 @@ public interface IMovieService {
 //    MovieDTO forceDelete(Long id);
     List<MovieDTO> getAll();
     MovieDTO getOne(Long id);
+    Movie getById(Long id);
     List<MovieDTO> getAllNotDeleted();
     List<MovieDTO> getAllDeleted();
     List<MovieDTO> getAllByNameLikeAndComing(String name, boolean coming);

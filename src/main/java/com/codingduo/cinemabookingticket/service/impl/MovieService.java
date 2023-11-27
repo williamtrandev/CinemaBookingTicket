@@ -48,6 +48,11 @@ public class MovieService implements IMovieService {
     }
 
     @Override
+    public Movie getById(Long id) {
+        return movieRepository.getReferenceById(id);
+    }
+
+    @Override
     public List<MovieDTO> getAllNotDeleted() {
         List<Movie> movies = movieRepository.findAllByDeletedOrderByIdDesc(false);
         List<MovieDTO> movieDTOs = new ArrayList<>();

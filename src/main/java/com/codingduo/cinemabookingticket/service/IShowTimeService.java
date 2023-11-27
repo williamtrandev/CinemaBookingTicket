@@ -9,4 +9,13 @@ import java.util.List;
 public interface IShowTimeService {
     List<ShowTimeDTO> getShowTimeByMovieAndDateShow(Long movieId, Date date);
     ShowTime getShowTimeByIdAndRoomId(Long showtimeId, Long roomId);
+
+    List<ShowTime> getShowTimeByMovie(Long id);
+
+
+    List<ShowTime> getAllByDateShowAndRoom(Date dateShow, Long roomId);
+
+    ShowTime save(ShowTime showTime);
+
+    ShowTime getOne(Long id);
 }
