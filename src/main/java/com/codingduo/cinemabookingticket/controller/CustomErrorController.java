@@ -21,6 +21,8 @@ public class CustomErrorController implements ErrorController {
                 errorPage = "error/404";
             } else if(statusCode == HttpStatus.BAD_REQUEST.value()) {
                 errorPage = "error/400";
+            } else if(statusCode == HttpStatus.FORBIDDEN.value()) {
+                errorPage = "error/403";
             }
         }
         return errorPage;

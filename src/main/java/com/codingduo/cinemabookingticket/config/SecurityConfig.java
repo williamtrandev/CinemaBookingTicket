@@ -18,7 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class UserSystemSecurityConfig {
+public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private static final String[] WHITE_LIST_URL = {
         "/api/v1/auth/**",
@@ -26,7 +26,8 @@ public class UserSystemSecurityConfig {
         "/css/**",
         "/js/**",
         "/images/**",
-        "/public/**"
+        "/public/**",
+        "/"
 
     };
     @Bean
@@ -64,12 +65,26 @@ public class UserSystemSecurityConfig {
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
                                 .requestMatchers(WHITE_LIST_URL).permitAll()
+                                .requestMatchers("/api/v1/**").authenticated()
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-
+                .formLogin(login ->
+                    login
+                        .loginPage("/login")
+                        .permitAll()
+                )
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout(logout ->
+                    logout
+                        .logoutUrl("/logout")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID", "jwt")
+                        .clearAuthentication(true)
+                        .logoutSuccessUrl("/login")
+                );
         return http.build();
 
 

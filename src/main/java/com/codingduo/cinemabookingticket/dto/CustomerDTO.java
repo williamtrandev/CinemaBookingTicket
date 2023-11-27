@@ -17,4 +17,5 @@ public class CustomerDTO {
     private String repeatPassword;
     private String avatarPath;
     private int point;
+    private String role;
 }
