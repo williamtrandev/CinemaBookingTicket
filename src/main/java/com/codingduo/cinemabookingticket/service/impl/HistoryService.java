@@ -8,8 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.YearMonth;
+import java.time.temporal.TemporalAdjusters;
+import java.util.*;
 
 @Service
 public class HistoryService implements IHistoryService {
@@ -75,4 +79,61 @@ public class HistoryService implements IHistoryService {
         return historyRepository.findAllByCustomer(customer);
     }
 
+    @Override
+    public Map<Date, Double> calculateDailyRevenueInWeek() {
+        LocalDate now = LocalDate.now();
+        LocalDate startOfWeek = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate endOfWeek = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+
+        // Lấy dữ liệu từ cơ sở dữ liệu theo tuần hiện tại
+        List<History> historiesInCurrentWeek = historyRepository
+                .findHistoriesByDateBookingBetween(Date.valueOf(startOfWeek), Date.valueOf(endOfWeek));
+
+        // Tạo Map để lưu trữ tổng tiền theo từng ngày
+        Map<Date, Double> dailyRevenueMap = new HashMap<>();
+        // Khởi tạo giá trị mặc định là 0 cho tất cả các ngày trong tuần
+        for (LocalDate date = startOfWeek; date.isBefore(endOfWeek.plusDays(1)); date = date.plusDays(1)) {
+            dailyRevenueMap.put(Date.valueOf(date), 0.0);
+        }
+        // Duyệt qua danh sách History và tính tổng tiền cho mỗi ngày
+        for (History history : historiesInCurrentWeek) {
+            Date date = history.getDateBooking();
+            double total = history.getTotal();
+
+            // Cập nhật tổng tiền cho ngày tương ứng trong Map
+            dailyRevenueMap.merge(date, total, Double::sum);
+        }
+
+        return dailyRevenueMap;
+    }
+
+    @Override
+    public Map<YearMonth, Double> calculateMonthlyRevenue() {
+        LocalDate now = LocalDate.now();
+        YearMonth startOfYear = YearMonth.of(now.getYear(), Month.JANUARY);
+        YearMonth endOfYear = YearMonth.of(now.getYear(), Month.DECEMBER);
+
+        //giá trị mặc định là 0
+        Map<YearMonth, Double> monthlyRevenueMap = new LinkedHashMap<>();
+        for (YearMonth month = startOfYear; !month.isAfter(endOfYear); month = month.plusMonths(1)) {
+            monthlyRevenueMap.put(month, 0.0);
+
+            // Lấy history theo từng tháng
+            List<History> historiesInMonth = historyRepository
+                    .findHistoriesByDateBookingBetween(
+                            Date.valueOf(month.atDay(1)),
+                            Date.valueOf(month.atEndOfMonth())
+                    );
+
+            // Tính tổng tiền cho tháng hiện tại
+            double totalRevenueInMonth = historiesInMonth.stream()
+                    .mapToDouble(History::getTotal)
+                    .sum();
+
+            // Cập nhật tổng tiền cho tháng tương ứng trong Map
+            monthlyRevenueMap.put(month, totalRevenueInMonth);
+        }
+
+        return monthlyRevenueMap;
+    }
 }

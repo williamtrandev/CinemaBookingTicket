@@ -11,7 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
+import java.time.YearMonth;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/admin")
@@ -37,6 +40,12 @@ public class AdminController {
 
     @Autowired
     private IComboService comboService;
+
+    @Autowired
+    private IShowTimeService showTimeService;
+
+    @Autowired
+    private IRoomService roomService;
 
     @GetMapping("/movie")
     public String admin(Model model) {
@@ -104,12 +113,18 @@ public class AdminController {
         List<TagMovieDTO> tagMovieList = tagMovieService.getAll();
         List<Genre> genreList = genreService.getAll();
         String genres = String.join(", ", movieDTO.getGenres());
+        List<ShowTime> showTimeList = showTimeService.getShowTimeByMovie(id);
+        List<Room> roomList = roomService.getAll();
+        List<Ticket> ticketList = ticketService.getAll();
+        model.addAttribute("ticketList", ticketList);
+        model.addAttribute("roomList", roomList);
+        model.addAttribute("showTimeList", showTimeList);
         model.addAttribute("movie", movieDTO);
         model.addAttribute("genre", genres);
         model.addAttribute("tagMovieList", tagMovieList);
         model.addAttribute("genreList", genreList);
         model.addAttribute("title", "Chi tiết phim");
-        model.addAttribute("links", new String[]{"detailMovie.css"});
+        model.addAttribute("links", new String[]{"detailMovie.css", "ttuser.css"});
 //        model.addAttribute("formAction", "/admin/movie/"+id);
 //        model.addAttribute("formMethod", "put");
         model.addAttribute("imageRequired", "false");
@@ -180,5 +195,19 @@ public class AdminController {
         model.addAttribute("title", "Danh sách combo");
         model.addAttribute("links", new String[]{"ttuser.css", "booking.css"});
         return "admin_combo";
+    }
+
+
+    @GetMapping("/income")
+    public String income(Model model) {
+        Map<Date, Double> revenuesInWeek = historyService.calculateDailyRevenueInWeek();
+        model.addAttribute("revenuesInWeek", revenuesInWeek);
+
+        Map<YearMonth, Double> revenuesInMonth = historyService.calculateMonthlyRevenue();
+        model.addAttribute("revenuesInMonth", revenuesInMonth);
+
+        model.addAttribute("links", new String[]{"detailMovie.css", "style.css"});
+        model.addAttribute("title", "Thống kê doanh thu");
+        return "income";
     }
 }
