@@ -397,10 +397,10 @@
                   <label class="form-label text-white">Nhãn phim</label>
                   <div class="btn-group mb-3" role="group">
                     <div th:each="tagMovie : ${tagMovieList}">
-                      <input class="btn-check" type="radio" name="tagMovie" th:id="@{'radio-'+${tagMovie.id}}"
+                      <input class="btn-check" type="radio" name="tagMovie" th:id="radio-'+${tagMovie.id}"
                              th:value="${tagMovie.id}"
                              th:field="*{tagId}">
-                      <label class="btn btn-outline-light" th:for="@{'radio-'+${tagMovie.id}}"
+                      <label class="btn btn-outline-light" th:for="'radio-'+${tagMovie.id}"
                              th:text="${tagMovie.name}"
                       ></label>
                     </div>
@@ -409,12 +409,12 @@
                   <label class="form-label text-white">Thể loại</label>
                   <div class="btn-group mb-3">
                     <div th:each="genre : ${genreList}">
-                      <input type="checkbox" class="btn-check" th:id="@{'checkbox-'+${genre.id}}" autocomplete="off"
+                      <input type="checkbox" class="btn-check" th:id="'checkbox-'+${genre.id}" autocomplete="off"
                              name="genre"
                              th:value="${genre.name}"
                              th:checked="${movie.genres != null && movie.genres.contains(genre.name)}"
                       >
-                      <label class="btn btn-outline-light" th:for="@{'checkbox-'+${genre.id}}" th:text="${genre.name}"></label>
+                      <label class="btn btn-outline-light" th:for="'checkbox-'+${genre.id}" th:text="${genre.name}"></label>
                     </div>
                   </div>
                 </div>

@@ -30,7 +30,7 @@
                         <div class='wrapper-product'>
                             <img th:src="@{'/public/combo/' + ${item.imagePath}}" alt=''>
                             <div class='wrapper-product-detail'>
-                                <span style='font-weight: bold; color: black' class='name-product' th:id='${item.id}' th:text="${item.nameCombo}"></span>
+                                <span style='font-weight: bold; color: black' class='name-product' th:text="${item.nameCombo}"></span>
                                 <span th:text="${item.detail}"></span>
                             </div>
                         </div>
@@ -47,8 +47,13 @@
                     <div class="wrapper-product" th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')}"></div>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-primary update-btn"><i class="fa-solid fa-pen-to-square"></i></button>
-                    <button type="button" class="btn btn-danger delete-btn"><i class="fa-solid fa-trash"></i></button>
+                    <button type="button" class="btn btn-primary update-btn"
+                            th:attr="data-id=${item.id}, data-name=${item.nameCombo}, data-detail=${item.detail}, data-price=${item.price}"
+                    ><i class="fa-solid fa-pen-to-square"></i></button>
+                    <button type="button" class="btn btn-danger delete-btn"
+                            data-bs-toggle="modal" data-bs-target="#deleteComboModal"
+                            th:attr="data-id=${item.id}, data-name=${item.nameCombo}"
+                    ><i class="fa-solid fa-trash"></i></button>
                 </td>
             </tr>
             </tbody>
@@ -89,6 +94,24 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
                     <button type="button" class="btn btn-primary" id="submitBtn">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deleteComboModal" tabindex="-1" aria-labelledby="deleteComboModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deleteComboModalLabel">Xóa Combo</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Bạn có chắc là muốn xóa combo <strong id="comboNameDelete"></strong>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="deleteBtn">Xóa</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -145,6 +168,36 @@
                     })
                     .catch(err => console.log(err));
             });
+
+            $(".combo-row").on("click", ".delete-btn", function () {
+                $("#comboNameDelete").text($(this).data("name"));
+                const dynamicPath = /*[[@{/api/v1/combo}]]*/ '';
+                const id = $(this).data("id");
+                $("#deleteBtn").click(() => {
+                    fetch(`${dynamicPath}/${id}`, {
+                        method: "DELETE"
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.message) {
+                                Toastify({
+                                    text: "Xóa không thành công",
+                                    className: "warning",
+                                    style: {
+                                        background: "linear-gradient(to right, #ff9900, #ffcc00)",
+                                    },
+                                    duration: 3000,
+                                    gravity: "top",
+                                    position: "right",
+                                }).showToast();
+                            } else {
+                                $(this).closest("tr").remove();
+                                $("#deleteComboModal").modal("hide");
+                            }
+                        })
+                        .catch(err => console.log(err));
+                });
+            })
         });
     </script>
 </div>
