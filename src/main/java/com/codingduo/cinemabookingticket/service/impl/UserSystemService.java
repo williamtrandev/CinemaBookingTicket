@@ -38,6 +38,7 @@ public class UserSystemService implements IUserSystemService {
         cs.setName(customerDTO.getName());
         cs.setPassword(customerDTO.getPassword());
         cs.setPoint(0);
+        cs.setRole(customerDTO.getRole());
         return userSystemRepository.save(cs);
     }
 

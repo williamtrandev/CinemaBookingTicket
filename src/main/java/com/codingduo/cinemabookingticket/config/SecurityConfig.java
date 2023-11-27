@@ -77,13 +77,6 @@ public class SecurityConfig {
                     login
                         .loginPage("/login")
                         .permitAll()
-                ).logout(logout ->
-                        logout
-                                .logoutUrl("/logout")
-                                .invalidateHttpSession(true)
-                                .deleteCookies("JSESSIONID", "jwt")
-                                .clearAuthentication(true)
-                                .logoutSuccessUrl("/login")
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
