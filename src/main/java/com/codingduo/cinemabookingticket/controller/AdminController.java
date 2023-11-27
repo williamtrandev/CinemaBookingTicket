@@ -3,27 +3,15 @@ package com.codingduo.cinemabookingticket.controller;
 import com.codingduo.cinemabookingticket.dto.MovieDTO;
 import com.codingduo.cinemabookingticket.dto.TagMovieDTO;
 import com.codingduo.cinemabookingticket.model.Genre;
-import com.codingduo.cinemabookingticket.model.Movie;
+import com.codingduo.cinemabookingticket.service.IUserSystemService;
 import com.codingduo.cinemabookingticket.service.IGenreService;
 import com.codingduo.cinemabookingticket.service.IMovieService;
 import com.codingduo.cinemabookingticket.service.ITagMovieService;
-import com.codingduo.cinemabookingticket.utils.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -38,6 +26,9 @@ public class AdminController {
 
     @Autowired
     private IGenreService genreService;
+
+    @Autowired
+    private IUserSystemService customerService;
 
     @GetMapping("/movie")
     public String admin(Model model) {
@@ -125,5 +116,10 @@ public class AdminController {
     public String deleteMovie(@PathVariable("id") Long id) {
         movieService.delete(id);
         return "redirect:/admin/movie";
+    }
+
+    @GetMapping("/customer/getAll")
+    public String allCustomer() {
+        return "customer";
     }
 }

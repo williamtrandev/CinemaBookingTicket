@@ -1,33 +1,35 @@
 package com.codingduo.cinemabookingticket.config;
 
-import com.codingduo.cinemabookingticket.model.Customer;
-import com.codingduo.cinemabookingticket.repository.CustomerRepository;
+import com.codingduo.cinemabookingticket.model.UserSystem;
+import com.codingduo.cinemabookingticket.repository.UserSystemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerServiceConfig implements UserDetailsService {
+@Service
+public class UserSystemServiceConfig implements UserDetailsService {
     @Autowired
-    private CustomerRepository customerRepository;
+    private UserSystemRepository userSystemRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("CUSTOMER"));
-        Customer customer = customerRepository.findByEmail(username);
-        if(customer == null){
+
+        UserSystem userSystem = userSystemRepository.findByEmail(username);
+        if(userSystem == null){
             throw new UsernameNotFoundException("Could not find email");
         }
-        CustomerDetails customUserDetail = new CustomerDetails();
-        customUserDetail.setUser(customer);
-        customUserDetail.setAuthorities(authorities);
+        authorities.add(new SimpleGrantedAuthority(userSystem.getRole()));
+        UserSystemDetails userSystemDetails = new UserSystemDetails();
+        userSystemDetails.setUserSystem(userSystem);
+        userSystemDetails.setAuthorities(authorities);
 
-        return customUserDetail;
+        return userSystemDetails;
     }
 }

@@ -1,7 +1,8 @@
 package com.codingduo.cinemabookingticket.config;
 
-import com.codingduo.cinemabookingticket.model.Customer;
-import com.codingduo.cinemabookingticket.model.Role;
+import com.codingduo.cinemabookingticket.model.UserSystem;
+import lombok.Data;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,41 +11,30 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class CustomerDetails implements UserDetails {
-    private Customer customer;
+@Data
+public class UserSystemDetails implements UserDetails {
+    private UserSystem userSystem;
     List<SimpleGrantedAuthority> authorities=null;
-    public Customer getUser() {
-        return customer;
-    }
-
-    public void setUser(Customer customer) {
-        this.customer = customer;
-    }
-
-    public void setAuthorities(List<SimpleGrantedAuthority> authorities)
-    {
-        this.authorities = authorities;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("CUSTOMER"));
+        authorities.add(new SimpleGrantedAuthority(userSystem.getRole()));
         return authorities;
     }
 
     public Long getId() {
-        return customer.getId();
+        return userSystem.getId();
     }
     @Override
     public String getPassword() {
-        return customer.getPassword();
+        return userSystem.getPassword();
     }
 
 
     @Override
     public String getUsername() {
-        return customer.getEmail();
+        return userSystem.getEmail();
     }
 
     @Override

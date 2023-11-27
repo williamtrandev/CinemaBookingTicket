@@ -14,10 +14,10 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Customer {
+public class UserSystem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "customer_id")
+    @Column(name = "user_id")
     private Long id;
     private String name;
     private String email;
@@ -25,7 +25,7 @@ public class Customer {
     @Column(name = "avatar_path")
     private String avatarPath;
     private int point;
-
+    private String role;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
     private List<History> historyList;
 }
