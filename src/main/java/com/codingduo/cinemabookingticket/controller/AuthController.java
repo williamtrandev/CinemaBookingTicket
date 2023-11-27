@@ -3,18 +3,14 @@ package com.codingduo.cinemabookingticket.controller;
 import com.codingduo.cinemabookingticket.dto.CustomerDTO;
 import com.codingduo.cinemabookingticket.dto.MovieDTO;
 import com.codingduo.cinemabookingticket.model.Banner;
-import com.codingduo.cinemabookingticket.model.Customer;
 import com.codingduo.cinemabookingticket.model.Genre;
-import com.codingduo.cinemabookingticket.model.Movie;
+import com.codingduo.cinemabookingticket.model.UserSystem;
 import com.codingduo.cinemabookingticket.service.IBannerService;
-import com.codingduo.cinemabookingticket.service.ICustomerService;
+import com.codingduo.cinemabookingticket.service.IUserSystemService;
 import com.codingduo.cinemabookingticket.service.IGenreService;
 import com.codingduo.cinemabookingticket.service.IMovieService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -30,7 +26,7 @@ import java.util.List;
 public class AuthController {
 
     @Autowired
-    ICustomerService customerService;
+    IUserSystemService userSystemService;
 
     @Autowired
     IMovieService movieService;
@@ -94,7 +90,7 @@ public class AuthController {
                 return "customer_register";
             }
             String email = customerDTO.getEmail();
-            Customer customer = customerService.findByEmail(email);
+            UserSystem customer = userSystemService.findByEmail(email);
             System.out.println("Email: " + email);
             if(customer == null) {
                 if(!customerDTO.getPassword().equals(customerDTO.getRepeatPassword())) {
@@ -106,7 +102,7 @@ public class AuthController {
                 model.addAttribute("signUp", "signUpMode");
                 model.addAttribute("succ", "Successfully");
                 customerDTO.setPassword(bCryptPasswordEncoder.encode(customerDTO.getPassword()));
-                customerService.save(customerDTO);
+                userSystemService.save(customerDTO);
             } else {
                 model.addAttribute("dupplicateErr", "Email is used");
                 System.out.println("Dup email:" + customer.getEmail());

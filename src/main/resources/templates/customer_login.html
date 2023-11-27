@@ -18,18 +18,18 @@
 <div th:class="login-container">
     <div class="forms-container">
         <div class="signin-signup">
-            <form th:action="@{/do-login}" class="sign-in-form user" method="post">
+            <form class="sign-in-form user">
                 <h2 class="title">Đăng nhập</h2>
                 <div class="input-field">
                     <i class="fas fa-user"></i>
-                    <input type="text" placeholder="Email" name="username" required />
+                    <input type="text" placeholder="Email" name="username" required id="email" />
                 </div>
                 <div class="input-field input-field-pass">
                     <i class="fas fa-lock"></i>
-                    <input type="password" placeholder="Mật khẩu" name="password" required />
+                    <input type="password" placeholder="Mật khẩu" name="password" required id="password" />
                     <i class="fa-solid fa-eye eye-icon" style="cursor: pointer"></i>
                 </div>
-                <input type="submit" value="Đăng nhập" class="btn solid" />
+                <input type="button" value="Đăng nhập" class="btn solid btn-login" />
                 <p style="padding: 10px 0">Hoặc đăng nhập thông qua</p>
                 <div style="display: flex; justify-content: center">
                     <a class="icon-oau2 facebook" href="#">
@@ -42,24 +42,6 @@
                         <i class="fa-brands fa-google"></i>
                     </a>
 
-                </div>
-                <div th:if = "${param.error}">
-                    <script>
-                        Toastify({
-                              text: "Email hoặc mật khẩu không đúng",
-                              className: "warning",
-                              style: {
-                                background: "linear-gradient(to right, #ff9900, #ffcc00)",
-                              },
-                              duration: 3000,
-                              gravity: "top",
-                              position: "right",
-                            }).showToast();
-                    </script>
-
-                </div>
-                <div th:if = "${param.logout}">
-                    You have been logged out!
                 </div>
             </form>
         </div>
@@ -109,6 +91,43 @@
 		    }
 
 		})
+        $('.btn-login').click(() => {
+            const email = $('#email').val();
+            const password = $('#password').val();
+            console.log(email);
+            console.log(password)
+            fetch('/cinema/api/v1/auth/authenticate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            })
+                .then(res => {
+                    if(!res.ok) {
+                        Toastify({
+                                text: "Email hoặc mật khẩu không đúng",
+                                className: "warning",
+                                style: {
+                                background: "linear-gradient(to right, #ff9900, #ffcc00)",
+                            },
+                            duration: 3000,
+                            gravity: "top",
+                            position: "right",
+                        }).showToast();
+                    } else {
+                        return res.json();
+                    }
+                })
+                .then(data => {
+                    const { token, role } = data;
+                    localStorage.setItem('token', token);
+                    console.log(data);
+                    // if(role === "CUSTOMER") {
+                    //     window.location.href = '/cinema';
+                    // } else {
+                    //     window.location.href = 'cinema/admin';
+                    // }
+                })
+        })
 	</script>
 </body>
 

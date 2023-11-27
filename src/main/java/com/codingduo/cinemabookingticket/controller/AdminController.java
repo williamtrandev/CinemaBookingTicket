@@ -1,7 +1,5 @@
 package com.codingduo.cinemabookingticket.controller;
 
-import com.codingduo.cinemabookingticket.dto.ComboDTO;
-import com.codingduo.cinemabookingticket.dto.CustomerDTO;
 import com.codingduo.cinemabookingticket.dto.MovieDTO;
 import com.codingduo.cinemabookingticket.dto.TagMovieDTO;
 import com.codingduo.cinemabookingticket.model.*;
@@ -39,10 +37,7 @@ public class AdminController {
     private IGenreService genreService;
 
     @Autowired
-    private ICustomerService customerService;
-
-    @Autowired
-    private IHistoryService historyService;
+    private IUserSystemService customerService;
 
     @Autowired
     private ITicketService ticketService;
@@ -154,25 +149,9 @@ public class AdminController {
         return "redirect:/admin/movie";
     }
 
-    @GetMapping("/customer")
-    public String customersPage(Model model) {
-        List<CustomerDTO> customerDTOList = customerService.getAll();
-        for (CustomerDTO customerDTO: customerDTOList) {
-            customerDTO.setPassword(null);
-        }
-        model.addAttribute("customers", customerDTOList);
-        model.addAttribute("title", "Danh sách khách hàng");
-        return "admin_customers";
-    }
-
-    @GetMapping("/customer/{id}")
-    public String customerDetailPage(@PathVariable("id") Long id, Model model) {
-        CustomerDTO customerDTO = customerService.getInfo(id);
-        List<History> histories = historyService.getAllByCustomer(id);
-        model.addAttribute("customer", customerDTO);
-        model.addAttribute("histories", histories);
-        model.addAttribute("title", "Chi tiết khách hàng");
-        return "admin_customer_detail";
+    @GetMapping("/customer/getAll")
+    public String allCustomer() {
+        return "customer";
     }
 
     @GetMapping("/ticket")

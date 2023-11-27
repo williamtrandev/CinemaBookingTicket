@@ -25,8 +25,8 @@ public class History {
     private Date dateBooking;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "customer_id", referencedColumnName = "user_id")
+    private UserSystem customer;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "history")
     private List<HistoryDetail> historyDetailList;

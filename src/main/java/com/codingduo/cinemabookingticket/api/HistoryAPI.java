@@ -1,11 +1,9 @@
 package com.codingduo.cinemabookingticket.api;
 
 
-import com.codingduo.cinemabookingticket.config.CustomerDetails;
+import com.codingduo.cinemabookingticket.config.UserSystemDetails;
 import com.codingduo.cinemabookingticket.dto.HistoryDTO;
-import com.codingduo.cinemabookingticket.model.Customer;
 import com.codingduo.cinemabookingticket.model.History;
-import com.codingduo.cinemabookingticket.service.IHistoryDetailService;
 import com.codingduo.cinemabookingticket.service.IHistoryService;
 import com.codingduo.cinemabookingticket.service.IMailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,18 +11,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.security.Principal;
-
 @RestController
 @RequestMapping("/api/v1/history")
-public class HistoryApi {
+public class HistoryAPI {
     @Autowired
     private IMailService mailService;
 
@@ -35,7 +29,7 @@ public class HistoryApi {
     public ResponseEntity<History> save(@RequestBody HistoryDTO historyDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication != null) {
-            CustomerDetails customer = (CustomerDetails) authentication.getPrincipal();
+            UserSystemDetails customer = (UserSystemDetails) authentication.getPrincipal();
 
             historyDTO.setIdCustomer(customer.getId());
             historyService.save(historyDTO);

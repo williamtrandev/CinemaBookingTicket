@@ -26,7 +26,7 @@ public class HistoryService implements IHistoryService {
     private ShowtimeRepository showTimeRepository;
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private UserSystemRepository customerRepository;
 
     @Override
     public History save(HistoryDTO historyDTO) {
@@ -36,7 +36,7 @@ public class HistoryService implements IHistoryService {
         history.setTotal(historyDTO.getTotal());
 
         // Lấy đối tượng Customer từ cơ sở dữ liệu bằng ID
-        Customer customer = customerRepository.findById(historyDTO.getIdCustomer())
+        UserSystem customer = customerRepository.findById(historyDTO.getIdCustomer())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy Customer với ID " + historyDTO.getIdCustomer()));
         history.setCustomer(customer);
 
@@ -71,7 +71,7 @@ public class HistoryService implements IHistoryService {
 
     @Override
     public List<History> getAllByCustomer(Long id) {
-        Customer customer = customerRepository.getReferenceById(id);
+        UserSystem customer = customerRepository.getReferenceById(id);
         return historyRepository.findAllByCustomer(customer);
     }
 

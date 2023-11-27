@@ -1,22 +1,37 @@
 package com.codingduo.cinemabookingticket.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
-public class CustomerSecurityConfig {
+@RequiredArgsConstructor
+public class UserSystemSecurityConfig {
+    private final JwtAuthenticationFilter jwtAuthFilter;
+    private static final String[] WHITE_LIST_URL = {
+        "/api/v1/auth/**",
+        "/static/**",
+        "/css/**",
+        "/js/**",
+        "/images/**",
+        "/public/**"
 
+    };
     @Bean
     public UserDetailsService userDetailsService() {
-        return new CustomerServiceConfig();
+        return new UserSystemServiceConfig();
     }
 
     @Bean
@@ -24,12 +39,19 @@ public class CustomerSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+
+
     @Bean
-    public DaoAuthenticationProvider provider(){
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(passwordEncoder());
-        provider.setUserDetailsService(userDetailsService());
-        return provider;
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 
 
@@ -41,15 +63,12 @@ public class CustomerSecurityConfig {
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
-                                .requestMatchers("/**", "/static/**", "/public/**").permitAll()
+                                .requestMatchers(WHITE_LIST_URL).permitAll()
                                 .anyRequest().authenticated()
                 )
-                .formLogin(form ->
-                        form
-                                .loginPage("/login")
-                                .loginProcessingUrl("/do-login")
-                                .defaultSuccessUrl("/")
-                                .permitAll());
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
 
