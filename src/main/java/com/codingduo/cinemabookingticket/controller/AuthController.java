@@ -9,8 +9,12 @@ import com.codingduo.cinemabookingticket.service.IBannerService;
 import com.codingduo.cinemabookingticket.service.IUserSystemService;
 import com.codingduo.cinemabookingticket.service.IGenreService;
 import com.codingduo.cinemabookingticket.service.IMovieService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -45,6 +49,29 @@ public class AuthController {
     public String customerLoginPage(Model model) {
         model.addAttribute("customerDTO", new CustomerDTO());
         return "login";
+    }
+    @GetMapping("/signout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        // Xóa thông tin xác thực của người dùng khỏi SecurityContext
+        SecurityContextHolder.clearContext();
+        // Hủy phiên làm việc (session)
+        request.getSession().invalidate();
+
+        // Xóa cookie có tên "jwt"
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("jwt".equals(cookie.getName())) {
+                    cookie.setMaxAge(0);
+                    cookie.setPath("/"); // Đảm bảo cùng đường dẫn với cookie cũ
+                    response.addCookie(cookie);
+                    break;
+                }
+            }
+        }
+
+
+        return "redirect:/login";
     }
 
     @GetMapping("/")
