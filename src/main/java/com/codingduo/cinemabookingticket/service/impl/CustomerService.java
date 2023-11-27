@@ -46,11 +46,22 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public Customer update(CustomerDTO customerDTO) {
-        Customer customerToUpdate = customerRepository.getReferenceById(customerDTO.getId());
+    public Customer update(Long id, CustomerDTO customerDTO) {
+        Customer customer = customerRepository.findByEmail(customerDTO.getEmail());
+        Customer customerToUpdate = customerRepository.getReferenceById(id);
+        if (customer != null && !customer.equals(customerToUpdate)) {
+            return null;
+        }
         customerToUpdate.setName(customerDTO.getName());
-        customerToUpdate.setAvatarPath(customerDTO.getAvatarPath());
+        customerToUpdate.setEmail(customerDTO.getEmail());
         return customerRepository.save(customerToUpdate);
+    }
+
+    @Override
+    public void changePassword(Long id, String password) {
+        Customer customer = customerRepository.getReferenceById(id);
+        customer.setPassword(password);
+        customerRepository.save(customer);
     }
 
     private CustomerDTO convertToCustomerDTO(Customer customer) {

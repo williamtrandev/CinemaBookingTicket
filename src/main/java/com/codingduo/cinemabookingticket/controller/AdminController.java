@@ -1,12 +1,10 @@
 package com.codingduo.cinemabookingticket.controller;
 
+import com.codingduo.cinemabookingticket.dto.ComboDTO;
 import com.codingduo.cinemabookingticket.dto.CustomerDTO;
 import com.codingduo.cinemabookingticket.dto.MovieDTO;
 import com.codingduo.cinemabookingticket.dto.TagMovieDTO;
-import com.codingduo.cinemabookingticket.model.Customer;
-import com.codingduo.cinemabookingticket.model.Genre;
-import com.codingduo.cinemabookingticket.model.History;
-import com.codingduo.cinemabookingticket.model.Movie;
+import com.codingduo.cinemabookingticket.model.*;
 import com.codingduo.cinemabookingticket.service.*;
 import com.codingduo.cinemabookingticket.utils.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +43,12 @@ public class AdminController {
 
     @Autowired
     private IHistoryService historyService;
+
+    @Autowired
+    private ITicketService ticketService;
+
+    @Autowired
+    private IComboService comboService;
 
     @GetMapping("/movie")
     public String admin(Model model) {
@@ -152,19 +156,41 @@ public class AdminController {
 
     @GetMapping("/customer")
     public String customersPage(Model model) {
-        List<CustomerDTO> customerDTOList =customerService.getAll();
+        List<CustomerDTO> customerDTOList = customerService.getAll();
+        for (CustomerDTO customerDTO: customerDTOList) {
+            customerDTO.setPassword(null);
+        }
         model.addAttribute("customers", customerDTOList);
         model.addAttribute("title", "Danh sách khách hàng");
         return "admin_customers";
     }
 
     @GetMapping("/customer/{id}")
-    public String CustomerDetailPage(@PathVariable("id") Long id, Model model) {
+    public String customerDetailPage(@PathVariable("id") Long id, Model model) {
         CustomerDTO customerDTO = customerService.getInfo(id);
         List<History> histories = historyService.getAllByCustomer(id);
         model.addAttribute("customer", customerDTO);
         model.addAttribute("histories", histories);
         model.addAttribute("title", "Chi tiết khách hàng");
         return "admin_customer_detail";
+    }
+
+    @GetMapping("/ticket")
+    public String ticketPage(Model model) {
+        List<Ticket> ticketList = ticketService.getAll();
+        model.addAttribute("tickets", ticketList);
+        model.addAttribute("title", "Quản lý vé");
+        model.addAttribute("links", new String[]{"ttuser.css"});
+        return "admin_ticket";
+    }
+
+    @GetMapping("/combo")
+    public String comboPage(Model model) {
+        List<Combo> combos = comboService.getAllByDeleted(false);
+        model.addAttribute("combo", new ComboDTO());
+        model.addAttribute("combos", combos);
+        model.addAttribute("title", "Danh sách combo");
+        model.addAttribute("links", new String[]{"ttuser.css", "booking.css"});
+        return "admin_combo";
     }
 }

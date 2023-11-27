@@ -49,7 +49,7 @@ public class MovieService implements IMovieService {
 
     @Override
     public List<MovieDTO> getAllNotDeleted() {
-        List<Movie> movies = movieRepository.findAllByDeleted(false);
+        List<Movie> movies = movieRepository.findAllByDeletedOrderByIdDesc(false);
         List<MovieDTO> movieDTOs = new ArrayList<>();
 
         for (Movie movie : movies) {
@@ -62,7 +62,7 @@ public class MovieService implements IMovieService {
 
     @Override
     public List<MovieDTO> getAllDeleted() {
-        List<Movie> movies = movieRepository.findAllByDeleted(true);
+        List<Movie> movies = movieRepository.findAllByDeletedOrderByIdDesc(true);
         List<MovieDTO> movieDTOs = new ArrayList<>();
 
         for (Movie movie : movies) {
@@ -189,7 +189,7 @@ public class MovieService implements IMovieService {
 
     @Override
     public List<MovieDTO> getTop6ByComingAndIdDesc() {
-        List<Movie> movieList = movieRepository.findTop6ByComingOrderByIdDesc(true);
+        List<Movie> movieList = movieRepository.findTop6ByComingAndDeletedOrderByIdDesc(true, false);
         List<MovieDTO> movieDTOList = new ArrayList<>();
         for(Movie movie : movieList) {
             movieDTOList.add(convertToMovieDTO(movie));

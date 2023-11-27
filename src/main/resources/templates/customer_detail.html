@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/customer_layout :: page(title=${title}, links=${links}, scripts=${scripts})}">
+<head>
+
+</head>
+<body>
+
+<div th:fragment="content">
+<!--    <div th:replace = "~{fragments/customer :: customer_detail}"></div>-->
+<!--    <div th:replace = "~{fragments/customer :: update}"></div>-->
+<!--    <div th:replace = "~{fragments/customer :: customer_history}"></div>-->
+    <div th:replace = "~{fragments/customer :: customer_info}"></div>
+</div>
+
+</body>
+</html>

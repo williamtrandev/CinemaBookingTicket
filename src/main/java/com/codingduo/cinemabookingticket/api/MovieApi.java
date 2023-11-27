@@ -70,8 +70,8 @@ public class MovieApi {
     }
 
     @GetMapping("/getAll")
-    public List<MovieDTO> getAllMovie() {
-        return movieService.getAll();
+    public ResponseEntity<List<MovieDTO>> getAllMovie() {
+        return new ResponseEntity<>(movieService.getAllNotDeleted(), HttpStatus.OK);
     }
 
     @GetMapping("/getOne/{id}")

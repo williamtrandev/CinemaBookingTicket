@@ -446,7 +446,7 @@
   <div class="row-phim">
     <div th:each="item : ${movieList}" class="w-100 d-flex justify-content-center box" style="position: relative">
 
-      <a class="card" th:href="@{'/admin/movie/' + ${item.id}}">
+      <div class="card">
 
         <div class="poster">
           <img th:src= "@{${item.imgPathAtLocal}}"  alt="poster" />
@@ -459,11 +459,11 @@
           </div>
         </div>
 
-      </a>
+      </div>
       <div style="position: absolute; top: 10px; right: 20px" class="d-flex align-items-center">
         <input class="form-check-input me-2" type="checkbox" value=""
                style="height: 32px; width: 32px; margin-top: 0 !important;"
-               th:attr="data-id=${item.id},data-name=${item.name}">
+               th:attr="data-id=${item.id}, data-name=${item.name}">
         <button type="button" class="btn btn-success restore-movie-btn"
                 style="height: 32px"
                 th:attr="data-id=${item.id}, data-name=${item.name}"

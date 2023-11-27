@@ -14,5 +14,7 @@ public interface ICustomerService {
 
     CustomerDTO getInfo(Long id);
 
-    Customer update(CustomerDTO customerDTO);
+    Customer update(Long id, CustomerDTO customerDTO);
+
+    void changePassword(Long id, String password);
 }

@@ -10,16 +10,16 @@ import java.util.List;
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Long> {
     List<Movie> findAllByNameLikeAndComing(String name, boolean coming);
-    List<Movie> findAllByDeleted(boolean deleted);
+    List<Movie> findAllByDeletedOrderByIdDesc(boolean deleted);
 
     @Query("SELECT DISTINCT m FROM Movie m LEFT JOIN FETCH m.genres WHERE m.id = :id")
     Movie findMovieWithGenresBy(Long id);
 
     @Query("SELECT DISTINCT m FROM Movie m " +
             "INNER JOIN m.genres g " +
-            "WHERE g.id = :genreId")
+            "WHERE g.id = :genreId AND m.deleted = false")
     List<Movie> findMoviesByGenreId(Long genreId);
 
-    List<Movie> findTop6ByComingOrderByIdDesc(boolean coming);
+    List<Movie> findTop6ByComingAndDeletedOrderByIdDesc(boolean coming, boolean deleted);
 
 }
