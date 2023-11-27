@@ -27,7 +27,10 @@ public class SecurityConfig {
         "/js/**",
         "/images/**",
         "/public/**",
-        "/"
+        "/",
+        "/logout",
+        "/api/v1/movie/getAllShowTime",
+        "/api/v1/movie/getAllByGenreId/**"
 
     };
     @Bean
@@ -66,7 +69,7 @@ public class SecurityConfig {
                         authorizeHttpRequests
                                 .requestMatchers(WHITE_LIST_URL).permitAll()
                                 .requestMatchers("/api/v1/**").authenticated()
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/admin/**").hasAuthority("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
@@ -75,16 +78,16 @@ public class SecurityConfig {
                     login
                         .loginPage("/login")
                         .permitAll()
+                ).logout(logout ->
+                        logout
+                                .logoutUrl("/logout")
+                                .invalidateHttpSession(true)
+                                .deleteCookies("JSESSIONID", "jwt")
+                                .clearAuthentication(true)
+                                .logoutSuccessUrl("/login")
                 )
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .logout(logout ->
-                    logout
-                        .logoutUrl("/logout")
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID", "jwt")
-                        .clearAuthentication(true)
-                        .logoutSuccessUrl("/login")
-                );
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
 
 
