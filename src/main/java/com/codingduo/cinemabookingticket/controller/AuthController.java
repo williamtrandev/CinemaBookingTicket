@@ -40,14 +40,11 @@ public class AuthController {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @GetMapping("/admin-login")
-    public String adminLoginPage() {
-        return "admin_login";
-    }
+
     @GetMapping("/login")
     public String customerLoginPage(Model model) {
         model.addAttribute("customerDTO", new CustomerDTO());
-        return "customer_login";
+        return "login";
     }
 
     @GetMapping("/")
@@ -76,7 +73,7 @@ public class AuthController {
     @GetMapping("/register")
     public String registerCustomerPage(Model model) {
         model.addAttribute("customerDTO", new CustomerDTO());
-        return "customer_register";
+        return "register";
     }
     @PostMapping("/register")
     public String registerCustomer(@Valid @ModelAttribute("customerDTO") CustomerDTO customerDTO,
@@ -87,7 +84,7 @@ public class AuthController {
                 model.addAttribute("customerDTO", customerDTO);
                 bindingResult.toString();
                 System.out.println(bindingResult);
-                return "customer_register";
+                return "register";
             }
             String email = customerDTO.getEmail();
             UserSystem customer = userSystemService.findByEmail(email);
@@ -96,23 +93,24 @@ public class AuthController {
                 if(!customerDTO.getPassword().equals(customerDTO.getRepeatPassword())) {
                     System.out.println("Customer not null");
                     model.addAttribute("nSameErr", "Your password and repeat password is not same");
-                    return "customer_register";
+                    return "register";
                 }
                 System.out.println("Succ");
                 model.addAttribute("signUp", "signUpMode");
                 model.addAttribute("succ", "Successfully");
                 customerDTO.setPassword(bCryptPasswordEncoder.encode(customerDTO.getPassword()));
+                customerDTO.setRole("CUSTOMER");
                 userSystemService.save(customerDTO);
             } else {
                 model.addAttribute("dupplicateErr", "Email is used");
                 System.out.println("Dup email:" + customer.getEmail());
-                return "customer_register";
+                return "register";
             }
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("serverErr", "Can not register because error server");
         }
-        return "customer_register";
+        return "register";
     }
 
 }

@@ -119,13 +119,12 @@
                 })
                 .then(data => {
                     const { token, role } = data;
-                    localStorage.setItem('token', token);
                     console.log(data);
-                    // if(role === "CUSTOMER") {
-                    //     window.location.href = '/cinema';
-                    // } else {
-                    //     window.location.href = 'cinema/admin';
-                    // }
+                    if(role === "CUSTOMER") {
+                        window.location.href = '/cinema/';
+                    } else {
+                        window.location.href = '/cinema/admin/movie';
+                    }
                 })
         })
 	</script>
