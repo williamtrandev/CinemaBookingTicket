@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 public class ComboDTO {
     private Long id;
     private String name;
+    private String detail;
     private String imagePath;
     private int price;
     private boolean deleted;

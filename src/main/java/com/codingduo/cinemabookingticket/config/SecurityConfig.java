@@ -73,6 +73,9 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+
 
                 .formLogin(login ->
                     login
@@ -87,6 +90,7 @@ public class SecurityConfig {
                                 .logoutSuccessUrl("/login")
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
 

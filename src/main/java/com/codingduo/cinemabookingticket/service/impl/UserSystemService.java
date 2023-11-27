@@ -47,7 +47,7 @@ public class UserSystemService implements IUserSystemService {
     }
 
     @Override
-    public UserSystem update(CustomerDTO customerDTO) {
+    public UserSystem update(Long id, CustomerDTO customerDTO) {
         UserSystem customerToUpdate = userSystemRepository.getReferenceById(customerDTO.getId());
         customerToUpdate.setName(customerDTO.getName());
         customerToUpdate.setAvatarPath(customerDTO.getAvatarPath());
@@ -57,6 +57,11 @@ public class UserSystemService implements IUserSystemService {
     @Override
     public Page<CustomerDTO> pageCustomer(int pageNum) {
         return null;
+    }
+
+    @Override
+    public void changePassword(Long id, String hashPassword) {
+
     }
 
     private CustomerDTO convertToCustomerDTO(UserSystem customer) {

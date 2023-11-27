@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+<div th:fragment="all_ticket">
+    <div class="title text">
+        <h2 class="mb-0">Quản lý vé</h2>
+    </div>
+    <div>
+        <table class="content-table">
+            <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên vé</th>
+                <th>Giá vé</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="ticket : ${tickets}">
+                <td th:text="${ticket.id}"></td>
+                <td th:text="${ticket.name}"></td>
+                <td><span class="price" th:text="${#numbers.formatDecimal(ticket.price, 0, 'COMMA', 0, 'POINT')}"></span> <i class="fa-solid fa-dong-sign"></i></td>
+                <td>
+                    <button class="my-btn change-price-btn" th:data-id="${ticket.id}" style="background: linear-gradient(to left bottom, #5ebaee, #dbe3ff, #ecb3fe); color: #0c244b"
+                            data-bs-toggle="modal" data-bs-target="#changePriceModal"
+                    >
+                        Thay đổi giá vé
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="changePriceModal" tabindex="-1" aria-labelledby="changePriceModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="changePriceModalLabel">Thay đổi giá vé</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Giá vé mới</span>
+                        <input type="text" id="newPrice" class="form-control" placeholder="Nhập giá vé mới">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="changePriceBtn">Cập nhật</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript">
+        $(function () {
+            $(".change-price-btn").click(function () {
+                const id = $(this).data("id");
+                $("#changePriceBtn").click(() => {
+                   const newPrice = $("#newPrice").val();
+                   if (newPrice !== "" && !isNaN(newPrice)) {
+                       const formData = new FormData();
+                       formData.append("newPrice", newPrice);
+                       let dynamicPath = /*[[@{/api/v1/ticket}]]*/ '';
+                       fetch(`${dynamicPath}/${id}`, {
+                           method: "PUT",
+                           body: formData,
+                       })
+                           .then(res => res.json())
+                           .then(data => {
+                               $(this).closest("tr").find(".price").text(data.toLocaleString("en-US"));
+                               $("#newPrice").val("");
+                               $("#changePriceModal").modal("hide");
+                           })
+                   }
+                });
+            });
+        });
+    </script>
+</div>
+
+</body>
+</html>

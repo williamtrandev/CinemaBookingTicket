@@ -5,6 +5,9 @@
 <body>
 
 <div th:fragment="all_customer" class="row">
+    <div class="title text">
+        <h2 class="mb-0">Danh sách khách hàng</h2>
+    </div>
     <div th:each="customer : ${customers}" class="col-6">
         <a th:href="@{'/admin/customer/'+${customer.id}}" class="customer-card bg-light text-dark card flex-row justify-content-between align-items-center mb-3 p-3" style="cursor: pointer">
             <i class="fa-regular fa-user fa-xl me-3"></i>
@@ -24,11 +27,14 @@
     <div class="bg-light text-dark card flex-row justify-content-between align-items-center mb-3 p-3">
         <i class="fa-regular fa-user fa-2xl me-3"></i>
         <div class="me-auto">
-            <h4 th:text="${customer.name}"></h4>
-            <h5 th:text="${customer.email}"></h5>
+            <h4 id="customerName" th:text="${customer.name}"></h4>
+            <h5 id="customerEmail" th:text="${customer.email}"></h5>
         </div>
         <div class="fs-3"><span th:text="${customer.point}"></span> điểm</div>
     </div>
+</div>
+
+<div th:fragment="customer_history">
     <div class="mt-4 title text">
         <h2 class="mb-0">Lịch sử đặt vé</h2>
     </div>
@@ -78,6 +84,136 @@
                 </table>
             </div>
             <div class="fs-5">Tổng tiền: <span th:text="${#numbers.formatDecimal(history.total, 0, 'COMMA', 0, 'POINT')}"></span> <i class="fa-solid fa-dong-sign"></i></div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="customer_info">
+    <div class="title text">
+        <h2 class="mb-0">Thông tin cá nhân</h2>
+    </div>
+    <div class="user-info-wrapper">
+        <div class="user-profile-card">
+            <div class="group-avatar">
+                <h5 class=" user-name text" th:text="${customer.name}"></h5>
+            </div>
+            <div class="sovemua">
+                <p class="text">Vé đã mua</p>
+                <p style="color: rgb(232, 165, 39)" th:text="${ticketNum}"></p>
+            </div>
+            <div class="tichdiem">
+                <p class="text">Tích điểm cá nhân</p>
+                <p style="color: rgb(28, 145, 135)" th:text="${customer.point}"></p>
+            </div>
+        </div>
+
+        <div class="detail-wrapper">
+            <div>
+                <div class="detail-info">
+                    <div class="info-box">
+                        <span class="text">Họ tên</span>
+                        <input type="text" name="" id="name-update" th:value="${customer.name}" readonly />
+                    </div>
+                    <div class="info-box">
+                        <span class="text">Email</span>
+                        <input type="email" name="" id="email-update" th:value="${customer.email}" readonly />
+                    </div>
+                </div>
+                <div class="msg-error-info mb-4"></div>
+                <button class="my-btn me-5 edit-btn" style="background: var(--primary-color)">
+                    Chỉnh sửa thông tin
+                </button>
+                <button class="my-btn me-5 disabled update-btn" style="background: linear-gradient(to left bottom, #5ebaee, #dbe3ff, #ecb3fe); color: #0c244b">
+                    Cập nhật thông tin
+                </button>
+                <button class="my-btn" style="background: linear-gradient(to left bottom, #5ebaee, #dbe3ff, #ecb3fe); color: #0c244b"
+                        data-bs-toggle="modal" data-bs-target="#changePasswordModal"
+                >Đổi mật khẩu</button>
+                <!-- Modal -->
+                <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="changePasswordModalLabel">Đổi mật khẩu</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="oldPassword" class="form-label">Mật khẩu cũ</label>
+                                    <input type="password" class="form-control" id="oldPassword" placeholder="Nhập mật khẩu cũ">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="newPassword" class="form-label">Mật khẩu mới</label>
+                                    <input type="password" class="form-control" id="newPassword" placeholder="Nhập mật khẩu mới">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" id="changePasswordBtn">Đổi mật khẩu</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    $(function() {
+
+                        $(".edit-btn").click(function() {
+                            $(".edit-btn").addClass("disabled");
+                            $(".update-btn").removeClass("disabled");
+                            $(".detail-info input").prop('readonly', false);
+                            $("#name-update").focus();
+                        })
+                        $(".detail-info input").click(function() {
+                            $(".msg-error-info").text("");
+                        })
+                    })
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="title text">
+        <h2 class="mb-0">Lịch sử mua vé phim</h2>
+    </div>
+    <div class="history-user">
+        <table class="content-table">
+            <thead>
+            <tr>
+                <!--                <th>STT</th>-->
+                <th>Tên phim</th>
+                <th>Số vé</th>
+                <th>Thời gian</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="history : ${histories}">
+                <td th:text="${history.historyDetailList.get(0).showTime.movie.name}"></td>
+                <td th:text="${history.historyDetailList.size()}"></td>
+                <td th:text="${#dates.format(history.dateBooking, 'dd-MM-yyyy')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal fade" id="modalInfo">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Thông báo</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    Cập nhật thông tin thành công
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>

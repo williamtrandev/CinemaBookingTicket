@@ -195,14 +195,20 @@
     <h2 class="mb-0">DANH SÁCH PHIM</h2>
   </div>
 
-  <!-- Button trigger modal -->
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#movieModal">
-    <i class="fa-solid fa-plus"></i>
-    Thêm phim
-  </button>
+  <div>
+    <a th:href="@{/admin/deleted-movie}" class="btn btn-success mb-3">Phim đã xóa</a>
+  </div>
+
+  <div>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#movieModal">
+      <i class="fa-solid fa-plus"></i>
+      Thêm phim
+    </button>
+  </div>
 
   <div class="row-phim">
-    <div th:each="item : ${movieList}" class="w-100 d-flex justify-content-center" style="position: relative">
+    <div th:each="item : ${movieList}" class="w-100 d-flex justify-content-center box" style="position: relative">
 
       <a class="card" th:href="@{'/admin/movie/' + ${item.id}}">
 
@@ -426,6 +432,48 @@
   </div>
 </div>
 
+
+<!--Danh sach phim da xoa-->
+<div class="dangchieu" id="all-movie-deleted" th:fragment="all_movie_deleted">
+  <div class="mt-5 title text">
+    <h2 class="mb-0">DANH SÁCH PHIM</h2>
+  </div>
+
+  <div>
+    <a th:href="@{/admin/movie}" class="btn btn-success mb-3">Danh sách phim</a>
+  </div>
+
+  <div class="row-phim">
+    <div th:each="item : ${movieList}" class="w-100 d-flex justify-content-center box" style="position: relative">
+
+      <div class="card">
+
+        <div class="poster">
+          <img th:src= "@{${item.imgPathAtLocal}}"  alt="poster" />
+        </div>
+        <div class="detail">
+          <h2 class="name-film" th:text="${item.name}"></h2>
+          <h3 class="director" th:text="'Đạo diễn ' + ${item.director}"></h3>
+          <div class="tags d-flex justify-content-center p-2">
+            <!--              <span th:class="${item.name_nhanphim.toLowerCase()}">${item.name_nhanphim}</span>-->
+          </div>
+        </div>
+
+      </div>
+      <div style="position: absolute; top: 10px; right: 20px" class="d-flex align-items-center">
+        <input class="form-check-input me-2" type="checkbox" value=""
+               style="height: 32px; width: 32px; margin-top: 0 !important;"
+               th:attr="data-id=${item.id}, data-name=${item.name}">
+        <button type="button" class="btn btn-success restore-movie-btn"
+                style="height: 32px"
+                th:attr="data-id=${item.id}, data-name=${item.name}"
+        ><i class="fa-solid fa-trash-can-arrow-up"></i></button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!--Danh sach phim da xoa end-->
 
     <script>
       function handleBooking(elem) {
