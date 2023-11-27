@@ -52,7 +52,7 @@ public class AuthController {
 
         List<Banner> bannerList = bannerService.getAll();
         List<MovieDTO> comingList = movieService.getTop6ByComingAndIdDesc();
-        List<MovieDTO> movies = movieService.getAll();
+        List<MovieDTO> movies = movieService.getAllNotDeleted();
         List<MovieDTO> movieList = new ArrayList<>();
         for(MovieDTO movie : movies) {
             if(!movie.isComing()) {

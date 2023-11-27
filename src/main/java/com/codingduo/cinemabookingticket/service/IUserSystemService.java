@@ -16,7 +16,9 @@ public interface IUserSystemService {
 
     CustomerDTO getInfo(Long id);
 
-    UserSystem update(CustomerDTO customerDTO);
+    UserSystem update(Long id, CustomerDTO customerDTO);
 
     Page<CustomerDTO> pageCustomer(int pageNum);
+
+    void changePassword(Long id, String hashPassword);
 }

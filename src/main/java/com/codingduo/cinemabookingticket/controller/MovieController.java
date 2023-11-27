@@ -24,7 +24,7 @@ public class MovieController {
 
     @GetMapping("/showing")
     public String showingMoviePage(Model model) {
-        List<MovieDTO> movieList = movieService.getAll();
+        List<MovieDTO> movieList = movieService.getAllNotDeleted();
         List<MovieDTO> showingList = new ArrayList<>();
         for(MovieDTO movie : movieList) {
             if(!movie.isComing()) {
@@ -38,7 +38,7 @@ public class MovieController {
 
     @GetMapping("/coming")
     public String comingMoviePage(Model model) {
-        List<MovieDTO> movieList = movieService.getAll();
+        List<MovieDTO> movieList = movieService.getAllNotDeleted();
         List<MovieDTO> comingList = new ArrayList<>();
         for(MovieDTO movie : movieList) {
             if(movie.isComing()) {

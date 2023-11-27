@@ -15,7 +15,13 @@ public class ComboService implements IComboService {
     private ComboRepository comboRepository;
     @Override
     public Combo save(ComboDTO comboDTO) {
-        return null;
+        Combo combo = new Combo();
+        combo.setNameCombo(comboDTO.getName());
+        combo.setDetail(comboDTO.getDetail());
+        combo.setImagePath(comboDTO.getImagePath());
+        combo.setPrice(comboDTO.getPrice());
+        combo.setDeleted(false);
+        return comboRepository.save(combo);
     }
 
     @Override

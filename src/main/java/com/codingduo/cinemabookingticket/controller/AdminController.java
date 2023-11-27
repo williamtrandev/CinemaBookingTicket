@@ -1,12 +1,11 @@
 package com.codingduo.cinemabookingticket.controller;
 
+import com.codingduo.cinemabookingticket.dto.ComboDTO;
+import com.codingduo.cinemabookingticket.dto.CustomerDTO;
 import com.codingduo.cinemabookingticket.dto.MovieDTO;
 import com.codingduo.cinemabookingticket.dto.TagMovieDTO;
-import com.codingduo.cinemabookingticket.model.Genre;
-import com.codingduo.cinemabookingticket.service.IUserSystemService;
-import com.codingduo.cinemabookingticket.service.IGenreService;
-import com.codingduo.cinemabookingticket.service.IMovieService;
-import com.codingduo.cinemabookingticket.service.ITagMovieService;
+import com.codingduo.cinemabookingticket.model.*;
+import com.codingduo.cinemabookingticket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +29,15 @@ public class AdminController {
     @Autowired
     private IUserSystemService customerService;
 
+    @Autowired
+    private IHistoryService historyService;
+
+    @Autowired
+    private ITicketService ticketService;
+
+    @Autowired
+    private IComboService comboService;
+
     @GetMapping("/movie")
     public String admin(Model model) {
         List<MovieDTO> movieList = movieService.getAllNotDeleted();
@@ -44,6 +52,22 @@ public class AdminController {
         model.addAttribute("btn", "Thêm");
         model.addAttribute("scripts", new String[]{"addMovie.js"});
         return "admin";
+    }
+
+    @GetMapping("/deleted-movie")
+    public String deletedMovie(Model model) {
+        List<MovieDTO> movieList = movieService.getAllDeleted();
+        List<TagMovieDTO> tagMovieList = tagMovieService.getAll();
+        List<Genre> genreList = genreService.getAll();
+        model.addAttribute("movie", new MovieDTO());
+        model.addAttribute("tagMovieList", tagMovieList);
+        model.addAttribute("genreList", genreList);
+        model.addAttribute("movieList", movieList);
+        model.addAttribute("title", "Quản lý phim");
+//        model.addAttribute("imageRequired", "true");
+//        model.addAttribute("btn", "Thêm");
+//        model.addAttribute("scripts", new String[]{"addMovie.js"});
+        return "admin_movie_deleted";
     }
 
 //    @GetMapping("/movie/create")
@@ -118,8 +142,43 @@ public class AdminController {
         return "redirect:/admin/movie";
     }
 
-    @GetMapping("/customer/getAll")
-    public String allCustomer() {
-        return "customer";
+    @GetMapping("/customer")
+    public String customersPage(Model model) {
+        List<CustomerDTO> customerDTOList = customerService.getAllCustomer();
+        for (CustomerDTO customerDTO: customerDTOList) {
+            customerDTO.setPassword(null);
+        }
+        model.addAttribute("customers", customerDTOList);
+        model.addAttribute("title", "Danh sách khách hàng");
+        return "admin_customers";
+    }
+
+    @GetMapping("/customer/{id}")
+    public String customerDetailPage(@PathVariable("id") Long id, Model model) {
+        CustomerDTO customerDTO = customerService.getInfo(id);
+        List<History> histories = historyService.getAllByCustomer(id);
+        model.addAttribute("customer", customerDTO);
+        model.addAttribute("histories", histories);
+        model.addAttribute("title", "Chi tiết khách hàng");
+        return "admin_customer_detail";
+    }
+
+    @GetMapping("/ticket")
+    public String ticketPage(Model model) {
+        List<Ticket> ticketList = ticketService.getAll();
+        model.addAttribute("tickets", ticketList);
+        model.addAttribute("title", "Quản lý vé");
+        model.addAttribute("links", new String[]{"ttuser.css"});
+        return "admin_ticket";
+    }
+
+    @GetMapping("/combo")
+    public String comboPage(Model model) {
+        List<Combo> combos = comboService.getAllByDeleted(false);
+        model.addAttribute("combo", new ComboDTO());
+        model.addAttribute("combos", combos);
+        model.addAttribute("title", "Danh sách combo");
+        model.addAttribute("links", new String[]{"ttuser.css", "booking.css"});
+        return "admin_combo";
     }
 }

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+<div th:fragment="all_combo">
+    <div class="title text">
+        <h2 class="mb-0">Danh sách combo</h2>
+    </div>
+    <div class="mb-4">
+        <button class="my-btn"
+                 data-bs-toggle="modal" data-bs-target="#comboModal"
+        ><i class="fas fa-plus me-2"></i>Combo</button>
+    </div>
+    <div>
+        <table class="table mb-0 text-center">
+            <thead style="background-color: #696969;">
+            <tr>
+                <th scope="col">Combo</th>
+<!--                <th scope="col">Chi tiết</th>-->
+                <th scope="col">Giá (VND)</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody class="combo-row">
+            <tr th:each="item : ${combos}">
+                <td>
+                    <div class='d-flex justify-content-center'>
+                        <div class='wrapper-product'>
+                            <img th:src="@{'/public/combo/' + ${item.imagePath}}" alt=''>
+                            <div class='wrapper-product-detail'>
+                                <span style='font-weight: bold; color: black' class='name-product' th:id='${item.id}' th:text="${item.nameCombo}"></span>
+                                <span th:text="${item.detail}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+<!--                <td>-->
+<!--                    <div class="wrapper-product">-->
+<!--                        <div class="minus-product action-product disabled">-</div>-->
+<!--                        <input type="number" value="0" readonly class="num-product">-->
+<!--                        <div class="add-product action-product">+</div>-->
+<!--                    </div>-->
+<!--                </td>-->
+                <td>
+                    <div class="wrapper-product" th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')}"></div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary update-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <button type="button" class="btn btn-danger delete-btn"><i class="fa-solid fa-trash"></i></button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="comboModal" tabindex="-1" aria-labelledby="comboModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="comboModalLabel">Combo</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="comboForm" th:object="${combo}" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="comboName" class="form-label fs-6">Tên Combo</label>
+                            <input type="text" class="form-control" id="comboName" th:field="*{name}" required>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control" id="comboDetail" placeholder="Leave a comment here" th:field="*{detail}" required></textarea>
+                            <label for="comboDetail" class="fs-6">Chi tiết Combo</label>
+                        </div>
+                        <div class="mb-3">
+                            <label for="comboPrice" class="form-label fs-6">Giá</label>
+                            <input type="text" class="form-control" id="comboPrice" th:field="*{price}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="comboImage" class="form-label fs-6">Hình ảnh</label>
+                            <input class="form-control" type="file" id="comboImage" accept="image/png, image/jpeg, image/jpg"
+                                   name="image"
+                                   th:required="${imageRequired}"
+                            >
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" id="submitBtn">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript">
+        $(function () {
+            $("#submitBtn").click(()=>{
+                let dynamicPath = /*[[@{/api/v1/combo}]]*/ '';
+                let dynamicImagePath = /*[[@{/public/combo}]]*/ '';
+                let formBody = new FormData($("#comboForm")[0]);
+                fetch(dynamicPath, {
+                    method: "POST",
+                    body: formBody,
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.message) {
+                            Toastify({
+                                text: "Xin hãy nhập đầy đủ thông tin combo",
+                                className: "warning",
+                                style: {
+                                    background: "linear-gradient(to right, #ff9900, #ffcc00)",
+                                },
+                                duration: 3000,
+                                gravity: "top",
+                                position: "right",
+                            }).showToast();
+                        } else {
+                            $(".combo-row").append(`
+                                <tr>
+                                    <td>
+                                        <div class='d-flex justify-content-center'>
+                                            <div class='wrapper-product'>
+                                                <img src="${dynamicImagePath}/${data.imagePath}" alt=''>
+                                                <div class='wrapper-product-detail'>
+                                                    <span style='font-weight: bold; color: black' class='name-product'>${data.nameCombo}</span>
+                                                    <span>${data.detail}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="wrapper-product">${data.price.toLocaleString("en-US")}</div>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary update-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+                                        <button type="button" class="btn btn-danger delete-btn"><i class="fa-solid fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            `);
+                            $("#comboForm")[0].reset();
+                            $("#comboModal").modal("hide");
+                        }
+                    })
+                    .catch(err => console.log(err));
+            });
+        });
+    </script>
+</div>
+
+</body>
+</html>

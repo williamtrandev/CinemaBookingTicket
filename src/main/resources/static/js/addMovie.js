@@ -8,9 +8,22 @@ $(function() {
         })
         .then(res => res.json())
         .then(data => {
-            $(".row-phim").append(renderCard(data));
-            $("#movieForm")[0].reset();
-            $("#movieModal").modal("hide");
+            if (data.message) {
+                Toastify({
+                    text: "Xin hãy nhập đầy đủ thông tin phim",
+                    className: "warning",
+                    style: {
+                        background: "linear-gradient(to right, #ff9900, #ffcc00)",
+                    },
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                }).showToast();
+            } else {
+                $(".row-phim").prepend(renderCard(data));
+                $("#movieForm")[0].reset();
+                $("#movieModal").modal("hide");
+            }
         })
         .catch(err => console.log(err));
     });
