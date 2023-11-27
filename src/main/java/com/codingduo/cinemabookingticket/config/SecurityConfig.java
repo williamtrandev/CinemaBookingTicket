@@ -18,17 +18,20 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class UserSystemSecurityConfig {
+public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private static final String[] WHITE_LIST_URL = {
-            "/api/v1/auth/**",
-            "/static/**",
-            "/css/**",
-            "/js/**",
-            "/images/**",
-            "/public/**",
-            "/api/v1/movie/getAllShowTime",
-            "/api/v1/movie/getAllByGenreId/**"
+        "/api/v1/auth/**",
+        "/static/**",
+        "/css/**",
+        "/js/**",
+        "/images/**",
+        "/public/**",
+        "/",
+        "/logout",
+        "/api/v1/movie/getAllShowTime",
+        "/api/v1/movie/getAllByGenreId/**"
+
     };
     @Bean
     public UserDetailsService userDetailsService() {
@@ -65,9 +68,23 @@ public class UserSystemSecurityConfig {
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
                                 .requestMatchers(WHITE_LIST_URL).permitAll()
+                                .requestMatchers("/api/v1/**").authenticated()
+                                .requestMatchers("/admin/**").hasAuthority("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
+                .formLogin(login ->
+                    login
+                        .loginPage("/login")
+                        .permitAll()
+                ).logout(logout ->
+                        logout
+                                .logoutUrl("/logout")
+                                .invalidateHttpSession(true)
+                                .deleteCookies("JSESSIONID", "jwt")
+                                .clearAuthentication(true)
+                                .logoutSuccessUrl("/login")
+                )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
 

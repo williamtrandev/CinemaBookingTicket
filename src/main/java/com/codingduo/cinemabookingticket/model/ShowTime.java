@@ -1,5 +1,6 @@
 package com.codingduo.cinemabookingticket.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,6 +30,7 @@ public class ShowTime {
 
     @Column(columnDefinition = "TINYINT")
     private boolean deleted;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id", referencedColumnName = "movie_id")
