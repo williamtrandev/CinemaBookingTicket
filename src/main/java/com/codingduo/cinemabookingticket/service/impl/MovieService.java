@@ -169,7 +169,7 @@ public class MovieService implements IMovieService {
 
     @Override
     public List<MovieDTO> getAllByNameLikeAndComing(String name, boolean coming) {
-        List<Movie> movieList = movieRepository.findAllByNameLikeAndComing("%"+name+"%", coming);
+        List<Movie> movieList = movieRepository.findAllByNameLikeAndComingOrderByIdDesc("%"+name+"%", coming);
         List<MovieDTO> movieDTOList = new ArrayList<>();
         for(Movie movie : movieList ) {
             movieDTOList.add(convertToMovieDTO(movie));

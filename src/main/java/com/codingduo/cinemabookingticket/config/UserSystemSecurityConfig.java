@@ -21,13 +21,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class UserSystemSecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private static final String[] WHITE_LIST_URL = {
-        "/api/v1/auth/**",
-        "/static/**",
-        "/css/**",
-        "/js/**",
-        "/images/**",
-        "/public/**"
-
+            "/api/v1/auth/**",
+            "/static/**",
+            "/css/**",
+            "/js/**",
+            "/images/**",
+            "/public/**",
+            "/api/v1/movie/getAllShowTime",
+            "/api/v1/movie/getAllByGenreId/**"
     };
     @Bean
     public UserDetailsService userDetailsService() {

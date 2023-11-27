@@ -1,10 +1,9 @@
 package com.codingduo.cinemabookingticket.controller;
 
-import com.codingduo.cinemabookingticket.config.CustomerDetails;
-import com.codingduo.cinemabookingticket.dto.CustomerDTO;
-import com.codingduo.cinemabookingticket.model.Customer;
+import com.codingduo.cinemabookingticket.config.UserSystemDetails;
 import com.codingduo.cinemabookingticket.model.History;
-import com.codingduo.cinemabookingticket.service.ICustomerService;
+import com.codingduo.cinemabookingticket.model.UserSystem;
+import com.codingduo.cinemabookingticket.service.IUserSystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -19,15 +18,15 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
     @Autowired
-    private ICustomerService customerService;
+    private IUserSystemService customerService;
 
     @GetMapping
     public String userPage(Model model, Principal principal) {
         if (principal == null) {
             return "redirect:/login";
         }
-        String email = ((CustomerDetails) ((Authentication) principal).getPrincipal()).getUsername();
-        Customer customer = customerService.findByEmail(email);
+        String email = ((UserSystemDetails) ((Authentication) principal).getPrincipal()).getUsername();
+        UserSystem customer = customerService.findByEmail(email);
         List<History> historyList = customer.getHistoryList();
         int ticketNum = 0;
         for (History history: historyList) {

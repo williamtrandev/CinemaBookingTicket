@@ -1,9 +1,9 @@
 package com.codingduo.cinemabookingticket.api;
 
-import com.codingduo.cinemabookingticket.config.CustomerDetails;
+import com.codingduo.cinemabookingticket.config.UserSystemDetails;
 import com.codingduo.cinemabookingticket.dto.CustomerDTO;
-import com.codingduo.cinemabookingticket.model.Customer;
-import com.codingduo.cinemabookingticket.service.ICustomerService;
+import com.codingduo.cinemabookingticket.model.UserSystem;
+import com.codingduo.cinemabookingticket.service.IUserSystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import java.security.Principal;
 @RequestMapping("/api/v1/customer")
 public class CustomerApi {
     @Autowired
-    private ICustomerService customerService;
+    private IUserSystemService customerService;
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -29,8 +29,8 @@ public class CustomerApi {
             @RequestParam("newPassword") String newPassword,
             Principal principal
     ) {
-        String email = ((CustomerDetails) ((Authentication) principal).getPrincipal()).getUsername();
-        Customer customer = customerService.findByEmail(email);
+        String email = ((UserSystemDetails) ((Authentication) principal).getPrincipal()).getUsername();
+        UserSystem customer = customerService.findByEmail(email);
         boolean isMatch = bCryptPasswordEncoder.matches(oldPassword, customer.getPassword());
         if (!isMatch) {
             return new ResponseEntity<>("Mật khẩu cũ không đúng", HttpStatus.BAD_REQUEST);
@@ -45,7 +45,7 @@ public class CustomerApi {
             @PathVariable("id") Long id,
             @ModelAttribute CustomerDTO customerDTO
     ) {
-        Customer updatedCustomer = customerService.update(id, customerDTO);
+        UserSystem updatedCustomer = customerService.update(id, customerDTO);
         if (updatedCustomer == null) {
             return new ResponseEntity<>("Email đã được sử dụng", HttpStatus.BAD_REQUEST);
         }

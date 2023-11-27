@@ -1,26 +1,16 @@
 package com.codingduo.cinemabookingticket.controller;
 
+import com.codingduo.cinemabookingticket.dto.ComboDTO;
+import com.codingduo.cinemabookingticket.dto.CustomerDTO;
 import com.codingduo.cinemabookingticket.dto.MovieDTO;
 import com.codingduo.cinemabookingticket.dto.TagMovieDTO;
 import com.codingduo.cinemabookingticket.model.*;
 import com.codingduo.cinemabookingticket.service.*;
-import com.codingduo.cinemabookingticket.utils.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -38,6 +28,9 @@ public class AdminController {
 
     @Autowired
     private IUserSystemService customerService;
+
+    @Autowired
+    private IHistoryService historyService;
 
     @Autowired
     private ITicketService ticketService;
@@ -149,9 +142,25 @@ public class AdminController {
         return "redirect:/admin/movie";
     }
 
-    @GetMapping("/customer/getAll")
-    public String allCustomer() {
-        return "customer";
+    @GetMapping("/customer")
+    public String customersPage(Model model) {
+        List<CustomerDTO> customerDTOList = customerService.getAllCustomer();
+        for (CustomerDTO customerDTO: customerDTOList) {
+            customerDTO.setPassword(null);
+        }
+        model.addAttribute("customers", customerDTOList);
+        model.addAttribute("title", "Danh sách khách hàng");
+        return "admin_customers";
+    }
+
+    @GetMapping("/customer/{id}")
+    public String customerDetailPage(@PathVariable("id") Long id, Model model) {
+        CustomerDTO customerDTO = customerService.getInfo(id);
+        List<History> histories = historyService.getAllByCustomer(id);
+        model.addAttribute("customer", customerDTO);
+        model.addAttribute("histories", histories);
+        model.addAttribute("title", "Chi tiết khách hàng");
+        return "admin_customer_detail";
     }
 
     @GetMapping("/ticket")

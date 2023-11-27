@@ -20,9 +20,9 @@ public class CustomerController {
         return customerService.getInfo(id);
     }
 
-    @PutMapping("/update")
-    public UserSystem updateInfo(@Valid @RequestBody CustomerDTO customerDTO) {
-        return customerService.update(customerDTO);
-    }
+//    @PutMapping("/update")
+//    public UserSystem updateInfo(@Valid @RequestBody CustomerDTO customerDTO) {
+//        return customerService.update(customerDTO);
+//    }
 
 }
