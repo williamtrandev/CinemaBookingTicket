@@ -8,10 +8,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class UserSystemService implements IUserSystemService {
     @Autowired
     private UserSystemRepository userSystemRepository;
+
+    @Override
+    public List<CustomerDTO> getAllCustomer() {
+        List<CustomerDTO> customerDTOList = new ArrayList<>();
+        List<UserSystem> customers = userSystemRepository.getAllByRole("CUSTOMER");
+        for (UserSystem customer: customers) {
+            customerDTOList.add(convertToCustomerDTO(customer));
+        }
+        return customerDTOList;
+    }
 
     @Override
     public UserSystem findByEmail(String email) {

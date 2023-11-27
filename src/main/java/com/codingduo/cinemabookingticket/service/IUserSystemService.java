@@ -4,7 +4,12 @@ import com.codingduo.cinemabookingticket.dto.CustomerDTO;
 import com.codingduo.cinemabookingticket.model.UserSystem;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface IUserSystemService {
+
+    List<CustomerDTO> getAllCustomer();
+
     UserSystem findByEmail(String email);
 
     UserSystem save(CustomerDTO customerDTO);
