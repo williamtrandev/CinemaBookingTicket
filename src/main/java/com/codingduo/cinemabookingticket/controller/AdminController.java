@@ -211,4 +211,13 @@ public class AdminController {
         model.addAttribute("title", "Thống kê doanh thu");
         return "income";
     }
+
+    @GetMapping("/room")
+    public String room(Model model) {
+        model.addAttribute("links", new String[]{"ttuser.css", "style.css", "detailMovie.css"});
+        model.addAttribute("title", "Phòng chiếu");
+        List<Room> roomList = roomService.getAll();
+        model.addAttribute("roomList", roomList);
+        return "room";
+    }
 }
