@@ -33,4 +33,16 @@ public class History {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "history")
     private List<ComboHistory> comboHistoryList;
+
+    @Override
+    public String toString() {
+        return "History{" +
+                "id=" + id +
+                ", total=" + total +
+                ", dateBooking=" + dateBooking +
+                ", customer=" + customer +
+                ", historyDetailList=" + historyDetailList +
+                ", comboHistoryList=" + comboHistoryList +
+                '}';
+    }
 }

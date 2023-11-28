@@ -11,16 +11,15 @@
     <div class="mb-4">
         <button class="my-btn" id="addComboBtn"
                  data-bs-toggle="modal" data-bs-target="#comboModal"
-        ><i class="fas fa-plus me-2"></i>Combo</button>
+        ><i class="fas fa-plus mx-2"></i>Combo</button>
     </div>
     <div>
-        <table class="table mb-0 text-center">
+        <table class="table mb-0 text-center content-table">
             <thead style="background-color: #696969;">
             <tr>
                 <th scope="col">Combo</th>
-<!--                <th scope="col">Chi tiết</th>-->
                 <th scope="col">Giá (VND)</th>
-                <th></th>
+                <th>Thao tác</th>
             </tr>
             </thead>
             <tbody class="combo-row">
@@ -46,6 +45,7 @@
                 <td>
                     <div class="wrapper-product" th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')}"></div>
                 </td>
+
                 <td>
                     <button type="button" class="btn btn-primary update-btn"
                             data-bs-toggle="modal" data-bs-target="#comboModal"

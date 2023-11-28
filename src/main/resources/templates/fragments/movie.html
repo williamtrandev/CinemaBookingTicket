@@ -195,16 +195,14 @@
     <h2 class="mb-0">DANH SÁCH PHIM</h2>
   </div>
 
-  <div>
-    <a th:href="@{/admin/deleted-movie}" class="btn btn-success mb-3">Phim đã xóa</a>
-  </div>
 
-  <div>
+  <div class="d-flex align-items-center">
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#movieModal">
+    <button type="button" class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#movieModal">
       <i class="fa-solid fa-plus"></i>
       Thêm phim
     </button>
+    <a th:href="@{/admin/deleted-movie}" class="btn btn-success">Phim đã xóa</a>
   </div>
 
   <div class="row-phim">
@@ -609,80 +607,80 @@
           <h5 class="modal-title" id="movieModalLongTitle">Thêm phim</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body bg-secondary bg-gradient">
+        <div class="modal-body">
 
               <div class="container">
                 <div class="row">
                   <div class="mb-3 col-md-6">
-                    <label for="movie-name" class="form-label text-white">Tên phim</label>
+                    <label for="movie-name" class="form-label text">Tên phim</label>
                     <input type="text" class="form-control" id="movie-name" required th:field="*{name}">
                   </div>
 
                   <div class="mb-3 col-md-6">
-                    <label for="movie-director" class="form-label text-white">Đạo diễn</label>
+                    <label for="movie-director" class="form-label text">Đạo diễn</label>
                     <input type="text" class="form-control" id="movie-director" th:field="*{director}" required>
                   </div>
 
-                  <div class="input-group mb-3 col-md-12">
-                    <span class="input-group-text">Diễn viên</span>
+                  <div class="mb-3 col-md-12">
+                    <label for="movie-actors" class="form-label text">Diễn viên</label>
                     <input type="text" class="form-control" id="movie-actors" th:field="*{actors}" required>
                   </div>
 
-                  <div class="mb-3 col-md-3">
-                    <div class="mb-2">
-                      <label for="movie-release-day" class="form-label text-white mb-3">Ngày chiếu</label>
+                  <div class="mb-3 col-md-6">
+                      <label for="movie-release-day" class="form-label text">Ngày chiếu</label>
                       <input type="date" class="form-control" id="movie-release-day" th:field="*{releaseDate}" required>
-                    </div>
-
-                    <div class="">
-                      <label for="movie-duration" class="form-label text-white">Thời lượng (phút)</label>
-                      <input type="number" class="form-control" id="movie-duration" th:field="*{duration}" required>
-                    </div>
                   </div>
 
-                  <div class="mb-3 col-md-3">
-                      <label for="movie-coming" class="form-label text-white">Sắp chiếu</label>
-                      <input class="form-check-input" id="movie-coming" type="checkbox" th:field="*{coming}">
-                  </div>
-
-                  <div  class="mb-3 col-md-6">
-                    <div class="mb-1">
-                      <label for="movie-image" class="form-label text-white">Poster</label>
-                      <input class="form-control" type="file" id="movie-image" accept="image/png, image/jpeg, image/jpg"
-                             name="image"
-                             th:required="${imageRequired}"
-                      >
-                    </div>
-
-                    <div>
-                      <img th:if="${not #strings.isEmpty(movie.imgPathAtLocal)}" th:src="@{${movie.imgPathAtLocal}}"  alt="poster" th:class="img-fluid" />
-                    </div>
+                  <div class="mb-3 col-md-6">
+                    <label for="movie-duration" class="form-label text">Thời lượng (phút)</label>
+                    <input type="number" class="form-control" id="movie-duration" th:field="*{duration}" required>
                   </div>
 
 
                   <div class="mb-3 col-md-6">
-                    <span class="input-group-text">Link trailer</span>
+                      <label for="movie-coming" class="form-label text">Sắp chiếu <input class="form-check-input ms-4" id="movie-coming" type="checkbox" th:field="*{coming}"></label>
+
+                  </div>
+
+                  <div  class="mb-3 col-md-6">
+                      <label for="movie-image" class="form-label text">Poster</label>
+                      <input class="form-control" type="file" id="movie-image" accept="image/png, image/jpeg, image/jpg"
+                             name="image"
+                             th:required="${imageRequired}"
+                      >
+                  </div>
+
+
+
+                  <div class="mb-3 col-md-6">
+                    <label for="movie-trailer-path" class="form-label text">Link trailer</label>
                     <input type="text" id="movie-trailer-path" class="form-control" th:field="*{trailerPath}" required>
                   </div>
 
-                    <div class="form-floating mb-3">
-                        <textarea class="form-control" id="movie-description" style="height: 100px" th:field="*{description}"></textarea>
-                        <label for="movie-description">Mô tả</label>
-                    </div>
+                  <div class="mb-3 col-md-6">
+                      <label for="movie-description" class="form-label text">Mô tả</label>
+                      <textarea class="form-control" id="movie-description" style="height: 100px" th:field="*{description}"></textarea>
 
-                  <label class="form-label text-white">Nhãn phim</label>
-                  <div class="btn-group mb-3" role="group">
-                    <div th:each="tagMovie : ${tagMovieList}">
-                      <input class="btn-check" type="radio" name="tagMovie" th:id="${'radio-'+tagMovie.id}"
-                             th:value="${tagMovie.id}"
-                             th:field="*{tagId}">
-                      <label class="btn btn-outline-light" th:for="'radio-'+${tagMovie.id}"
-                             th:text="${tagMovie.name}"
-                      ></label>
+
+                  </div>
+
+                  <div class="mb-3 col-md-12">
+                    <label class="form-label text me-3">Nhãn phim</label>
+                    <div class="btn-group" role="group">
+                      <div th:each="tagMovie : ${tagMovieList}">
+                        <input class="btn-check" type="radio" name="tagMovie" th:id="@{'radio-'+${tagMovie.id}}"
+                               th:value="${tagMovie.id}"
+                               th:field="*{tagId}">
+                        <label class="btn btn-outline-primary text" th:for="@{'radio-'+${tagMovie.id}}"
+                               th:text="${tagMovie.name}"
+                        ></label>
+                      </div>
+
                     </div>
                   </div>
 
-                  <label class="form-label text-white">Thể loại</label>
+
+                  <label class="form-label text">Thể loại</label>
                   <div class="btn-group mb-3">
                     <div th:each="genre : ${genreList}">
                       <input type="checkbox" class="btn-check" th:id="${'checkbox-'+genre.id}" autocomplete="off"
@@ -690,7 +688,9 @@
                              th:value="${genre.name}"
                              th:checked="${movie.genres != null && movie.genres.contains(genre.name)}"
                       >
-                      <label class="btn btn-outline-light" th:for="${'checkbox-'+genre.id}" th:text="${genre.name}"></label>
+
+                      <label class="btn btn-outline-primary" th:for="@{'checkbox-'+${genre.id}}" th:text="${genre.name}"></label>
+
                     </div>
                   </div>
                 </div>

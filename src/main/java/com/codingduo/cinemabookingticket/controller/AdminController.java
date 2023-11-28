@@ -178,6 +178,7 @@ public class AdminController {
         model.addAttribute("customer", customerDTO);
         model.addAttribute("histories", histories);
         model.addAttribute("title", "Chi tiết khách hàng");
+        model.addAttribute("links", new String[]{"ttuser.css"});
         return "admin_customer_detail";
     }
 
@@ -224,5 +225,14 @@ public class AdminController {
         model.addAttribute("links", new String[]{"detailMovie.css", "style.css"});
         model.addAttribute("title", "Thống kê doanh thu");
         return "income";
+    }
+
+    @GetMapping("/room")
+    public String room(Model model) {
+        model.addAttribute("links", new String[]{"ttuser.css", "style.css", "detailMovie.css"});
+        model.addAttribute("title", "Phòng chiếu");
+        List<Room> roomList = roomService.getAll();
+        model.addAttribute("roomList", roomList);
+        return "room";
     }
 }

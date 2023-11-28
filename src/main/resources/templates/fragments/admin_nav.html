@@ -6,7 +6,7 @@
 <th:block th:fragment="nav">
     <nav class="my-sidebar close">
         <header>
-            <a th:href="@{/admin}">
+            <a th:href="@{/admin/movie}">
                 <div class="logo">
                     <div class="brand">W</div>
                     <div class="text header-text">
@@ -19,6 +19,13 @@
         <div class="my-menu-bar">
             <div class="my-menu">
                 <ul class="my-menu-links">
+                    <li class="my-nav-link">
+                        <a th:href="@{/admin/room}">
+                            <i class="fas fa-tv icon"></i>
+                            <span class="nav-text text">Phòng chiếu</span>
+                            <span class="tooltip-text">Phòng chiếu</span>
+                        </a>
+                    </li>
                     <li class="my-nav-link">
                         <a th:href="@{/admin/movie}">
                             <i class="fa-solid fa-film icon"></i>
@@ -72,7 +79,9 @@
                     </a>
                 </li>
                 <li sec:authorize="isAuthenticated()">
-                    <a th:href="@{/logout}">
+
+                    <a th:href="@{/signout}">
+
                         <i class="fa-solid fa-right-from-bracket icon logout-icon"></i>
                         <span class="nav-text text">Đăng xuất</span>
                         <span class="tooltip-text">Đăng xuất</span>
@@ -96,7 +105,7 @@
     <nav class="my-sidebar-bottom">
         <ul class="my-menu-bottom-links">
             <li class="my-nav-bottom-link">
-                <a th:href="@{/}">
+                <a th:href="@{/movie}">
                     <i class=" fa-solid fa-house-chimney icon"></i>
                     <span class="nav-text text">Trang chủ</span>
                 </a>
