@@ -17,7 +17,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
   <script th:inline="javascript">
@@ -189,6 +189,7 @@
                   // Thêm nội dung vào mảng contents
                   contents.push(content);
                 });
+                const comboDetails = JSON.parse(localStorage.getItem("comboDetails"));
                 const infoCombo = contents.join(", ");
                 const seatIds = seatList.map(item => item.id);
                 const data = {
@@ -197,10 +198,11 @@
                   // Tiếp tục chỗ này
                     showTimeId: JSON.parse(sessionStorage.getItem("bookingInfo")).showtimeId,
                     infoSeats: infoSeats,
-                    infoCombo: infoCombo
+                    infoCombo: infoCombo,
+                    comboDetails
                     // infoSeats: JSON.parse(sessionStorage.getItem(""))
                 }
-
+                console.log(data);
                 let dynamicPath = /*[[@{/api/v1/history/save}]]*/ '';
                 fetch(dynamicPath, {
                         method: 'POST',
@@ -210,16 +212,23 @@
                         body: JSON.stringify(data)
 
                     })
-                    .then(res => res.json())
-                    .then((data) => {
-                        if (data) {
-                            console.log(data);
+                    .then(res => {
+                        if(res.status === 201) {
+                          Swal.fire({
+                            title: "Thành công",
+                            text: "Bạn vui lòng check mail để xem thông tin nhé",
+                            icon: "success"
+                          });
                         } else {
-                            alert("Thất bại");
+                          Swal.fire({
+                            title: "Thất bại",
+                            text: "Đã có lỗi xảy ra",
+                            icon: "error"
+                          });
                         }
                         $(".wrap-loading").css('display', 'none');
                     })
-                    .catch((err) => console.log(err));
+
             });
 
 

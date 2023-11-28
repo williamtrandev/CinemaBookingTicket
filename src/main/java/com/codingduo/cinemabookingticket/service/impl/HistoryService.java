@@ -32,6 +32,12 @@ public class HistoryService implements IHistoryService {
     @Autowired
     private UserSystemRepository customerRepository;
 
+    @Autowired
+    private ComboRepository comboRepository;
+
+    @Autowired
+    private ComboHistoryRepository comboHistoryRepository;
+
     @Override
     public History save(HistoryDTO historyDTO) {
         // Tạo đối tượng History từ HistoryDTO
@@ -52,11 +58,10 @@ public class HistoryService implements IHistoryService {
 
         // Tạo các đối tượng HistoryDetail từ seatIds và showTimeId
         List<HistoryDetail> historyDetails = new ArrayList<>();
+        List<ComboHistory> comboHistoryList = new ArrayList<>();
         for (Long seatId : historyDTO.getSeatIds()) {
             Seat seat = seatRepository.findById(seatId)
                     .orElseThrow(() -> new RuntimeException("Không tìm thấy Seat với ID " + seatId));
-
-
 
             HistoryDetail historyDetail = new HistoryDetail();
             historyDetail.setHistory(history);
@@ -64,12 +69,26 @@ public class HistoryService implements IHistoryService {
             historyDetail.setShowTime(showTime);
             historyDetails.add(historyDetail);
         }
+        for(HistoryDTO.ComboDetail comboDetail : historyDTO.getComboDetails()) {
+            ComboHistory comboHistory = new ComboHistory();
+            comboHistory.setHistory(history);
+            Combo combo = comboRepository.getReferenceById(comboDetail.getId());
+            comboHistory.setCombo(combo);
+            comboHistory.setQuantity(comboDetail.getQuantity());
+            comboHistoryList.add(comboHistory);
+        }
 
         // Lưu historyDetails vào cơ sở dữ liệu
         historyDetailRepository.saveAll(historyDetails);
 
+        // Lưu ComboHistory vào cơ sở dữ liệu
+        comboHistoryRepository.saveAll(comboHistoryList);
+
         // Thiết lập mối quan hệ giữa history và historyDetails
         history.setHistoryDetailList(historyDetails);
+
+        // Thiết lập mối quan hệ giữa history và combo history
+        history.setComboHistoryList(comboHistoryList);
         return historyRepository.save(history);
     }
 

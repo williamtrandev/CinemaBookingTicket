@@ -175,6 +175,7 @@ public class AdminController {
         model.addAttribute("customer", customerDTO);
         model.addAttribute("histories", histories);
         model.addAttribute("title", "Chi tiết khách hàng");
+        model.addAttribute("links", new String[]{"ttuser.css"});
         return "admin_customer_detail";
     }
 

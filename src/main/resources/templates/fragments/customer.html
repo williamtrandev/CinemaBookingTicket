@@ -8,14 +8,18 @@
     <div class="title text">
         <h2 class="mb-0">Danh sách khách hàng</h2>
     </div>
-    <div th:each="customer : ${customers}" class="col-6">
-        <a th:href="@{'/admin/customer/'+${customer.id}}" class="customer-card bg-light text-dark card flex-row justify-content-between align-items-center mb-3 p-3" style="cursor: pointer">
-            <i class="fa-regular fa-user fa-xl me-3"></i>
-            <div class="me-auto">
+    <div th:each="customer : ${customers}" class="col-4">
+        <a th:href="@{'/admin/customer/'+${customer.id}}" class="customer-card bg-light text-dark card flex-row justify-content-between align-items-center mb-3 px-4 py-3 border-0"
+           style="cursor: pointer; border: 1px solid rgba(0, 0, 0, 0.1);
+            background: var(--sidebar-color) !important;
+            border-radius: 6px;
+            box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        ">
+            <img th:src="@{/public/avatar/user.png}" alt="" style="width: 50px; height: 50px" class="me-3">
+            <div class="me-auto text">
                 <div th:text="${customer.name}" class="fs-5 fw-bold"></div>
                 <div th:text="${customer.email}"></div>
             </div>
-            <div class="fs-4"><span th:text="${customer.point}"></span> điểm</div>
         </a>
     </div>
 </div>
@@ -24,13 +28,18 @@
     <div class="title text">
         <h2 class="mb-0">Thông tin khách hàng</h2>
     </div>
-    <div class="bg-light text-dark card flex-row justify-content-between align-items-center mb-3 p-3">
-        <i class="fa-regular fa-user fa-2xl me-3"></i>
-        <div class="me-auto">
+    <div class="bg-light text-dark card flex-row justify-content-between align-items-center mb-3 px-4 py-3 border-0"
+         style="border: 1px solid rgba(0, 0, 0, 0.1);
+            background: var(--sidebar-color) !important;
+            border-radius: 6px;
+            box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        ">
+        <img th:src="@{/public/avatar/user.png}" alt="" style="width: 50px; height: 50px" class="me-3">
+
+        <div class="me-auto text">
             <h4 id="customerName" th:text="${customer.name}"></h4>
             <h5 id="customerEmail" th:text="${customer.email}"></h5>
         </div>
-        <div class="fs-3"><span th:text="${customer.point}"></span> điểm</div>
     </div>
 </div>
 
@@ -39,10 +48,12 @@
         <h2 class="mb-0">Lịch sử đặt vé</h2>
     </div>
     <div th:each="history : ${histories}">
-        <div class="card bg-light mb-3 p-3">
-            <div class="fs-5" th:text="'Ngày đặt: '+${#dates.format(history.dateBooking, 'dd-MM-yyyy')}"></div>
+        <div class="card bg-light mb-3 p-4 border-0" style="background: var(--sidebar-color) !important;
+            border-radius: 6px;
+            box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;">
+            <h3 class="text" th:text="'Ngày đặt: '+${#dates.format(history.dateBooking, 'dd-MM-yyyy')}"></h3>
             <div>
-                <table class="table table-borderless">
+                <table class="table table-borderless content-table">
                     <thead>
                     <tr>
                         <th scope="col">Phim</th>
@@ -60,11 +71,11 @@
                         <td th:text="${#dates.format(detail.showTime.timeShow, 'HH:mm')}"></td>
                         <td th:text="${detail.showTime.room.id}"></td>
                         <td th:text="${detail.showTime.ticket.name}"></td>
-                        <td><span th:text="${#numbers.formatDecimal(detail.showTime.ticket.price, 0, 'COMMA', 0, 'POINT')}"></span> <i class="fa-solid fa-dong-sign"></i></td>
+                        <td><span th:text="${#numbers.formatDecimal(detail.showTime.ticket.price, 0, 'COMMA', 0, 'POINT')}"> đ</span></td>
                     </tr>
                     </tbody>
                 </table>
-                <table class="table table-borderless">
+                <table class="table table-borderless content-table">
                     <thead>
                     <tr>
                         <th scope="col">Combo</th>
@@ -77,13 +88,13 @@
                     <tr th:each="comboDetail : ${history.comboHistoryList}">
                         <td th:text="${comboDetail.combo.nameCombo}"></td>
                         <td th:text="${comboDetail.combo.detail}"></td>
-                        <td><span th:text="${#numbers.formatDecimal(comboDetail.combo.price, 0, 'COMMA', 0, 'POINT')}"></span> <i class="fa-solid fa-dong-sign"></i></td>
+                        <td><span th:text="${#numbers.formatDecimal(comboDetail.combo.price, 0, 'COMMA', 0, 'POINT')}"></span> đ</td>
                         <td th:text="${comboDetail.quantity}"></td>
                     </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="fs-5">Tổng tiền: <span th:text="${#numbers.formatDecimal(history.total, 0, 'COMMA', 0, 'POINT')}"></span> <i class="fa-solid fa-dong-sign"></i></div>
+            <h3 class="mt-3 text">Tổng tiền: <span th:text="${#numbers.formatDecimal(history.total, 0, 'COMMA', 0, 'POINT')}"></span> đ</h3>
         </div>
     </div>
 </div>
@@ -192,6 +203,114 @@
             </tr>
             </tbody>
         </table>
+    </div>
+    <div class="modal fade" id="modalInfo">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Thông báo</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    Cập nhật thông tin thành công
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="admin_info">
+    <div class="title text">
+        <h2 class="mb-0">Thông tin cá nhân</h2>
+    </div>
+    <div class="user-info-wrapper">
+        <div class="user-profile-card">
+            <div class="group-avatar">
+                <h5 class=" user-name text" th:text="${customer.name}"></h5>
+            </div>
+            <!--            <div class="sovemua">-->
+            <!--                <p class="text">Vé đã mua</p>-->
+            <!--                <p style="color: rgb(232, 165, 39)" th:text="${ticketNum}"></p>-->
+            <!--            </div>-->
+            <!--            <div class="tichdiem">-->
+            <!--                <p class="text">Tích điểm cá nhân</p>-->
+            <!--                <p style="color: rgb(28, 145, 135)" th:text="${customer.point}"></p>-->
+            <!--            </div>-->
+        </div>
+
+        <div class="detail-wrapper">
+            <div>
+                <div class="detail-info">
+                    <div class="info-box">
+                        <span class="text">Họ tên</span>
+                        <input type="text" name="" id="name-update" th:value="${customer.name}" readonly />
+                    </div>
+                    <div class="info-box">
+                        <span class="text">Email</span>
+                        <input type="email" name="" id="email-update" th:value="${customer.email}" readonly />
+                    </div>
+                </div>
+                <div class="msg-error-info mb-4"></div>
+                <button class="my-btn me-5 edit-btn" style="background: var(--primary-color)">
+                    Chỉnh sửa thông tin
+                </button>
+                <button class="my-btn me-5 disabled update-btn" style="background: linear-gradient(to left bottom, #5ebaee, #dbe3ff, #ecb3fe); color: #0c244b">
+                    Cập nhật thông tin
+                </button>
+                <button class="my-btn" style="background: linear-gradient(to left bottom, #5ebaee, #dbe3ff, #ecb3fe); color: #0c244b"
+                        data-bs-toggle="modal" data-bs-target="#changePasswordModal"
+                >Đổi mật khẩu</button>
+                <!-- Modal -->
+                <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="changePasswordModalLabel">Đổi mật khẩu</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="oldPassword" class="form-label">Mật khẩu cũ</label>
+                                    <input type="password" class="form-control" id="oldPassword" placeholder="Nhập mật khẩu cũ">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="newPassword" class="form-label">Mật khẩu mới</label>
+                                    <input type="password" class="form-control" id="newPassword" placeholder="Nhập mật khẩu mới">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" id="changePasswordBtn">Đổi mật khẩu</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    $(function() {
+
+                        $(".edit-btn").click(function() {
+                            $(".edit-btn").addClass("disabled");
+                            $(".update-btn").removeClass("disabled");
+                            $(".detail-info input").prop('readonly', false);
+                            $("#name-update").focus();
+                        })
+                        $(".detail-info input").click(function() {
+                            $(".msg-error-info").text("");
+                        })
+                    })
+                </script>
+            </div>
+        </div>
     </div>
     <div class="modal fade" id="modalInfo">
         <div class="modal-dialog">

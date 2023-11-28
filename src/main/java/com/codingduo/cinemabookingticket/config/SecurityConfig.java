@@ -28,6 +28,9 @@ public class SecurityConfig {
         "/images/**",
         "/public/**",
         "/",
+        "/register",
+        "/movie/showing", "/movie/coming",
+        "/movie/**",
         "/logout",
         "/api/v1/movie/getAllShowTime",
         "/api/v1/movie/getAllByGenreId/**"

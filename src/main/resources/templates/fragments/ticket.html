@@ -15,14 +15,14 @@
                 <th>STT</th>
                 <th>Tên vé</th>
                 <th>Giá vé</th>
-                <th></th>
+                <th>Thao tác</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="ticket : ${tickets}">
                 <td th:text="${ticket.id}"></td>
                 <td th:text="${ticket.name}"></td>
-                <td><span class="price" th:text="${#numbers.formatDecimal(ticket.price, 0, 'COMMA', 0, 'POINT')}"></span> <i class="fa-solid fa-dong-sign"></i></td>
+                <td><span class="price" th:text="${#numbers.formatDecimal(ticket.price, 0, 'COMMA', 0, 'POINT')}"></span> đ</td>
                 <td>
                     <button class="my-btn change-price-btn" th:data-id="${ticket.id}" style="background: linear-gradient(to left bottom, #5ebaee, #dbe3ff, #ecb3fe); color: #0c244b"
                             data-bs-toggle="modal" data-bs-target="#changePriceModal"
