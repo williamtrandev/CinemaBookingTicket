@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/admin_layout :: page(title=${title}, links=${links}, scripts=${scripts})}">
+<head>
+
+</head>
+<body>
+
+<div th:fragment="content">
+    <div class="mt-2 d-flex justify-content-end">
+        <button class="btn btn-statistics me-3 btn-week border-0 border-bottom border-primary" style="font-weight: normal !important;">Thống kê theo tuần</button>
+        <button class="btn btn-statistics me-3 btn-month border-0 border-bottom" style="font-weight: normal !important;">Thống kê theo tháng</button>
+    </div>
+    <div class="mt-5 d-flex justify-content-center" style="height: 60vh">
+        <canvas id="myChart"></canvas>
+    </div>
+    <script th:inline="javascript">
+        let statisticsChart = null;
+        var revenuesInWeek = /*[[${revenuesInWeek}]]*/ {};
+        console.log(revenuesInWeek)
+        var revenuesInMonth = /*[[${revenuesInMonth}]]*/ {};
+        console.log(revenuesInMonth)
+        const ctx = document.getElementById('myChart');
+
+        const labels = Object.keys(revenuesInWeek).sort().map(w => {
+            const [year, month, day] = w.substring(0, 10).split('-');
+            return `${day}-${month}-${year}`;
+        });
+
+        const labelsMonth = Object.keys(revenuesInMonth).sort().map(m => {
+            const [year, month] = m.split('-');
+            return `${month}-${year}`;
+        });
+        const dataValues = Object.values(revenuesInWeek);
+
+        const dataValuesYear = Object.values(revenuesInMonth);
+
+        let optsWeek = {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Doanh thu theo ngày trong tuần',
+                    data: dataValues,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        }
+
+        optsMonth = {
+            type: 'bar',
+            data: {
+                labels: labelsMonth,
+                datasets: [{
+                    label: 'Doanh thu theo tháng trong năm',
+                    data: dataValuesYear,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        }
+
+        let opts = optsWeek;
+        statisticsChart = new Chart(ctx, opts);
+        $('.btn-statistics').click(function() {
+            $('.btn').removeClass('border-primary');
+            $(this).addClass('border-primary')
+        });
+        $('.btn-week').click(() => {
+            opts = optsWeek;
+            updateChart();
+        })
+        $('.btn-month').click(() => {
+            opts = optsMonth;
+            updateChart();
+        })
+        function updateChart() {
+            if (statisticsChart) {
+                statisticsChart.destroy();
+            }
+            statisticsChart = new Chart(ctx, opts);
+        }
+    </script>
+</div>
+
+</body>
+</html>

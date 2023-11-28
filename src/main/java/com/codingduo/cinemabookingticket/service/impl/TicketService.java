@@ -24,4 +24,9 @@ public class TicketService implements ITicketService {
         ticket.setPrice(price);
         return ticketRepository.save(ticket);
     }
+
+    @Override
+    public Ticket getOne(Long ticketId) {
+        return ticketRepository.getReferenceById(ticketId);
+    }
 }

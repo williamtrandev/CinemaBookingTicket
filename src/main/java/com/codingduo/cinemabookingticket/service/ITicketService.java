@@ -7,4 +7,6 @@ import java.util.List;
 public interface ITicketService {
     List<Ticket> getAll();
     Ticket changePrice(Long id, double price);
+
+    Ticket getOne(Long ticketId);
 }

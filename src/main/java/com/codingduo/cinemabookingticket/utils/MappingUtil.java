@@ -1,8 +1,10 @@
 package com.codingduo.cinemabookingticket.utils;
 
 import com.codingduo.cinemabookingticket.dto.SeatDTO;
+import com.codingduo.cinemabookingticket.dto.ShowTimeDTO;
 import com.codingduo.cinemabookingticket.model.HistoryDetail;
 import com.codingduo.cinemabookingticket.model.Seat;
+import com.codingduo.cinemabookingticket.model.ShowTime;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,4 +40,16 @@ public class MappingUtil {
         return seatDTO;
     }
 
+    public static ShowTimeDTO convertToDTO(ShowTime showTime) {
+        ShowTimeDTO showTimeDTO = new ShowTimeDTO();
+        showTimeDTO.setId(showTime.getId());
+        showTimeDTO.setTimeShow(showTime.getTimeShow());
+        showTimeDTO.setDateShow(showTime.getDateShow());
+        showTimeDTO.setPrice(showTime.getTicket().getPrice());
+        showTimeDTO.setDeleted(showTime.isDeleted());
+        showTimeDTO.setIdMovie(showTime.getMovie().getId());
+        showTimeDTO.setIdRoom(showTime.getRoom().getId());
+        showTimeDTO.setIdTicket(showTime.getTicket().getId());
+        return showTimeDTO;
+    }
 }

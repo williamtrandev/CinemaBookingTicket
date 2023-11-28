@@ -14,7 +14,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.sql.Date;
+import java.time.YearMonth;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/admin")
@@ -195,5 +198,19 @@ public class AdminController {
         model.addAttribute("title", "Thông tin tài khoản");
         model.addAttribute("links", new String[]{"ttuser.css"});
         return "admin_detail";
+    }
+
+
+    @GetMapping("/income")
+    public String income(Model model) {
+        Map<Date, Double> revenuesInWeek = historyService.calculateDailyRevenueInWeek();
+        model.addAttribute("revenuesInWeek", revenuesInWeek);
+
+        Map<YearMonth, Double> revenuesInMonth = historyService.calculateMonthlyRevenue();
+        model.addAttribute("revenuesInMonth", revenuesInMonth);
+
+        model.addAttribute("links", new String[]{"detailMovie.css", "style.css"});
+        model.addAttribute("title", "Thống kê doanh thu");
+        return "income";
     }
 }
