@@ -44,6 +44,12 @@ public class AdminController {
     @Autowired
     private IComboService comboService;
 
+    @Autowired
+    private IShowTimeService showTimeService;
+
+    @Autowired
+    private IRoomService roomService;
+
     @GetMapping("/movie")
     public String admin(Model model) {
         List<MovieDTO> movieList = movieService.getAllNotDeleted();
@@ -110,12 +116,18 @@ public class AdminController {
         List<TagMovieDTO> tagMovieList = tagMovieService.getAll();
         List<Genre> genreList = genreService.getAll();
         String genres = String.join(", ", movieDTO.getGenres());
+        List<ShowTime> showTimeList = showTimeService.getShowTimeByMovie(id);
+        List<Room> roomList = roomService.getAll();
+        List<Ticket> ticketList = ticketService.getAll();
+        model.addAttribute("ticketList", ticketList);
+        model.addAttribute("roomList", roomList);
+        model.addAttribute("showTimeList", showTimeList);
         model.addAttribute("movie", movieDTO);
         model.addAttribute("genre", genres);
         model.addAttribute("tagMovieList", tagMovieList);
         model.addAttribute("genreList", genreList);
         model.addAttribute("title", "Chi tiết phim");
-        model.addAttribute("links", new String[]{"detailMovie.css"});
+        model.addAttribute("links", new String[]{"detailMovie.css", "ttuser.css"});
 //        model.addAttribute("formAction", "/admin/movie/"+id);
 //        model.addAttribute("formMethod", "put");
         model.addAttribute("imageRequired", "false");
