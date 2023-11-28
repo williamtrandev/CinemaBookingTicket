@@ -9,5 +9,7 @@ import java.util.List;
 public interface IComboService {
     Combo save(ComboDTO comboDTO);
     List<Combo> getAllByDeleted(boolean deleted);
+    Combo delete(Long id);
 
+    Combo update(Long id, ComboDTO comboDTO);
 }

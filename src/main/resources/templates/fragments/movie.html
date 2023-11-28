@@ -661,6 +661,7 @@
                       <label for="movie-description" class="form-label text">Mô tả</label>
                       <textarea class="form-control" id="movie-description" style="height: 100px" th:field="*{description}"></textarea>
 
+
                   </div>
 
                   <div class="mb-3 col-md-12">
@@ -674,6 +675,7 @@
                                th:text="${tagMovie.name}"
                         ></label>
                       </div>
+
                     </div>
                   </div>
 
@@ -681,12 +683,14 @@
                   <label class="form-label text">Thể loại</label>
                   <div class="btn-group mb-3">
                     <div th:each="genre : ${genreList}">
-                      <input type="checkbox" class="btn-check" th:id="@{'checkbox-'+${genre.id}}" autocomplete="off"
+                      <input type="checkbox" class="btn-check" th:id="${'checkbox-'+genre.id}" autocomplete="off"
                              name="genre"
                              th:value="${genre.name}"
                              th:checked="${movie.genres != null && movie.genres.contains(genre.name)}"
                       >
+
                       <label class="btn btn-outline-primary" th:for="@{'checkbox-'+${genre.id}}" th:text="${genre.name}"></label>
+
                     </div>
                   </div>
                 </div>

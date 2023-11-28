@@ -28,4 +28,23 @@ public class ComboService implements IComboService {
     public List<Combo> getAllByDeleted(boolean deleted) {
         return comboRepository.findAllByDeleted(deleted);
     }
+
+    @Override
+    public Combo delete(Long id) {
+        Combo combo = comboRepository.getReferenceById(id);
+        combo.setDeleted(true);
+        return comboRepository.save(combo);
+    }
+
+    @Override
+    public Combo update(Long id, ComboDTO comboDTO) {
+        Combo combo = comboRepository.getReferenceById(id);
+        combo.setNameCombo(comboDTO.getName());
+        combo.setDetail(comboDTO.getDetail());
+        combo.setPrice(comboDTO.getPrice());
+        if (comboDTO.getImagePath() != null) { // Nếu hình không thay đổi
+            combo.setImagePath(comboDTO.getImagePath());
+        }
+        return comboRepository.save(combo);
+    }
 }

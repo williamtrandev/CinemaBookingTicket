@@ -36,4 +36,23 @@ public class ComboApi {
         return new ResponseEntity<>(comboService.save(comboDTO), HttpStatus.CREATED);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Combo> update(
+            @PathVariable("id") Long id,
+            @ModelAttribute ComboDTO comboDTO,
+            @RequestParam("image") MultipartFile image
+    ) throws IOException {
+        if (!image.isEmpty()) {
+            String fileName = StringUtils.cleanPath(image.getOriginalFilename());
+            comboDTO.setImagePath(fileName);
+            String uploadDir = "public/combo";
+            FileUploadUtil.saveFile(uploadDir, fileName, image);
+        }
+        return new ResponseEntity<>(comboService.update(id, comboDTO), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Combo> delete(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(comboService.delete(id), HttpStatus.OK);
+    }
 }

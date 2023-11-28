@@ -1,5 +1,6 @@
 package com.codingduo.cinemabookingticket.controller;
 
+import com.codingduo.cinemabookingticket.config.UserSystemDetails;
 import com.codingduo.cinemabookingticket.dto.ComboDTO;
 import com.codingduo.cinemabookingticket.dto.CustomerDTO;
 import com.codingduo.cinemabookingticket.dto.MovieDTO;
@@ -7,10 +8,12 @@ import com.codingduo.cinemabookingticket.dto.TagMovieDTO;
 import com.codingduo.cinemabookingticket.model.*;
 import com.codingduo.cinemabookingticket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.sql.Date;
 import java.time.YearMonth;
 import java.util.List;
@@ -196,6 +199,18 @@ public class AdminController {
         model.addAttribute("title", "Danh sách combo");
         model.addAttribute("links", new String[]{"ttuser.css", "booking.css"});
         return "admin_combo";
+    }
+
+    @GetMapping("/user")
+    public String userPage(Model model, Principal principal) {
+        String email = ((UserSystemDetails) ((Authentication) principal).getPrincipal()).getUsername();
+        UserSystem customer = customerService.findByEmail(email);
+        List<History> historyList = customer.getHistoryList();
+        customer.setPassword(null);
+        model.addAttribute("customer", customer);
+        model.addAttribute("title", "Thông tin tài khoản");
+        model.addAttribute("links", new String[]{"ttuser.css"});
+        return "admin_detail";
     }
 
 

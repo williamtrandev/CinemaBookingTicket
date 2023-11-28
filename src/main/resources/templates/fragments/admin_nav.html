@@ -72,7 +72,16 @@
                     </a>
                 </li>
                 <li sec:authorize="isAuthenticated()">
+                    <a th:href="@{/admin/user}">
+                        <i class="fa-solid fa-user icon"></i>
+                        <span class="nav-text text">Tài khoản</span>
+                        <span class="tooltip-text">Tài khoản</span>
+                    </a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+
                     <a th:href="@{/signout}">
+
                         <i class="fa-solid fa-right-from-bracket icon logout-icon"></i>
                         <span class="nav-text text">Đăng xuất</span>
                         <span class="tooltip-text">Đăng xuất</span>
@@ -90,12 +99,6 @@
                         <div class="switch"></div>
                     </div>
                 </li>
-            </div>
-            <div th:if="${session.user != null}" class="user-icon">
-                <a th:href="@{/user}">
-                    <img th:src="@{/img/user.png}" alt="" />
-                    <span th:text="${session.user.name}" class="text"></span>
-                </a>
             </div>
         </div>
     </nav>
