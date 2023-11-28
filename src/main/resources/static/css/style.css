@@ -942,3 +942,4 @@ body.dark .row-phim .card:hover::after {
         margin-left: calc((100% - var(--card-width) * 5) / 4);
     }
 }
+

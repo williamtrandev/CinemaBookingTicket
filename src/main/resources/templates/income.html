@@ -8,8 +8,8 @@
 
 <div th:fragment="content">
     <div class="mt-2 d-flex justify-content-end">
-        <button class="btn btn-statistics me-3 btn-week border-0 border-bottom border-primary" style="font-weight: normal !important;">Thống kê theo tuần</button>
-        <button class="btn btn-statistics me-3 btn-month border-0 border-bottom" style="font-weight: normal !important;">Thống kê theo tháng</button>
+        <button class="btn btn-statistics me-3 btn-week border-0 border-bottom border-primary text" style="font-weight: normal !important;">Thống kê theo tuần</button>
+        <button class="btn btn-statistics me-3 btn-month border-0 border-bottom text" style="font-weight: normal !important;">Thống kê theo tháng</button>
     </div>
     <div class="mt-5 d-flex justify-content-center" style="height: 60vh">
         <canvas id="myChart"></canvas>
@@ -42,7 +42,7 @@
                 datasets: [{
                     label: 'Doanh thu theo ngày trong tuần',
                     data: dataValues,
-                    borderWidth: 1
+                    borderWidth: 1,
                 }]
             },
             options: {
@@ -61,7 +61,7 @@
                 datasets: [{
                     label: 'Doanh thu theo tháng trong năm',
                     data: dataValuesYear,
-                    borderWidth: 1
+                    borderWidth: 1,
                 }]
             },
             options: {
