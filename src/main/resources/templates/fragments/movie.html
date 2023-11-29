@@ -411,7 +411,7 @@
         <th>Thao tác</th>
       </tr>
       </thead>
-      <tbody>
+      <tbody id="showtime-table">
       <tr th:each="showtime, showtimeIndex : ${showTimeList}">
         <td th:text="${showtimeIndex.index + 1}">1</td>
         <td th:text="${showtime.dateShow}">30/11/2023</td>
@@ -496,7 +496,14 @@
                   text: "Thêm suất chiếu thành công",
                   icon: "success"
                 });
-                let newIndex = parseInt($('tbody tr').last().find('td').first().text()) + 1;
+                const trLength = $('#showtime-table tr').length;
+                console.log('trLengthh', trLength);
+                let newIndex = 1;
+                if(trLength !== 0) {
+                  newIndex = parseInt($('#showtime-table tr').last().find('td').eq(0).text()) + 1;
+                }
+
+                console.log(newIndex);
                 let ticketName = $('#ticket option:selected').text();
                 let newTr = `<tr>
                   <td>${newIndex}</td>

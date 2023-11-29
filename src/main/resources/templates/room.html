@@ -19,7 +19,7 @@
             <th>Số hàng</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="room-table">
         <tr th:each="room, idx : ${roomList}">
             <td th:text="${idx.index + 1}"></td>
             <td th:text="'Phòng số ' + ${room.id}"></td>
@@ -83,10 +83,14 @@
                                 text: "Thêm phòng thành công",
                                 icon: "success"
                             });
-                            let newIdx = parseInt($('tbody tr').find('td').first().text()) + 1;
+                            const trLength = $('#room-table tr').length;
+                            let newIndex = 1;
+                            if(trLength !== 0) {
+                                newIndex = parseInt($('#room-table tr').last().find('td').eq(0).text()) + 1;
+                            }
                             let tr = `<tr>
-                                <td>${newIdx}</td>
-                                <td>Phòng số ${newIdx}</td>
+                                <td>${newIndex}</td>
+                                <td>Phòng số ${newIndex}</td>
                                 <td>${numRow}</td>
                             </tr>`
                             $('tbody').append(tr);

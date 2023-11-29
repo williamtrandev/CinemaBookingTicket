@@ -48,6 +48,8 @@ public class HistoryService implements IHistoryService {
         // Lấy đối tượng Customer từ cơ sở dữ liệu bằng ID
         UserSystem customer = customerRepository.findById(historyDTO.getIdCustomer())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy Customer với ID " + historyDTO.getIdCustomer()));
+        customer.setPoint(customer.getPoint() + historyDTO.getSeatIds().size()*10);
+        customerRepository.save(customer);
         history.setCustomer(customer);
 
         // Lưu history vào cơ sở dữ liệu
