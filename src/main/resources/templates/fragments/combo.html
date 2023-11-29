@@ -46,8 +46,8 @@
                     <div class="wrapper-product" th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')}"></div>
                 </td>
 
-                <td>
-                    <button type="button" class="btn btn-primary update-btn"
+                <td class="d-flex justify-content-center align-items-center">
+                    <button type="button" class="btn btn-primary update-btn me-3"
                             data-bs-toggle="modal" data-bs-target="#comboModal"
                             th:attr="data-id=${item.id}, data-name=${item.nameCombo}, data-detail=${item.detail}, data-price=${item.price}"
                     ><i class="fa-solid fa-pen-to-square"></i></button>
@@ -165,8 +165,8 @@
                                     <td>
                                         <div class="wrapper-product">${data.price.toLocaleString("en-US")}</div>
                                     </td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary update-btn"
+                                    <td class="d-flex justify-content-center align-items-center">
+                                        <button type="button" class="btn btn-primary update-btn me-3"
                                             data-bs-toggle="modal" data-bs-target="#comboModal"
                                             data-id="${data.id}"
                                             data-name="${data.nameCombo}"
@@ -235,8 +235,8 @@
                                     <td>
                                         <div class="wrapper-product">${data.price.toLocaleString("en-US")}</div>
                                     </td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary update-btn"
+                                    <td class="d-flex justify-content-center align-items-center">
+                                        <button type="button" class="btn btn-primary update-btn me-3"
                                             data-bs-toggle="modal" data-bs-target="#comboModal"
                                             data-id="${data.id}"
                                             data-name="${data.nameCombo}"
