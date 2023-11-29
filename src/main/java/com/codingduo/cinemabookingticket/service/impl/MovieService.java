@@ -29,10 +29,11 @@ public class MovieService implements IMovieService {
 
     @Override
     public List<MovieDTO> getAll() {
-        List<Movie> movies = movieRepository.findAll();
+        List<Movie> movies = movieRepository.findAllByDeletedOrderByIdDesc(false);
         List<MovieDTO> movieDTOs = new ArrayList<>();
 
         for (Movie movie : movies) {
+            System.out.println(movie.getId());
             MovieDTO movieDTO = convertToMovieDTO(movie);
             movieDTOs.add(movieDTO);
         }

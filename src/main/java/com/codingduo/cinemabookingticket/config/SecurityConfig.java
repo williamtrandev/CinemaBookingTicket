@@ -33,7 +33,8 @@ public class SecurityConfig {
         "/movie/**",
         "/logout",
         "/api/v1/movie/getAllShowTime",
-        "/api/v1/movie/getAllByGenreId/**"
+        "/api/v1/movie/getAllByGenreId/**",
+        "/api/v1/movie/getAllShowing"
 
     };
     @Bean
@@ -82,10 +83,6 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
-
         return http.build();
-
-
     }
 }
